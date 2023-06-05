@@ -1,4 +1,4 @@
-""" Students """
+""" Students. """
 
 
 class Student:

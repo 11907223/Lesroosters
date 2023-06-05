@@ -1,4 +1,4 @@
-""" Courses class """
+""" Courses class. """
 
 
 class Course:

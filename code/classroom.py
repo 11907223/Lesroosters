@@ -1,4 +1,4 @@
-""" Classroom """
+""" Classroom. """
 
 
 class Classroom:
