@@ -2,11 +2,9 @@
 # Use Google-style docstrings.
 convention = "google"
 
-[tool.black]
-line-length = 79
-
 [tool.flake8]
 ignore = ["E203"]
+ignore = ["E501"]
 
 [tool.ruff]
-line-length = 79
+ignore = ["501"]

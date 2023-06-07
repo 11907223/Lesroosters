@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Any
 import pandas as pd
 import json
 
@@ -14,7 +15,7 @@ class Schedule:
 
     def init_empty_schedule(
         self, df_halls: pd.DataFrame
-    ) -> dict[str, dict[str, dict[str, str]]]:
+    ) -> dict[str, dict[str, dict[str, list[Any]]]]:
         """Initialize an empty schedule to fill in.
 
         Args:
@@ -27,16 +28,16 @@ class Schedule:
         """
         weekday: list[str] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         hall_ids: list[str] = list(df_halls["Zaalnummer"])
-        hallslot: dict[str, str] = {id: [] for id in hall_ids}
-        timeslot: dict[str, dict[str, str]] = {
+        hallslot: dict[str, list[Any]] = {id: [] for id in hall_ids}
+        timeslot: dict[str, dict[str, list[Any]]] = {
             str(i): deepcopy(hallslot) for i in range(9, 19, 2)
         }
-        schedule: dict[str, dict[str, dict[str, str]]] = {
+        schedule: dict[str, dict[str, dict[str, list[Any]]]] = {
             day: deepcopy(timeslot) for day in weekday
         }
         return schedule
 
-    def dump_courses_in_schedule(self, df_courses):
+    def dump_courses_in_schedule(self, df_courses: pd.Dataframe) -> bool:
         """Dump all courses into schedule.
 
         This function does not take lecture hall capacity into account.
@@ -110,13 +111,7 @@ class Schedule:
         )
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the schedule. This is useful for debugging purposes. The string representation can be converted to a more understandable format using the : py : func : ` str ` function.
-
-
-        Returns:
-                A string representation of the schedule in the format used by the : py : func : ` str ` function
-        """
+        """Return a string representation of the schedule."""
         return str(self.schedule)
 
 

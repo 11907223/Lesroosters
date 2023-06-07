@@ -1,4 +1,6 @@
-/code/test_elise.py
+./code/test_elise.py
+.vscode
+scheduler.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
