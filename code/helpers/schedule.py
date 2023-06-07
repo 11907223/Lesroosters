@@ -1,5 +1,4 @@
 import copy
-from collections import defaultdict
 
 
 def init_empty_schedule():
@@ -22,12 +21,10 @@ class Schedule:
         self, day: str, timeslot: int, course: str, type: str, location: str
     ):
         """
-
         Args:
             day (str): Day.
             timeslot (str): sada
             course (str):
-
         """
         self.schedule[day][timeslot].update(
             {location: {"coursename": course, "type": type}}
