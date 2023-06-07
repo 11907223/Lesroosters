@@ -16,6 +16,7 @@ def display_schedule(df):
     df.insert(0, "Timeslot", row_headers)
 
     # Display lecture halls and course names as values
+
     a1_04 = df["Monday"]["9"]
 
     print(a1_04)
