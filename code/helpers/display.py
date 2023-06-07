@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-import pandas as pd
 
 
 def display_schedule(df):
@@ -15,11 +14,12 @@ def display_schedule(df):
     # Insert the row headers as a new column
     df.insert(0, "Timeslot", row_headers)
 
-    # Display lecture halls and course names as values
+    value = df["Monday"]["9"]["A1.04"]
 
-    a1_04 = df["Monday"]["9"]
+    for hall in df["Monday"]["9"]:
+        print(df["Monday"]["9"][hall])
+        print(hall)
 
-    print(a1_04)
     # Create the GUI layout
     layout = [
         [sg.Text("Schedule")],
@@ -30,17 +30,19 @@ def display_schedule(df):
                 display_row_numbers=False,
                 font=("Arial", 12),
                 justification="left",
-                auto_size_columns=False,
-                row_height=45,
+                auto_size_columns=True,
+                row_height=100,
                 num_rows=len(df),
-                col_widths=[10] + [40] * (len(df.columns) - 1),
+                key="-TABLE-",
+                expand_x=True,
+                expand_y=True,
             )
         ],  # Add the DataFrame as a table
         [sg.Button("CLOSE")],
     ]
 
     # Create the window
-    window = sg.Window("Schedule", layout, size=(900, 600))
+    window = sg.Window("Schedule", layout, size=(1000, 700))
 
     # Create an event loop
     while True:
