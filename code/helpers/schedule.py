@@ -4,17 +4,19 @@ import json
 
 
 class Schedule:
-    def __init__(self, df_halls) -> None:
+    def __init__(self, path: str = "../../data/") -> None:
         """Generate a schedule for all classes in roster.
 
         Args:
-            df_halls (pd.DataFrame): Contains lecture hall information.
+            Path (str): Path to folder containing data.
+                Defaults to ("../../data/")
         """
-        self.schedule = self.init_empty_schedule(df_halls)
+        self.df_halls = pd.read_csv(f"{path}zalen.csv")
+        self.df_courses = pd.read_csv(f"{path}vakken.csv")
 
-    def init_empty_schedule(
-        self, df_halls: pd.DataFrame
-    ) -> dict[str, dict[str, dict[str, str]]]:
+        self.schedule = self.init_empty_schedule()
+
+    def init_empty_schedule(self) -> dict[str, dict[str, dict[str, str]]]:
         """Initialize an empty schedule to fill in.
 
         Args:
@@ -26,7 +28,7 @@ class Schedule:
                 Lecture halls can have a course assigned.
         """
         weekday: list[str] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-        hall_ids: list[str] = list(df_halls["Zaalnummer"])
+        hall_ids: list[str] = list(self.df_halls["Zaalnummer"])
         hallslot: dict[str, str] = {id: "" for id in hall_ids}
         timeslot: dict[str, dict[str, str]] = {
             str(i): deepcopy(hallslot) for i in range(9, 19, 2)
@@ -36,7 +38,7 @@ class Schedule:
         }
         return schedule
 
-    def dump_courses_in_schedule(self, df_courses) -> bool:
+    def dump_courses_in_schedule(self) -> bool:
         """Dump all courses into schedule.
 
         This function does not take lecture hall capacity into account.
@@ -50,7 +52,9 @@ class Schedule:
             False if dump was not completed.
         """
         course_id = 0
-        lecture_count: int = self.calc_total_lecture_count(df_courses.iloc[course_id])
+        lecture_count: int = self.calc_total_lecture_count(
+            self.df_courses.iloc[course_id]
+        )
 
         # Return True if the course is in the schedule.
         for day in self.schedule.values():
@@ -58,7 +62,7 @@ class Schedule:
             for timeslot in day.values():
                 # Add a new hall to the timeslot
                 for hall in timeslot.keys():
-                    timeslot[hall] = df_courses.iloc[course_id]["Vak"]
+                    timeslot[hall] = self.df_courses.iloc[course_id]["Vak"]
                     lecture_count -= 1
                     # Check if lecture count is 0 or 29
                     if lecture_count == 0:
@@ -70,9 +74,12 @@ class Schedule:
                             return True
                         else:
                             lecture_count = self.calc_total_lecture_count(
-                                df_courses.iloc[course_id]
+                                self.df_courses.iloc[course_id]
                             )
         return False
+
+    def schedule_courses(self):
+        pass
 
     def calc_total_lecture_count(self, df_course: pd.Series):
         """Calculate total lecture count for a course.
@@ -116,8 +123,6 @@ class Schedule:
 
 # This function is called from the main module.
 if __name__ == "__main__":
-    schedule = Schedule(pd.read_csv("../../data/zalen.csv"))
-
-    df = pd.read_csv("../../data/vakken.csv")
-    schedule.dump_courses_in_schedule(df)
+    schedule = Schedule()
+    schedule.dump_courses_in_schedule()
     print(json.dumps(schedule.schedule, indent=4))
