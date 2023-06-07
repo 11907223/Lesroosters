@@ -1,5 +1,4 @@
 from copy import deepcopy
-from typing import Any
 import pandas as pd
 import json
 
@@ -15,7 +14,7 @@ class Schedule:
 
     def init_empty_schedule(
         self, df_halls: pd.DataFrame
-    ) -> dict[str, dict[str, dict[str, list[Any]]]]:
+    ) -> dict[str, dict[str, dict[str, str]]]:
         """Initialize an empty schedule to fill in.
 
         Args:
@@ -28,16 +27,16 @@ class Schedule:
         """
         weekday: list[str] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         hall_ids: list[str] = list(df_halls["Zaalnummer"])
-        hallslot: dict[str, list[Any]] = {id: [] for id in hall_ids}
-        timeslot: dict[str, dict[str, list[Any]]] = {
+        hallslot: dict[str, str] = {id: "" for id in hall_ids}
+        timeslot: dict[str, dict[str, str]] = {
             str(i): deepcopy(hallslot) for i in range(9, 19, 2)
         }
-        schedule: dict[str, dict[str, dict[str, list[Any]]]] = {
+        schedule: dict[str, dict[str, dict[str, str]]] = {
             day: deepcopy(timeslot) for day in weekday
         }
         return schedule
 
-    def dump_courses_in_schedule(self, df_courses: pd.Dataframe) -> bool:
+    def dump_courses_in_schedule(self, df_courses) -> bool:
         """Dump all courses into schedule.
 
         This function does not take lecture hall capacity into account.
@@ -58,8 +57,8 @@ class Schedule:
             # Return True if lecture count is 0 or 29
             for timeslot in day.values():
                 # Add a new hall to the timeslot
-                for hall in timeslot.values():
-                    hall.append(df_courses.iloc[course_id]["Vak"])
+                for hall in timeslot.keys():
+                    timeslot[hall] = df_courses.iloc[course_id]["Vak"]
                     lecture_count -= 1
                     # Check if lecture count is 0 or 29
                     if lecture_count == 0:
