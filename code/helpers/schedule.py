@@ -29,25 +29,26 @@ class Schedule:
         self.schedule[day][timeslot].update(
             {location: {"coursename": course, "type": type}}
         )
-    
-def fill_prototype_schedule(df_vakken):
 
+
+def fill_prototype_schedule(df_vakken):
     # empty schedule
     schedule = init_empty_schedule()
 
     # initial values
     vak_id = 0
-    n_colleges: int = df_vakken.iloc[vak_id]["#Hoorcolleges"] + df_vakken.iloc[vak_id]["#Practica"] + df_vakken.iloc[vak_id]["#Werkcolleges"]
+    n_colleges: int = (
+        df_vakken.iloc[vak_id]["#Hoorcolleges"]
+        + df_vakken.iloc[vak_id]["#Practica"]
+        + df_vakken.iloc[vak_id]["#Werkcolleges"]
+    )
 
     # loop over days
     for day in schedule.values():
-
-        # loop over timeslots 
+        # loop over timeslots
         for timeslot in day.values():
-
             # loop over rooms
             for hall in timeslot.values():
-
                 # insert course
                 hall.update({df_vakken.iloc[vak_id]["Vak"]: n_colleges})
                 n_colleges -= 1
@@ -59,6 +60,9 @@ def fill_prototype_schedule(df_vakken):
                     # quit condition
                     if vak_id == 29:
                         return schedule
-                    
-                    n_colleges: int = df_vakken.iloc[vak_id]["#Hoorcolleges"] + df_vakken.iloc[vak_id]["#Practica"] + df_vakken.iloc[vak_id]["#Werkcolleges"]
 
+                    n_colleges: int = (
+                        df_vakken.iloc[vak_id]["#Hoorcolleges"]
+                        + df_vakken.iloc[vak_id]["#Practica"]
+                        + df_vakken.iloc[vak_id]["#Werkcolleges"]
+                    )
