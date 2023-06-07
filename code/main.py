@@ -2,15 +2,18 @@ import pandas as pd
 import sys
 
 sys.path.append("./helpers/")
-from schedule import fill_prototype_schedule, init_empty_schedule
+from schedule import fill_prototype_schedule
+from display import display_schedule
 
 
 def main():
-    df_vakken = pd.read_csv("./data/vakken.csv")
-    df_zalen = pd.read_csv("./data/zalen.csv")
+    df_vakken = pd.read_csv("../data/vakken.csv")
+    df_zalen = pd.read_csv("../data/zalen.csv")
 
     result = fill_prototype_schedule(df_vakken)
-    print(result)
+    df = pd.DataFrame(result)
+
+    display_schedule(df)
 
 
 main()
