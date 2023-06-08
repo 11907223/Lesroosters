@@ -1,6 +1,7 @@
-from copy import deepcopy
+
 import pandas as pd
 import json
+from copy import deepcopy
 
 
 class Schedule:
@@ -8,7 +9,7 @@ class Schedule:
         """Generate a schedule for all classes in roster.
 
         Args:
-            Path (str): Path to folder containing data.
+            path (str): Path to folder containing data.
                 Defaults to ("../../data/")
         """
         self.df_halls = pd.read_csv(f"{path}zalen.csv")
