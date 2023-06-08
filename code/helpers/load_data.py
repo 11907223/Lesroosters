@@ -52,9 +52,9 @@ def init_activities(course):
         tuple: list of lectures, list of tutorials, list of practicals.
     """
     name = course["Vak"]
-    n_lectures = course["#Hoorcollege"]
-    n_practicals = course["#Practicals"]
-    n_tutorials = course["#Werkgroepen"]
+    n_lectures = course["#Hoorcolleges"]
+    n_practicals = course["#Practica"]
+    n_tutorials = course["#Werkcolleges"]
 
     # Add lectures.
     lectures = [
