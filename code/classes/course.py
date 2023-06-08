@@ -14,13 +14,13 @@ class Course:
         """Initialize the Course with the relevant information.
 
         Args:
-                name (str): Name of the course.
-                lectures (int): Number of lectures in the course.
-                tutorials (int): Number of tutorials in the course.
-                max_tutorials_capacity (int): Maximum number of students in a tutorial.
-                practicals (int): Number of practicals in the course.
-                max_practical (int): Maximum number of students in a practical.
-                expected (int): Expected number of students in the course.
+            name (str): Name of the course.
+            lectures (int): Number of lectures in the course.
+            tutorials (int): Number of tutorials in the course.
+            max_tutorials_capacity (int): Maximum number of students in a tutorial.
+            practicals (int): Number of practicals in the course.
+            max_practical (int): Maximum number of students in a practical.
+            expected (int): Expected number of students in the course.
         """
         self.name = name
         self.lectures = lectures

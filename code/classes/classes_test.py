@@ -6,6 +6,7 @@ Contents of this file will probably be transferred to main.py or ./helpers/ in t
 """
 
 import pandas as pd
+import csv
 from course import Course
 from schedule import ScheduleSlot, Schedule
 from activity import Activity
@@ -65,15 +66,12 @@ for course in courses:
 
 # create all empty timeslots
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-halls = {
-    "A1.04": 41,
-    "A1.06": 22,
-    "A1.08": 20,
-    "A1.10": 56,
-    "B0.201": 48,
-    "C0.110": 117,
-    "C1.112": 60,
-}
+halls_raw = [hall for hall in csv.DictReader(open("../../data/zalen.csv", mode='r', encoding='utf-8-sig'))]
+halls = {}
+for hall in halls_raw:
+    hall_id, capacity = hall.values()
+    halls.update({hall_id: int(capacity)})
+
 timeslots = [str(i) for i in range(9, 19, 2)]
 slots = []
 for day in weekdays:
