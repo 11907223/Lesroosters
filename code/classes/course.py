@@ -22,13 +22,13 @@ class Course:
             max_practical (int): Maximum number of students in a practical.
             expected (int): Expected number of students in the course.
         """
-        self.name = name
-        self.lectures = lectures
-        self.tutorials = tutorials
-        self.practicals = practicals
-        self.max_practical_capacity = max_practical_capacity
-        self.max_tutorial_capacity = max_tutorial_capacity
-        self.expected = expected
+        self.name: str = name
+        self.lectures: int = lectures
+        self.tutorials: int = tutorials
+        self.practicals: int = practicals
+        self.max_practical_capacity: int = max_practical_capacity
+        self.max_tutorial_capacity: int = max_tutorial_capacity
+        self.expected: int = expected
 
     def number_of_activities(self):
         """Return total number of activities in the course."""

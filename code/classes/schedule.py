@@ -7,14 +7,14 @@ class ScheduleSlot:
         self.activity = activity
 
     def is_empty(self) -> bool:
-        """Check if slot is empty"""
+        """Check if slot is empty."""
         if not self.activity:
             return True
         else:
             return False
 
     def fill(self, activity) -> None:
-        """Fill the slot with an activity"""
+        """Fill the slot with an activity."""
         self.activity = activity
 
     def check_capacity(self, activity):
@@ -45,7 +45,7 @@ class ScheduleSlot:
         }
 
     def __repr__(self) -> str:
-        """Return string representation of this ScheduleSlot object"""
+        """Return string representation of this ScheduleSlot object."""
 
         return f"{self.day} starting at {self.time} in room {self.room}"
 

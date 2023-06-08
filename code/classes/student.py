@@ -21,11 +21,3 @@ class Student:
         self.last_name = last_name
         self.id = id
         self.courses = courses
-
-    def number_of_activities(self):
-        """Return total number of activities of the student."""
-        return len(self.tutorials) + len(self.practicals) + len(self.lectures)
-
-    def all_activities(self):
-        """Return all activity objects of the course."""
-        return self.lectures + self.practicals + self.tutorials

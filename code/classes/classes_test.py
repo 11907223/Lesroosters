@@ -27,9 +27,12 @@ for index, row in df_vakken.iterrows():
         expected=row["Verwacht"],
     )
 
+for row in df_vakken:
+    print(row)
+
 # add activity objects to courses
-for course in courses:
-    course = courses[course]
+for course_name in courses:
+    course = courses[course_name]
 
     # add lectures
     course.lectures = [
@@ -47,7 +50,7 @@ for course in courses:
         for i in range(course.practicals)
     ]
 
-    # add workgroups
+    # add tutorials
     course.tutorials = [
         Activity(
             course=course.name,
@@ -56,6 +59,8 @@ for course in courses:
         )
         for i in range(course.tutorials)
     ]
+
+# add student
 
 # put all activities in a list
 all_activities = []
