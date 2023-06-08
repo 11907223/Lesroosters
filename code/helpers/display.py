@@ -14,7 +14,7 @@ def display_schedule(df):
     # Insert the row headers as a new column
     df.insert(0, "Timeslot", row_headers)
 
-    value = df["Monday"]["9"]["A1.04"]
+    # value = df["Monday"]["9"]["A1.04"]
 
     for hall in df["Monday"]["9"]:
         print(df["Monday"]["9"][hall])
