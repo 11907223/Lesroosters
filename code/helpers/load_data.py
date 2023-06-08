@@ -28,51 +28,58 @@ def load_courses(path: str = "../../data"):
 
     courses = {}
     for _index, row in df_courses.iterrows():
+        lectures, tutorials, practicals = init_activities(row)
         courses[row["Vak"]] = Course(
             name=row["Vak"],
-            lectures=row["#Hoorcolleges"],
-            tutorials=row["#Werkcolleges"],
+            lectures=lectures,
+            tutorials=tutorials,
             max_tutorial_capacity=row["Max. stud. Werkcollege"],
-            practicals=row["#Practica"],
+            practicals=practicals,
             max_practical_capacity=row["Max. stud. Practicum"],
             expected=row["Verwacht"],
         )
-
-    for course in courses.values():
-        init_activities(course)
 
     return courses
 
 
 def init_activities(course):
-    """Add activity objects to course."""
+    """Generate activity objects in list for a course.
+    
+    Args:
+        course (pd.Series): Row containing course data.
 
-    # Add lectures
-    course.lectures = [
-        Activity(
-            course=course.name, category=f"lecture {i+1}", capacity=course.expected
-        )
-        for i in range(course.lectures)
+    Returns:
+        tuple: list of lectures, list of tutorials, list of practicals.
+    """
+    name = course["Vak"]
+    n_lectures = course["#Hoorcollege"]
+    n_practicals = course["#Practicals"]
+    n_tutorials = course["#Werkgroepen"]
+
+    # Add lectures.
+    lectures = [
+        Activity(course=name, category=f"lecture {i+1}", capacity=course["Verwacht"])
+        for i in range(n_lectures)
     ]
 
     # Add practicals.
-    course.practicals = [
+    practicals = [
         Activity(
-            course=course.name,
+            course=name,
             category=f"practical {i+1}",
-            capacity=course.max_practical_capacity,
+            capacity=course["Max. stud. Practicum"],
         )
-        for i in range(course.practicals)
+        for i in range(n_practicals)
     ]
 
     # Add tutorials.
-    course.tutorials = [
+    tutorials = [
         Activity(
-            course=course.name,
+            course=name,
             category=f"tutorial {i+1}",
-            capacity=course.max_tutorial_capacity,
+            capacity=course["Max. stud. Werkcollege"],
         )
-        for i in range(course.tutorials)
+        for i in range(n_tutorials)
     ]
 
-    return course
+    return lectures, tutorials, practicals
