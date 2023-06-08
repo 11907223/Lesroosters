@@ -82,7 +82,7 @@ halls_raw = [
 halls = {}
 for hall in halls_raw:
     hall_id, capacity = hall.values()
-    halls.update({hall_id: int(capacity)})
+    halls.update({str(hall_id): int(capacity)})
 
 # create all empty timeslots
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -90,8 +90,8 @@ timeslots = [str(i) for i in range(9, 19, 2)]
 slots = []
 for day in weekdays:
     for timeslot in timeslots:
-        for hall in halls:
-            slots.append(ScheduleSlot(day, timeslot, hall, halls[hall]))
+        for hall_id, capacity in halls.items():
+            slots.append(ScheduleSlot(day, timeslot, hall_id, capacity))
 
 # create empty schedule
 s = Schedule(slots)
