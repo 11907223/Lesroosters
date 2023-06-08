@@ -1,9 +1,8 @@
 import pandas as pd
 import sys
 
-sys.path.append("../classes")
-from course import Course
-from activity import Activity
+from classes.course import Course
+from classes.activity import Activity
 
 
 def load_courses(path: str = "../../data"):
