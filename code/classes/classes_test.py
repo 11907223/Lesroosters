@@ -7,7 +7,7 @@ Contents of this file will probably be transferred to main.py or ./helpers/ in t
 
 import pandas as pd
 import csv
-from schedule import ScheduleSlot, Schedule
+from malus import ScheduleSlot, Schedule
 from load_data import load_courses
 
 
