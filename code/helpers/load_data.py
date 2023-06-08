@@ -1,5 +1,4 @@
 import pandas as pd
-import sys
 
 from classes.course import Course
 from classes.activity import Activity
@@ -7,7 +6,7 @@ from classes.activity import Activity
 
 def load_courses(path: str = "../../data"):
     """Load courses from file to a dictionary.
-     
+
     Args:
         path (str): path of courses to load.
             Defaults to "../../data"
@@ -28,7 +27,7 @@ def load_courses(path: str = "../../data"):
     df_courses = pd.read_csv(f"{path}/vakken.csv", dtype=d_type)
 
     courses = {}
-    for index, row in df_courses.iterrows():
+    for _index, row in df_courses.iterrows():
         courses[row["Vak"]] = Course(
             name=row["Vak"],
             lectures=row["#Hoorcolleges"],
@@ -43,6 +42,7 @@ def load_courses(path: str = "../../data"):
         init_activities(course)
 
     return courses
+
 
 def init_activities(course):
     """Add activity objects to course."""

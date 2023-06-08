@@ -16,7 +16,7 @@ df_vakken = pd.read_csv("../../data/vakken.csv")
 
 # create courses dict (key=coursename, value=Course obj)
 courses = {}
-for index, row in df_vakken.iterrows():
+for _index, row in df_vakken.iterrows():
     courses[row["Vak"]] = Course(
         name=row["Vak"],
         lectures=row["#Hoorcolleges"],
@@ -69,14 +69,23 @@ for course in courses:
     for act in course.all_activities():
         all_activities.append(act)
 
-# create all empty timeslots
-weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-halls_raw = [hall for hall in csv.DictReader(open("../../data/zalen.csv", mode='r', encoding='utf-8-sig'))]
+
+# read halls from csv
+halls_raw = [
+    hall
+    for hall in csv.DictReader(
+        open("../../data/zalen.csv", mode="r", encoding="utf-8-sig")
+    )
+]
+
+# create a dictionary with halls and their capacity
 halls = {}
 for hall in halls_raw:
     hall_id, capacity = hall.values()
     halls.update({hall_id: int(capacity)})
 
+# create all empty timeslots
+weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 timeslots = [str(i) for i in range(9, 19, 2)]
 slots = []
 for day in weekdays:
@@ -99,7 +108,7 @@ df = pd.DataFrame(s.as_list_of_dicts())
 print("THIS IS A DATAFRAME OF THE WHOLE SCHEDULE WHEN ACCOUNTING FOR ROOM SIZE: \n", df)
 
 room_scheme = df[df.room == "A1.04"]
-print("THESE ARE ALL ACTIVITIES IN A1.04 ACROSS THE WHOLE WEERK: \n", room_scheme)
+print("THESE ARE ALL ACTIVITIES IN A1.04 ACROSS THE WHOLE WEEK: \n", room_scheme)
 
 day_schema = df[df.day == "Monday"]
 print("THESE ARE ALL ACTIVITIES ON MONDAY:\n", day_schema)
