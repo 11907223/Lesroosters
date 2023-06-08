@@ -126,3 +126,4 @@ if __name__ == "__main__":
     schedule = Schedule()
     schedule.dump_courses_in_schedule()
     print(json.dumps(schedule.schedule, indent=4))
+    
