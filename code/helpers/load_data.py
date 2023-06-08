@@ -4,12 +4,12 @@ from classes.course import Course
 from classes.activity import Activity
 
 
-def load_courses(path: str = "../../data"):
+def load_courses(path: str = "../data"):
     """Load courses from file to a dictionary.
 
     Args:
         path (str): path of courses to load.
-            Defaults to "../../data"
+            Defaults to "../data"
 
     Returns:
         dict: Contains courses and their activities.
@@ -44,7 +44,7 @@ def load_courses(path: str = "../../data"):
 
 def init_activities(course):
     """Generate activity objects in list for a course.
-    
+
     Args:
         course (pd.Series): Row containing course data.
 

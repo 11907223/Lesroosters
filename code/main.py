@@ -4,5 +4,5 @@ from helpers.load_data import load_courses
 
 
 if __name__ == "__main__":
-    courses = load_courses(path="../data")
+    courses = load_courses()
     print(courses)

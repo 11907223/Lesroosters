@@ -7,58 +7,11 @@ Contents of this file will probably be transferred to main.py or ./helpers/ in t
 
 import pandas as pd
 import csv
-from course import Course
 from schedule import ScheduleSlot, Schedule
-from activity import Activity
+from load_data import load_courses
 
-# read data
-df_vakken = pd.read_csv("../../data/vakken.csv")
 
-# create courses dict (key=coursename, value=Course obj)
-courses = {}
-for _index, row in df_vakken.iterrows():
-    courses[row["Vak"]] = Course(
-        name=row["Vak"],
-        lectures=row["#Hoorcolleges"],
-        tutorials=row["#Werkcolleges"],
-        max_tutorial_capacity=row["Max. stud. Werkcollege"],
-        practicals=row["#Practica"],
-        max_practical_capacity=row["Max. stud. Practicum"],
-        expected=row["Verwacht"],
-    )
-
-for row in df_vakken:
-    print(row)
-
-# add activity objects to courses
-for course_name in courses:
-    course = courses[course_name]
-
-    # add lectures
-    course.lectures = [
-        Activity(course=course.name, category=f"lecture{i+1}", capacity=course.expected)
-        for i in range(course.lectures)
-    ]
-
-    # add practicals
-    course.practicals = [
-        Activity(
-            course=course.name,
-            category=f"practical{i+1}",
-            capacity=course.max_practical_capacity,
-        )
-        for i in range(course.practicals)
-    ]
-
-    # add tutorials
-    course.tutorials = [
-        Activity(
-            course=course.name,
-            category=f"tutorial{i+1}",
-            capacity=course.max_tutorial_capacity,
-        )
-        for i in range(course.tutorials)
-    ]
+courses = load_courses()
 
 # add student
 
