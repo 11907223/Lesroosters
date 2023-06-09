@@ -5,9 +5,9 @@ from copy import deepcopy
 
 def penalty_point_calculator(schedule) -> int:
     # Return True if the course is in the schedule.
+    points = 0
     for slot in schedule.values():
-        # Return True if lecture count is 0 or 29
-        for timeslot in day.values():
+        slot.course
             # Add a new hall to the timeslot
             for hall in timeslot.keys():
                 timeslot[hall] = self.df_courses.iloc[course_id]["Vak"]
