@@ -1,8 +1,7 @@
 import pandas as pd
-
-from classes.course import Course
-from classes.activity import Activity
-from classes.student import Student
+from libraries.classes.course import Course
+from libraries.classes.activity import Activity
+from libraries.classes.student import Student
 
 
 def load_courses(path: str = "data"):
@@ -102,7 +101,7 @@ def load_students(courses, path: str = "data"):
 
     students = {}
     for index, row in df_students.iterrows():
-        subjects = [courses[row[f"Vak{i+1}"]] for i in range(5)]
+        subjects = {row[f"Vak{i+1}"]: courses[row[f"Vak{i+1}"]] for i in range(5) if isinstance(row[f"Vak{i+1}"], str)}
         students[index] = Student(
             first_name=row["Voornaam"],
             last_name=row["Achternaam"],
