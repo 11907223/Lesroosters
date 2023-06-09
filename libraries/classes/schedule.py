@@ -1,4 +1,6 @@
-from random import random
+import csv
+from libraries.helpers.load_data import load_halls
+
 
 class ScheduleSlot:
     def __init__(self, day, time, room, room_capacity, activity=None) -> None:
@@ -53,8 +55,22 @@ class ScheduleSlot:
 
 
 class Schedule:
-    def __init__(self, slots) -> None:
-        self.slots = slots
+    def __init__(self, path: str="data") -> None:
+        self.slots = self._init_schedule(path)
+
+    def _init_schedule(self, path):
+        halls = load_halls(path)
+
+        # create all empty timeslots
+        weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        timeslots = [str(i) for i in range(9, 19, 2)]
+        slots = []
+        for day in weekdays:
+            for timeslot in timeslots:
+                for hall_id, capacity in halls.items():
+                    slots.append(ScheduleSlot(day, timeslot, hall_id, capacity))
+
+        return slots
 
     def day_schedule(self, day):
         """Return list of slot objects of a day."""

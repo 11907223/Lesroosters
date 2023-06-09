@@ -1,4 +1,5 @@
 import pandas as pd
+import csv
 from libraries.classes.course import Course
 from libraries.classes.activity import Activity
 from libraries.classes.student import Student
@@ -103,12 +104,14 @@ def load_students(courses, path: str = "data"):
     for index, student in df_students.iterrows():
         subjects = load_subjects(courses, student)
         students[index] = Student(
+            index=index,
             first_name=student["Voornaam"],
             last_name=student["Achternaam"],
             id=student["Stud.Nr."],
             courses=subjects,
         )
 
+        update_course_roster(courses, students[index])
     return students
 
 
@@ -118,3 +121,25 @@ def load_subjects(courses, student):
         for i in range(5)
         if isinstance(student[f"Vak{i+1}"], str)
     }
+
+def update_course_roster(courses: dict[str, Course], student: Student):
+    for course in student.courses.keys():
+        courses[course].add_student(student)
+
+
+def load_halls(path: str="data"):
+    # read halls from csv
+    halls_raw = [
+        hall
+        for hall in csv.DictReader(
+            open(f"{path}/zalen.csv", mode="r", encoding="utf-8-sig")
+        )
+    ]
+
+    # create a dictionary with halls and their capacity
+    halls = {}
+    for hall in halls_raw:
+        hall_id, capacity = hall.values()
+        halls.update({str(hall_id): int(capacity)})
+
+    return halls

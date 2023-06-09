@@ -3,7 +3,8 @@ from libraries.helpers.load_data import load_courses, load_students
 
 if __name__ == "__main__":
     courses = load_courses()
-    print(courses)
 
     students = load_students(courses)
-    print(students)
+
+    for course in courses.values():
+        print(course.name, course.students.keys())
