@@ -2,14 +2,15 @@ import pandas as pd
 
 from classes.course import Course
 from classes.activity import Activity
+from classes.student import Student
 
 
-def load_courses(path: str = "../data"):
-    """Load courses from file to a dictionary.
+def load_courses(path: str = "data"):
+    """Load courses from csv to a dictionary.
 
     Args:
-        path (str): path of courses to load.
-            Defaults to "../data"
+        path (str): path of csv to load.
+            Defaults to "/data"
 
     Returns:
         dict: Contains courses and their activities.
@@ -83,3 +84,30 @@ def init_activities(course):
     ]
 
     return lectures, tutorials, practicals
+
+
+def load_students(courses, path: str = "data"):
+    """Load students from file to a dictionary.
+
+    Args:
+        courses (dict): Dictionary of all courses.
+        path (str): Path of csv to load.
+            Defaults to "/data"
+
+    Returns:
+        dict: Contains courses and their activities.
+          key = student index, value = Student obj.
+    """
+    df_students = pd.read_csv(f"{path}/studenten_en_vakken.csv")
+
+    students = {}
+    for index, row in df_students.iterrows():
+        subjects = [courses[row[f"Vak{i+1}"]] for i in range(5)]
+        students[index] = Student(
+            first_name=row["Voornaam"],
+            last_name=row["Achternaam"],
+            id=row["Stud.Nr."],
+            courses=subjects
+        )
+
+    return students
