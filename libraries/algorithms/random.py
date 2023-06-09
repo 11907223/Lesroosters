@@ -24,5 +24,5 @@ def random_schedule():
         # insert activity at random point
         while not insertion:
             index = random()*(len(s.slots)-1)
-            insertion = s.insert_activity(activity, int(index))
+            insertion = s.insert_activity(int(index), activity)
     return s
