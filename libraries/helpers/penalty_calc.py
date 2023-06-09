@@ -3,7 +3,7 @@ import json
 from copy import deepcopy
 
 
-def penalty_point_calculator() -> int:
+def penalty_point_calculator(schedule) -> int:
     # Return True if the course is in the schedule.
     for slot in schedule.values():
         # Return True if lecture count is 0 or 29
