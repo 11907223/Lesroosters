@@ -27,16 +27,16 @@ def load_courses(path: str = "data"):
     df_courses = pd.read_csv(f"{path}/vakken.csv", dtype=d_type)
 
     courses = {}
-    for _index, row in df_courses.iterrows():
-        lectures, tutorials, practicals = init_activities(row)
-        courses[row["Vak"]] = Course(
-            name=row["Vak"],
+    for _index, course in df_courses.iterrows():
+        lectures, tutorials, practicals = init_activities(course)
+        courses[course["Vak"]] = Course(
+            name=course["Vak"],
             lectures=lectures,
             tutorials=tutorials,
-            max_tutorial_capacity=row["Max. stud. Werkcollege"],
+            max_tutorial_capacity=course["Max. stud. Werkcollege"],
             practicals=practicals,
-            max_practical_capacity=row["Max. stud. Practicum"],
-            expected=row["Verwacht"],
+            max_practical_capacity=course["Max. stud. Practicum"],
+            expected=course["Verwacht"],
         )
 
     return courses
@@ -100,13 +100,21 @@ def load_students(courses, path: str = "data"):
     df_students = pd.read_csv(f"{path}/studenten_en_vakken.csv")
 
     students = {}
-    for index, row in df_students.iterrows():
-        subjects = {row[f"Vak{i+1}"]: courses[row[f"Vak{i+1}"]] for i in range(5) if isinstance(row[f"Vak{i+1}"], str)}
+    for index, student in df_students.iterrows():
+        subjects = load_subjects(courses, student)
         students[index] = Student(
-            first_name=row["Voornaam"],
-            last_name=row["Achternaam"],
-            id=row["Stud.Nr."],
-            courses=subjects
+            first_name=student["Voornaam"],
+            last_name=student["Achternaam"],
+            id=student["Stud.Nr."],
+            courses=subjects,
         )
 
     return students
+
+
+def load_subjects(courses, student):
+    return {
+        student[f"Vak{i+1}"]: courses[student[f"Vak{i+1}"]]
+        for i in range(5)
+        if isinstance(student[f"Vak{i+1}"], str)
+    }
