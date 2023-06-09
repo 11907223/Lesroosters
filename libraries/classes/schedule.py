@@ -78,7 +78,7 @@ class Schedule:
                 day_list.append(slot)
         return day_list
 
-    def insert_activity(self, activity, index):
+    def insert_activity(self, index, activity):
             """Try to insert activity into empty and valid slot."""
             slot = self.slots[index]
             if slot.is_empty and slot.check_capacity(activity):
