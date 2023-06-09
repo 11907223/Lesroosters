@@ -7,14 +7,32 @@
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, width=device-width">
 
-        <link href="../static/styles.css" rel="stylesheet">
+        <link href="../static/style.css" rel="stylesheet">
 
         <title>University timetable</title>
 
     </head>
 
     <body>
-        <text> Hier komt een rooster!</text>
+        <div class="header">
+            <h1> Schedule </h1>
+        </div>
+        <div class="schedule-box">
+            <div class="grid-container">
+                <div class="grid-item">Timeslot</div>
+                {% for day in weekdays %}
+                    <div class="grid-item">{{day}}</div>
+                {% endfor %}
+                {% for slot in timeslots %}
+                    <div class="grid-item">{{slot}}</div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                {% endfor %}
+            </div>
+        </div>
     </body>
 
 </html>
