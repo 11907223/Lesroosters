@@ -14,22 +14,59 @@
     </head>
 
     <body>
+
         <div class="header">
             <h1> Schedule </h1>
         </div>
         <div class="schedule-box">
             <div class="grid-container">
-                <div class="grid-item">Timeslot</div>
+                <div class="timeslot-header">Timeslot</div>
                 {% for day in weekdays %}
-                    <div class="grid-item">{{day}}</div>
+                    <div class="weekday-header">{{day}}</div>
                 {% endfor %}
-                {% for slot in timeslots %}
-                    <div class="grid-item">{{slot}}</div>
-                    <div class="grid-item"></div>
-                    <div class="grid-item"></div>
-                    <div class="grid-item"></div>
-                    <div class="grid-item"></div>
-                    <div class="grid-item"></div>
+
+                {% for element in schedule.items() %}
+                    <div class="grid-item-timeslot">{{element[0]}}</div>
+                    <div class="grid-item">
+                        {% for activity in element[1]["Monday"] %}
+                            <div class="activity">
+                                <text class="course-name">{{activity[0]}}</text>
+                                <text class="location">{{activity[1]}}</text>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="grid-item">
+                        {% for activity in element[1]["Tuesday"] %}
+                            <div class="activity">
+                                <text class="course-name">{{activity[0]}}</text>
+                                <text class="location">{{activity[1]}}</text>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="grid-item">
+                        {% for activity in element[1]["Wednesday"] %}
+                            <div class="activity">
+                                <text class="course-name">{{activity[0]}}</text>
+                                <text class="location">{{activity[1]}}</text>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="grid-item">
+                        {% for activity in element[1]["Thursday"] %}
+                            <div class="activity">
+                                <text class="course-name">{{activity[0]}}</text>
+                                <text class="location">{{activity[1]}}</text>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="grid-item">
+                        {% for activity in element[1]["Friday"] %}
+                            <div class="activity">
+                                <text class="course-name">{{activity[0]}}</text>
+                                <text class="location">{{activity[1]}}</text>
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
