@@ -104,7 +104,7 @@ class Schedule:
         return [slot.as_dict() for slot in self.slots]
 
     def __repr__(self) -> str:
-        """'Return string representation of schedule."""
+        """Return string representation of schedule."""
         string = ""
         for slot in self.slots:
             if slot.activity:
