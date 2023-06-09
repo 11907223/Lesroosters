@@ -1,3 +1,5 @@
+# from .student import Student
+
 class Course:
     """ "Contains all information in a course."""
 
@@ -29,6 +31,7 @@ class Course:
         self.max_practical_capacity: int = max_practical_capacity
         self.max_tutorial_capacity: int = max_tutorial_capacity
         self.expected: int = expected
+        self.students = {}
 
     def number_of_activities(self):
         """Return total number of activities in the course."""
@@ -37,3 +40,6 @@ class Course:
     def all_activities(self):
         """Return all activity objects of the course."""
         return self.lectures + self.practicals + self.tutorials
+
+    def add_student(self, student):
+        self.students.update({student.index: student})

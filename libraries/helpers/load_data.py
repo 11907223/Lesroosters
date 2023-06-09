@@ -103,12 +103,14 @@ def load_students(courses, path: str = "data"):
     for index, student in df_students.iterrows():
         subjects = load_subjects(courses, student)
         students[index] = Student(
+            index=index,
             first_name=student["Voornaam"],
             last_name=student["Achternaam"],
             id=student["Stud.Nr."],
             courses=subjects,
         )
 
+        update_course_roster(courses, students[index])
     return students
 
 
@@ -118,3 +120,7 @@ def load_subjects(courses, student):
         for i in range(5)
         if isinstance(student[f"Vak{i+1}"], str)
     }
+
+def update_course_roster(courses: dict[str, Course], student: Student):
+    for course in student.courses.keys():
+        courses[course].add_student(student)
