@@ -122,12 +122,13 @@ def load_subjects(courses, student):
         if isinstance(student[f"Vak{i+1}"], str)
     }
 
+
 def update_course_roster(courses: dict[str, Course], student: Student):
     for course in student.courses.keys():
         courses[course].add_student(student)
 
 
-def load_halls(path: str="data"):
+def load_halls(path: str = "data"):
     # read halls from csv
     halls_raw = [
         hall
