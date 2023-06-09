@@ -4,7 +4,7 @@ class Activity:
     Possible activity categories are lecture, practical or tutorial.
     """
 
-    def __init__(self, course, category, capacity, students=None) -> None:
+    def __init__(self, course, category, capacity) -> None:
         """Initialize activity for a course.
 
         Args:
@@ -14,7 +14,7 @@ class Activity:
             students (): The list of students in the course.
         """
         self.course = course
-        self.students = students
+        self.students = {}
         self.category = category
         self.capacity = capacity
 
@@ -24,4 +24,4 @@ class Activity:
         Args:
                 student (): Student to include in course activity.
         """
-        self.students.append(student)
+        self.students.update(student)
