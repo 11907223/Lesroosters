@@ -37,7 +37,7 @@ class Course:
         """Return total number of activities in the course."""
         return len(self.tutorials) + len(self.practicals) + len(self.lectures)
 
-    def all_activities(self):
+    def activities(self):
         """Return all activity objects of the course."""
         return self.lectures + self.practicals + self.tutorials
 

@@ -1,0 +1,12 @@
+div.schedule-box {
+    border: 5px solid blue;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-item {
+    border: 2px solid pink;
+}
