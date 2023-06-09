@@ -1,7 +1,31 @@
-
 import pandas as pd
 import json
 from copy import deepcopy
+
+
+def penalty_point_calculator() -> int:
+    # Return True if the course is in the schedule.
+    for slot in schedule.values():
+        # Return True if lecture count is 0 or 29
+        for timeslot in day.values():
+            # Add a new hall to the timeslot
+            for hall in timeslot.keys():
+                timeslot[hall] = self.df_courses.iloc[course_id]["Vak"]
+                lecture_count -= 1
+                # Check if lecture count is 0 or 29
+                if lecture_count == 0:
+                    course_id += 1
+
+                    # Return True if lecture count is valid.
+                    if course_id == 29:
+                        # quit condition
+                        return True
+                    else:
+                        lecture_count = self.calc_total_lecture_count(
+                            self.df_courses.iloc[course_id]
+                        )
+
+
 
 
 class Schedule:

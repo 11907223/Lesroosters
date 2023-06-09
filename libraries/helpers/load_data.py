@@ -1,4 +1,5 @@
 import pandas as pd
+import csv
 from libraries.classes.course import Course
 from libraries.classes.activity import Activity
 from libraries.classes.student import Student
@@ -124,3 +125,21 @@ def load_subjects(courses, student):
 def update_course_roster(courses: dict[str, Course], student: Student):
     for course in student.courses.keys():
         courses[course].add_student(student)
+
+
+def load_halls(path: str="data"):
+    # read halls from csv
+    halls_raw = [
+        hall
+        for hall in csv.DictReader(
+            open(f"{path}/zalen.csv", mode="r", encoding="utf-8-sig")
+        )
+    ]
+
+    # create a dictionary with halls and their capacity
+    halls = {}
+    for hall in halls_raw:
+        hall_id, capacity = hall.values()
+        halls.update({str(hall_id): int(capacity)})
+
+    return halls
