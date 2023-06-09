@@ -22,4 +22,5 @@ def index():
         "15:00-17:00",
         "17:00-19:00",
     ]
+
     return render_template("index.html", weekdays=weekdays, timeslots=timeslots)
