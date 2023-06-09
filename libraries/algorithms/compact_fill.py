@@ -8,8 +8,8 @@ def fill_schedule(courses, schedule):
             all_activities.append(activity)
 
     # insert all activities in schedule (accounting for room capacity!)
-    for activity in all_activities:
-        schedule.insert_activity(activity)
+    for index, activity in enumerate(all_activities):
+        schedule.insert_activity(activity, index)
         students = courses[activity.course].students.values()
         for student in students:
             activity.add_student({student.index: student})
