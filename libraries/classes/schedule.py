@@ -1,6 +1,4 @@
 from libraries.helpers.load_data import load_halls
-import random
-
 
 class ScheduleSlot:
     def __init__(self, day, time, room, room_capacity, activity=None) -> None:
@@ -80,23 +78,13 @@ class Schedule:
                 day_list.append(slot)
         return day_list
 
-    def insert_activity(self, activity, random=True):
-        """Insert activity into empty and valid slot."""
-        if random:
-            # insert activity in random slot
-            while True:
-                index = random.choice(self.slots)
-                slot = self.slots[index]
-                if slot.is_empty() and slot.check_capacity(activity):
-                    slot.fill(activity)
-                    return True
-        else:
-            # just insert into next empty and valid slot
-            for slot in self.slots:
-                if slot.is_empty() and slot.check_capacity(activity):
-                    slot.fill(activity)
-                    return True
-            return False
+    def insert_activity(self, activity, index):
+            """Try to insert activity into empty and valid slot."""
+            slot = self.slots[index]
+            if slot.is_empty and slot.check_capacity(activity):
+                slot.fill(activity)
+                return True
+            return False 
 
     def as_list_of_dicts(self):
         """Return Schedule as list of dicts for pandas dataframe."""
