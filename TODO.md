@@ -60,3 +60,7 @@ On the TODO list:
     - [ ] typehint variables. Current function args unclear.
 - [ ] Course.py
 - [ ] Classroom.py
+
+### Helpers folder
+- [ ] load_data.py
+    - [ ] typehint all vars and add docstrings everywhere.
