@@ -1,5 +1,6 @@
 from libraries.helpers.load_data import load_courses, load_students
-from libraries.algorithms.compact_fill import fill_schedule
+from libraries.algorithms.random import random_schedule
+from libraries.helpers.penalty_calc import penalty_point_calculator
 from libraries.classes.schedule import Schedule
 import pandas as pd
 
@@ -9,10 +10,11 @@ if __name__ == "__main__":
     students = load_students(courses)
     schedule = Schedule()
 
-    random = random_schedule(courses, schedule)
-    compact = fill_schedule(courses, schedule)
-    genetic = genetic_schedule(courses, schedule, students)
+    schedule = random_schedule()
+    # compact = fill_schedule(courses, schedule)
 
+    points = penalty_point_calculator(schedule)
+    print(points)
     # print schedule
     print(schedule)
 

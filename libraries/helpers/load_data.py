@@ -107,7 +107,7 @@ def load_students(courses, path: str = "data"):
             index=index,
             first_name=student["Voornaam"],
             last_name=student["Achternaam"],
-            id=student["Stud.Nr."],
+            student_number=student["Stud.Nr."],
             courses=subjects,
         )
 

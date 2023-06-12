@@ -3,35 +3,18 @@ import json
 from copy import deepcopy
 from libraries.classes.schedule import Schedule
 
-def penalty_point_calculator(schedule) -> int:
+def penalty_point_calculator(schedule: Schedule) -> int:
     # Return True if the course is in the schedule.
     points = 0
-    timeslot = 0
-    students ={}
-    for slot in schedule.values():
-        if timeslot == 0:
-            students = {}
-        students.update(slot.activity.students)
-        timeslot = (timeslot + 1) % 4
-            # Add a new hall to the timeslot
-            for hall in timeslot.keys():
-                timeslot[hall] = self.df_courses.iloc[course_id]["Vak"]
-                lecture_count -= 1
-                # Check if lecture count is 0 or 29
-                if lecture_count == 0:
-                    course_id += 1
-
-                    # Return True if lecture count is valid.
-                    if course_id == 29:
-                        # quit condition
-                        return True
-                    else:
-                        lecture_count = self.calc_total_lecture_count(
-                            self.df_courses.iloc[course_id]
-                        )
-
+    for slot in schedule.slots:
+        if slot.activity is not None:
+            if slot.room_capacity - slot.activity.capacity < 0:
+                points += slot.room_capacity - slot.activity.capacity
+                print(f"capacity overfill: {slot.room_capacity - slot.activity.capacity}")
+            if schedule.slots.index(slot) - 1 % 27 == 0 and schedule.slots.index(slot) > 0:
+                points += 5
+                print(f"index: {schedule.slots.index(slot)} and {slot.activity.course}")
     return points
-
 
 class Schedule:
     def __init__(self, path: str = "../../data/") -> None:
@@ -61,7 +44,7 @@ class Schedule:
         hall_ids: list[str] = list(self.df_halls["Zaalnummer"])
         hallslot: dict[str, str] = {id: "" for id in hall_ids}
         timeslot: dict[str, dict[str, str]] = {
-            str(i): deepcopy(hallslot) for i in range(9, 19, 2)
+            str(i): deepcopy(hallslot) for i in range(9, 17, 2)
         }
         schedule: dict[str, dict[str, dict[str, str]]] = {
             day: deepcopy(timeslot) for day in weekday

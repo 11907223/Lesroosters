@@ -8,10 +8,11 @@ class Activity:
         """Initialize activity for a course.
 
         Args:
-            course (): The course to which the membership belongs.
-            category (): The category of the membership.
-            capacity (): The capacity of the membership.
-            students (): The list of students in the course.
+            course (): The course which the activity belongs to.
+            category (): The category of the activity.
+                Options: (lecture, tutorial or practical).
+            capacity (): The maximum number of students in the activity.
+            students (): The list of students in the activity.
         """
         self.course = course
         self.students = {}
@@ -24,4 +25,4 @@ class Activity:
         Args:
                 student (): Student to include in course activity.
         """
-        self.students.update(student)
+        self.students.update({student.index: student})

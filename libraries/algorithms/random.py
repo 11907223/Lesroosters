@@ -1,6 +1,6 @@
 import pandas as pd
 import csv
-from libraries.classes.schedule import ScheduleSlot, Schedule
+from libraries.classes.schedule import Hall_slot, Schedule
 from libraries.helpers.load_data import load_courses
 from random import random
 

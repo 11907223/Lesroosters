@@ -1,6 +1,6 @@
 from libraries.helpers.load_data import load_halls
 
-class ScheduleSlot:
+class Hall_slot:
     def __init__(self, day, time, room, room_capacity, activity=None) -> None:
         self.day = day
         self.time = time
@@ -51,6 +51,19 @@ class ScheduleSlot:
         return f"{self.day} starting at {self.time} in room {self.room}"
 
 
+class Day:
+    def __init__(self, weekday: str, path: str = "data") -> None:
+        self.name = weekday
+        self.slots = self.init_timeslots(path)
+
+    def init_slots(path) -> None:
+        timeslots = [str(i) for i in range(9, 17, 2)]
+        halls = load_halls(path)
+        slots = []
+        for hall_id, capacity in halls.items():
+            # Initiate empty schedule 9:00 to 15:00.
+            slots.append(Hall_slot(day, timeslot, hall_id, capacity))
+
 class Schedule:
     def __init__(self, path: str = "data") -> None:
         self.slots = self._init_schedule(path)
@@ -60,13 +73,16 @@ class Schedule:
 
         # create all empty timeslots
         weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-        timeslots = [str(i) for i in range(9, 19, 2)]
+        timeslots = [str(i) for i in range(9, 17, 2)]
         slots = []
         for day in weekdays:
             for timeslot in timeslots:
                 for hall_id, capacity in halls.items():
-                    slots.append(ScheduleSlot(day, timeslot, hall_id, capacity))
-
+                    # Initiate empty schedule 9:00 to 15:00.
+                    slots.append(Hall_slot(day, timeslot, hall_id, capacity))
+            # Add evening timeslot.
+            largest_hall = list(halls)[5]
+            slots.append(Hall_slot(day, str(17), largest_hall, halls[largest_hall]))
         return slots
 
     def day_schedule(self, day):
