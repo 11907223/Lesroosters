@@ -52,17 +52,22 @@ class Hall_slot:
 
 
 class Day:
-    def __init__(self, weekday: str, path: str = "data") -> None:
+    def __init__(self, weekday: str, timeslots, halls) -> None:
         self.name = weekday
-        self.slots = self.init_timeslots(path)
+        self.slots = self.init_slots(halls, timeslots)
 
-    def init_slots(path) -> None:
-        timeslots = [str(i) for i in range(9, 17, 2)]
-        halls = load_halls(path)
+    def init_slots(self, halls, timeslots) -> int:
         slots = []
-        for hall_id, capacity in halls.items():
-            # Initiate empty schedule 9:00 to 15:00.
-            slots.append(Hall_slot(day, timeslot, hall_id, capacity))
+        for timeslot in timeslots:
+            for hall_id, capacity in halls.items():
+                # Initiate empty schedule from 9:00 to 15:00.
+                slots.append(Hall_slot(self.name, timeslot, hall_id, capacity))
+
+        # Add 17:00 timeslot.
+        largest_hall = list(halls)[5]
+        slots.append(Hall_slot(self.name, str(17), largest_hall, halls[largest_hall]))
+
+        return slots
 
 class Schedule:
     def __init__(self, path: str = "data") -> None:
@@ -71,19 +76,14 @@ class Schedule:
     def _init_schedule(self, path):
         halls = load_halls(path)
 
-        # create all empty timeslots
+        # create empty timeslots for each day
         weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         timeslots = [str(i) for i in range(9, 17, 2)]
-        slots = []
+        days = []
         for day in weekdays:
-            for timeslot in timeslots:
-                for hall_id, capacity in halls.items():
-                    # Initiate empty schedule 9:00 to 15:00.
-                    slots.append(Hall_slot(day, timeslot, hall_id, capacity))
-            # Add evening timeslot.
-            largest_hall = list(halls)[5]
-            slots.append(Hall_slot(day, str(17), largest_hall, halls[largest_hall]))
-        return slots
+            # Initiate empty schedule 9:00 to 15:00.
+            days.append(Day(day, timeslots, halls))
+        return days
 
     def day_schedule(self, day):
         """Return list of slot objects of a day."""
