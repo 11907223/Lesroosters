@@ -48,7 +48,6 @@ class ScheduleSlot:
 
     def __repr__(self) -> str:
         """Return string representation of this ScheduleSlot object."""
-
         return f"{self.day} starting at {self.time} in room {self.room}"
 
 

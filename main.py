@@ -8,7 +8,10 @@ if __name__ == "__main__":
     courses = load_courses()
     students = load_students(courses)
     schedule = Schedule()
-    fill_schedule(courses, schedule)
+
+    random = random_schedule(courses, schedule)
+    compact = fill_schedule(courses, schedule)
+    genetic = genetic_schedule(courses, schedule, students)
 
     # print schedule
     print(schedule)

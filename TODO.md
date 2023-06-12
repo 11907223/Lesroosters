@@ -53,7 +53,7 @@ On the TODO list:
         - [ ] {timeslot: jimmy}
         - [ ] bijhouden per type maluspunt
             (dict voor maandag, di,wo, etc)
-
+    - [ ] we hebben een *oneindig* aantal docenten
 ### Classes folder
 
 - [ ] activity.py

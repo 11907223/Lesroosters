@@ -1,13 +1,18 @@
 import pandas as pd
 import json
 from copy import deepcopy
-
+from libraries.classes.schedule import Schedule
 
 def penalty_point_calculator(schedule) -> int:
     # Return True if the course is in the schedule.
     points = 0
+    timeslot = 0
+    students ={}
     for slot in schedule.values():
-        slot.course
+        if timeslot == 0:
+            students = {}
+        students.update(slot.activity.students)
+        timeslot = (timeslot + 1) % 4
             # Add a new hall to the timeslot
             for hall in timeslot.keys():
                 timeslot[hall] = self.df_courses.iloc[course_id]["Vak"]
@@ -25,7 +30,7 @@ def penalty_point_calculator(schedule) -> int:
                             self.df_courses.iloc[course_id]
                         )
 
-
+    return points
 
 
 class Schedule:
