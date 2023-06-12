@@ -23,6 +23,6 @@ def random_schedule():
         insertion = False
         # insert activity at random point
         while not insertion:
-            index = random()*(len(s.slots)-1)
+            index = random()*(len(s.days)-1)
             insertion = s.insert_activity(int(index), activity)
     return s

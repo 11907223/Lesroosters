@@ -29,7 +29,7 @@ def index():
 
     print("EMPTY LIST!!!")
     print(schedule_list)
-    for slot in schedule.slots:
+    for slot in schedule.days:
         if slot.activity:
             schedule_list[slot.time][slot.day].append([slot.activity.course, slot.room])
 

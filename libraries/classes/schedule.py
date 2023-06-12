@@ -71,7 +71,7 @@ class Day:
 
 class Schedule:
     def __init__(self, path: str = "data") -> None:
-        self.slots = self._init_schedule(path)
+        self.days = self._init_schedule(path)
 
     def _init_schedule(self, path):
         halls = load_halls(path)
@@ -88,14 +88,14 @@ class Schedule:
     def day_schedule(self, day):
         """Return list of slot objects of a day."""
         day_list = []
-        for slot in self.slots:
+        for slot in self.days:
             if slot.day == day:
                 day_list.append(slot)
         return day_list
 
     def insert_activity(self, index, activity):
             """Try to insert activity into empty and valid slot."""
-            slot = self.slots[index]
+            slot = self.days[index]
             if slot.is_empty and slot.check_capacity(activity):
                 slot.fill(activity)
                 return True
@@ -104,12 +104,12 @@ class Schedule:
     def as_list_of_dicts(self):
         """Return Schedule as list of dicts for pandas dataframe."""
 
-        return [slot.as_dict() for slot in self.slots]
+        return [slot.as_dict() for slot in self.days]
 
     def __repr__(self) -> str:
         """Return string representation of schedule."""
         string = ""
-        for slot in self.slots:
+        for slot in self.days:
             if slot.activity:
                 string = (
                     string
