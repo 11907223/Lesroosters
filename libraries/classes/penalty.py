@@ -42,3 +42,12 @@ class Penalty:
                 penalty_points += 5
 
         return penalty_points
+
+    def empty_timeslot(self) -> int:
+        penalty_points = 0
+
+        for day in self.schedule.days.values():
+            students_in_day = []
+            for slot in day:
+                students_in_day.append(slot.activity.students)
+            
