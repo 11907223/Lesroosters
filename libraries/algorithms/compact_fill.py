@@ -32,11 +32,12 @@ class compact_fill:
 
         # insert all activities in schedule.
         for activity in all_activities:
-            for day in self.schedule.days:
-                index, _slot = enumerate(day)
-                self.schedule.insert_activity(day, index, activity)
-                students = activity.course.students.values()
-                for student in students:
-                    activity.add_student({student.index: student})
+            for day_name, day in self.schedule.days.items():
+                for index, _name in enumerate(day.slots):
+                    self.schedule.insert_activity(day_name, index, activity)
+                    students = list(activity.course.students.values())
+                    print(students)
+                    for student in students:
+                        activity.add_student({student.index: student})
 
         return self.schedule
