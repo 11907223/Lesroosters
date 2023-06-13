@@ -3,7 +3,7 @@
 
 class Schedule{
     days: dict[str: Day]
-    -init_schedule() -> list[Days]
+    -init_schedule() -> dict[str: Day]
     day_schedule(day) -> list[slots] in day
     insert_activity(Day, Slot, Activity) -> bool. Modifies activity in place.
     as_list_of_dicts() -> dict representation of the Schedule.
