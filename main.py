@@ -11,8 +11,8 @@ if __name__ == "__main__":
     students = load_students(courses)
     schedule = Schedule()
 
-    model = Model()
-    model.translate_schedule_to_model()
+    # model = Model()
+    # model.translate_schedule_to_model()
 
     random_schedule = Random(schedule, courses)
     random_schedule = random_schedule.run()
