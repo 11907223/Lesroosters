@@ -45,7 +45,7 @@ class Penalty:
                         students.append(object)
 
         for student in students:
-            print(student)
+            print(student.activity)
 
         return penalty_points
 
