@@ -1,3 +1,6 @@
+from libraries.classes.hallslot import Hall_slot
+
+
 class Day:
     def __init__(self, weekday: str, timeslots, halls) -> None:
         """Initialize a Day.
