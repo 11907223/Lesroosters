@@ -33,4 +33,4 @@ if __name__ == "__main__":
     score = Penalty(schedule)
 
     print(score.evening_penalty())
-    print(schedule.as_list_of_dicts())
+    # print(schedule.as_list_of_dicts())
