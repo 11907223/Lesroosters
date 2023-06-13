@@ -56,7 +56,7 @@ class Day:
         self.name = weekday
         self.slots = self.init_slots(halls, timeslots)
 
-    def init_slots(self, halls, timeslots) -> int:
+    def init_slots(self, halls, timeslots) -> list[Hall_slot]:
         slots = []
         for timeslot in timeslots:
             for hall_id, capacity in halls.items():
@@ -79,10 +79,10 @@ class Schedule:
         # create empty timeslots for each day
         weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         timeslots = [str(i) for i in range(9, 17, 2)]
-        days = []
+        days = {}
         for day in weekdays:
             # Initiate empty schedule 9:00 to 15:00.
-            days.append(Day(day, timeslots, halls))
+            days.update({day:Day(day, timeslots, halls)})
         return days
 
     def day_schedule(self, day):
@@ -93,9 +93,9 @@ class Schedule:
                 day_list.append(slot)
         return day_list
 
-    def insert_activity(self, index, activity):
+    def insert_activity(self, day, index, activity):
             """Try to insert activity into empty and valid slot."""
-            slot = self.days[index]
+            slot = self.days[day].slots[index]
             if slot.is_empty and slot.check_capacity(activity):
                 slot.fill(activity)
                 return True
@@ -104,20 +104,21 @@ class Schedule:
     def as_list_of_dicts(self):
         """Return Schedule as list of dicts for pandas dataframe."""
 
-        return [slot.as_dict() for slot in self.days]
+        return [slot.as_dict() for day in self.days.values() for slot in day.slots]
 
     def __repr__(self) -> str:
         """Return string representation of schedule."""
         string = ""
-        for slot in self.days:
-            if slot.activity:
-                string = (
-                    string
-                    + f"day: {slot.day} time: {slot.time} room: {slot.room} activity: {slot.activity.course}, {slot.activity.category} \n"
-                )
-            else:
-                string = (
-                    string
-                    + f"day: {slot.day} time: {slot.time} room: {slot.room} activity: None \n"
-                )
+        for day in self.days.values():
+            for slot in day.slots:
+                if slot.activity is not None:
+                    string = (
+                        string
+                        + f"day: {day.name} time: {slot.time} room: {slot.room} activity: {slot.activity.course}, {slot.activity.category} \n"
+                    )
+                else:
+                    string = (
+                        string
+                        + f"day: {day.name} time: {slot.time} room: {slot.room} activity: None \n"
+                    )
         return string

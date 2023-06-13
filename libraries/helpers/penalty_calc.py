@@ -6,14 +6,17 @@ from libraries.classes.schedule import Schedule
 def penalty_point_calculator(schedule: Schedule) -> int:
     # Return True if the course is in the schedule.
     points = 0
-    for slot in schedule.slots:
-        if slot.activity is not None:
-            if slot.room_capacity - slot.activity.capacity < 0:
-                points += slot.room_capacity - slot.activity.capacity
-                print(f"capacity overfill: {slot.room_capacity - slot.activity.capacity}")
-            if schedule.slots.index(slot) - 1 % 27 == 0 and schedule.slots.index(slot) > 0:
-                points += 5
-                print(f"index: {schedule.slots.index(slot)} and {slot.activity.course}")
+    for day in schedule.days:
+        for slot in day:
+            if slot.activity is not None:
+                if slot.room_capacity - slot.activity.capacity < 0:
+                    points += slot.room_capacity - slot.activity.capacity
+                    print(f"capacity overfill: {slot.room_capacity - slot.activity.capacity}")
+                if day.slots.in
+                if schedule.slots.index(slot) - 1 % 27 == 0 and schedule.slots.index(slot) > 0:
+                    points += 5
+                    print(f"index: {schedule.slots.index(slot)} and {slot.activity.course}")
+    
     return points
 
 class Schedule:

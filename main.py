@@ -1,6 +1,6 @@
 from libraries.helpers.load_data import load_courses, load_students
 from libraries.algorithms.random import random_schedule
-from libraries.helpers.penalty_calc import penalty_point_calculator
+# from libraries.helpers.penalty_calc import penalty_point_calculator
 from libraries.classes.schedule import Schedule
 import pandas as pd
 
@@ -13,8 +13,8 @@ if __name__ == "__main__":
     schedule = random_schedule()
     # compact = fill_schedule(courses, schedule)
 
-    points = penalty_point_calculator(schedule)
-    print(points)
+    # points = penalty_point_calculator(schedule)
+    # print(points)
     # print schedule
     print(schedule)
 

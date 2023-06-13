@@ -2,7 +2,7 @@ import pandas as pd
 import csv
 from libraries.classes.schedule import Hall_slot, Schedule
 from libraries.helpers.load_data import load_courses
-from random import random
+import random
 
 def random_schedule():
     courses = load_courses()
@@ -17,12 +17,14 @@ def random_schedule():
     # create empty schedule
     s = Schedule("data")
 
-    
+    weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
     for activity in all_activities:
         
-        insertion = False
+        inserted_all_courses = False
         # insert activity at random point
-        while not insertion:
-            index = random()*(len(s.days)-1)
-            insertion = s.insert_activity(int(index), activity)
+        while not inserted_all_courses:
+            index = random.random()*(len(s.days[weekdays[1]].slots)-1)
+            weekday = random.choice(weekdays)
+            inserted_all_courses = s.insert_activity(weekday, int(index), activity)
     return s
