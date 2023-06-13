@@ -1,5 +1,6 @@
 from libraries.helpers.load_data import load_halls
 
+
 class Hall_slot:
     def __init__(self, day, time, room, room_capacity, activity=None) -> None:
         self.day = day
@@ -28,7 +29,7 @@ class Hall_slot:
         return False
 
     def get_activity_exceeding_capacity(self, activity):
-        
+        pass
 
     def as_dict(self):
         """Return ScheduleSlot object as a dict (for pandas dataframes)."""
@@ -38,7 +39,7 @@ class Hall_slot:
                 "day": self.day,
                 "time": self.time,
                 "room": self.room,
-                "course": self.activity.course,
+                "course": self.activity.course.name,
                 "activity": self.activity.category,
             }
         return {
@@ -57,27 +58,25 @@ class Hall_slot:
 class Day:
     def __init__(self, weekday: str, timeslots, halls) -> None:
         """Initialize a Day.
-         
-         Args:
-         	 weekday (list[str]): The weekday of the instance.
-         	 timeslots (list[str]): The timeslots of the instance.
-         	 halls (dict[str, int]): The halls of the instance.
-         
-         Returns: 
+
+        Args:
+            weekday (list[str]): The weekday of the instance.
+            timeslots (list[str]): The timeslots of the instance.
+            halls (dict[str, int]): The halls of the instance.
         """
         self.name = weekday
         self.slots = self._init_slots(halls, timeslots)
 
     def _init_slots(self, halls, timeslots) -> list[Hall_slot]:
         """
-         Initialize hall slots for this job. This is a helper method to initialize the timeslots and halls for this job.
-         
-         Args:
-         	 halls: Dictionary of halls keyed by timeslot id.
-         	 timeslots: List of timeslot objects. Each timeslot is represented as a dictionary with keys corresponding to the timeslot id and values corresponding to the capacity
-         
-         Returns: 
-         	 List of Hall_slot objects that have been
+        Initialize hall slots for this job. This is a helper method to initialize the timeslots and halls for this job.
+
+        Args:
+            halls: Dictionary of halls keyed by timeslot id.
+            timeslots: List of timeslot objects. Each timeslot is represented as a dictionary with keys corresponding to the timeslot id and values corresponding to the capacity
+
+        Returns:
+            List of Hall_slot objects that have been
         """
         slots = []
         # Initiate empty schedule from 9:00 to 15:00.
@@ -90,8 +89,9 @@ class Day:
         slots.append(Hall_slot(self.name, str(17), largest_hall, halls[largest_hall]))
 
         return slots
-    
+
     def get_penalty_points(self) -> int:
+        pass
         penalty_points = 0
         for slot in self.slots:
             slot.get_
@@ -110,7 +110,7 @@ class Schedule:
         days = {}
         for day in weekdays:
             # Initiate empty schedule 9:00 to 15:00.
-            days.update({day:Day(day, timeslots, halls)})
+            days.update({day: Day(day, timeslots, halls)})
         return days
 
     def day_schedule(self, day):
@@ -122,12 +122,12 @@ class Schedule:
         return day_list
 
     def insert_activity(self, day, index, activity):
-            """Try to insert activity into empty and valid slot."""
-            slot = self.days[day].slots[index]
-            if slot.is_empty and slot.check_capacity(activity):
-                slot.fill(activity)
-                return True
-            return False 
+        """Try to insert activity into empty and valid slot."""
+        slot = self.days[day].slots[index]
+        if slot.is_empty and slot.check_capacity(activity):
+            slot.fill(activity)
+            return True
+        return False
 
     def as_list_of_dicts(self):
         """Return Schedule as list of dicts for pandas dataframe."""
@@ -142,7 +142,7 @@ class Schedule:
                 if slot.activity is not None:
                     string = (
                         string
-                        + f"day: {day.name} time: {slot.time} room: {slot.room} activity: {slot.activity.course}, {slot.activity.category} \n"
+                        + f"day: {day.name} time: {slot.time} room: {slot.room} activity: {slot.activity.course.name}, {slot.activity.category} \n"
                     )
                 else:
                     string = (

@@ -8,7 +8,7 @@ import pandas as pd
 if __name__ == "__main__":
     courses = load_courses()
     students = load_students(courses)
-    schedule = Schedule()
+    # schedule = Schedule()
 
     schedule = random_schedule()
     # compact = fill_schedule(courses, schedule)
@@ -17,7 +17,6 @@ if __name__ == "__main__":
     # print(points)
     # print schedule
     print(schedule)
-
     # other examples
     df = pd.DataFrame(schedule.as_list_of_dicts())
     print(

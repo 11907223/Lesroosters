@@ -61,6 +61,9 @@ On the TODO list:
 - [ ] Course.py
 - [ ] Classroom.py
 
+- [ ] room.py object
+    - [ ] is netter
+
 ### Helpers folder
 - [ ] load_data.py
     - [ ] typehint all vars and add docstrings everywhere.

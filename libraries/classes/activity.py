@@ -17,7 +17,7 @@ class Activity:
             capacity (): Maximum number of students in the activity.
             students (): List of students in the activity.
         """
-        self.course: str = course
+        self.course: Course = course
         self.students: dict[str, Student] = {}
         self.category: str = category
         self.capacity: int = capacity
@@ -29,11 +29,3 @@ class Activity:
             student (Student): Student to add to activity.
         """
         self.students.update({student.index: student})
-
-    def get_course(self, courses):
-        """Return the course object of the activity.
-        
-        Args:
-            courses (dict[str, Course]): Contains all courses.
-        """
-        return courses[self.course]

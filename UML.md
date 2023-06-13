@@ -1,3 +1,5 @@
+# UML Diagram
+
 <div hidden>
 @startuml FirstDiagram
 
@@ -32,7 +34,7 @@ class Activity{
     course: Course = The course which the activity belongs to.
     category: str = The category of the activity. Options: lecture, tutorial or practical.
     capacity: int.
-    students: list[Student].
+    students: dict[str, Student].
 }
 
 class Course{
