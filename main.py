@@ -32,5 +32,5 @@ if __name__ == "__main__":
 
     score = Penalty(schedule)
 
-    print(score.capacity_penalty())
+    print(score.course_conflict())
     # print(schedule.as_list_of_dicts())
