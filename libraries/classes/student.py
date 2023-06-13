@@ -10,7 +10,7 @@ class Student:
         first_name: str,
         last_name: str,
         student_number: int,
-        courses: dict[str,Course],
+        courses: 'dict[str,Course]',
     ) -> None:
         """Initialize the Course with the relevant information.
 

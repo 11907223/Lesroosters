@@ -15,7 +15,7 @@ class Day:
         self.name = weekday
         self.slots = self._init_slots(halls, timeslots)
 
-    def _init_slots(self, halls, timeslots) -> list[Hall_slot]:
+    def _init_slots(self, halls, timeslots) -> 'list[Hall_slot]':
         """
         Initialize hall slots for this job. This is a helper method to initialize the timeslots and halls for this job.
 
