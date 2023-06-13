@@ -14,10 +14,8 @@ if __name__ == "__main__":
     schedule = random_schedule()
     compact = compact_fill(schedule)
     compact.fill(courses)
-    print(compact)
+    print(pd.DataFrame(compact.fill(courses).as_list_of_dicts()))
 
-    # print(points)
-    # print schedule
     print(schedule)
     # other examples
     df = pd.DataFrame(schedule.as_list_of_dicts())

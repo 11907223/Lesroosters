@@ -1,5 +1,7 @@
-from .course import Course
-
+from typing import TYPE_CHECKING
+from libraries.classes.course import Course
+if TYPE_CHECKING:
+    from libraries.classes.activity import Activity
 
 class Student:
     def __init__(
@@ -8,7 +10,7 @@ class Student:
         first_name: str,
         last_name: str,
         student_number: int,
-        courses: Course,
+        courses: dict[str,Course],
     ) -> None:
         """Initialize the Course with the relevant information.
 
@@ -16,7 +18,7 @@ class Student:
             index (int): Index of student in file.
             first_name (str): Student first name.
             last_name (str): Student last name.
-            id (int): Student ID number.
+            student_number (int): Student ID number.
             courses (list[Course]): Enrolled courses of the student.
         """
         self.index: int = index
@@ -24,7 +26,7 @@ class Student:
         self.last_name: str = last_name
         self.student_number: int = student_number
         self.courses: dict[str, Course] = courses
-        self.activites = {}
+        self.activites: dict[str, Activity] = {}
 
     def add_course(self, course: Course):
         self.courses.update({course.name: course})

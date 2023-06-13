@@ -62,7 +62,7 @@ def init_activities(course_obj: Course, course: pd.Series):
     # Add practicals.
     practicals = {
         "practicals": Activity(
-            course=course,
+            course=course_obj,
             category=f"practical {i+1}",
             capacity=course["Max. stud. Practicum"],
         )
@@ -72,7 +72,7 @@ def init_activities(course_obj: Course, course: pd.Series):
     # Add tutorials.
     tutorials = {
         "tutorials": Activity(
-            course=course,
+            course=course_obj,
             category=f"tutorial {i+1}",
             capacity=course["Max. stud. Werkcollege"],
         )
