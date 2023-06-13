@@ -3,6 +3,7 @@ from libraries.algorithms.random import random_schedule
 from libraries.classes.schedule import Schedule
 from libraries.algorithms.compact_fill import compact_fill
 from libraries.classes.penalty import Penalty
+from libraries.helpers.model import Model
 import pandas as pd
 
 
@@ -11,6 +12,8 @@ if __name__ == "__main__":
     students = load_students(courses)
     schedule = Schedule()
 
+    model = Model()
+    model.translate_schedule_to_model()
     schedule = random_schedule()
     # random_schedule = Random(schedule, courses)
     # random_schedule = random_schedule.run()
@@ -18,7 +21,7 @@ if __name__ == "__main__":
     compact = compact_fill(schedule)
     compact.fill(courses)
     print(pd.DataFrame(compact.fill(courses).as_list_of_dicts()))
-
+    print(schedule.as_list_of_dicts())
     print(schedule)
     # other examples
     df = pd.DataFrame(schedule.as_list_of_dicts())

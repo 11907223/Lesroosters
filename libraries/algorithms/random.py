@@ -25,9 +25,11 @@ def random_schedule():
             index = random.random() * (len(s.days[weekdays[1]].slots))
             weekday = random.choice(weekdays)
             inserted_all_courses = s.insert_activity(weekday, int(index), activity)
-            students = list(activity.course.students.values())
+            students = activity.course.students
+            print(students)
             for student in students:
                     activity.add_student(student)
+                    print(activity.students)
     return s
 
 class Random:
