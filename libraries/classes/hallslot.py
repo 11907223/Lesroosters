@@ -17,13 +17,18 @@ class Hall_slot:
         """Fill the slot with an activity."""
         self.activity = activity
 
-    def check_capacity(self, activity):
-        """Check if nr. of students in activity smaller than room capacity."""
-        if self.room_capacity >= activity.capacity:
-            return True
+    def exceed_capacity(self, activity):
+        """Check if nr. of students in activity smaller than room capacity.
+        Returns none if room capacity is not exceded. Returns integer with
+        capacity difference if capacity is exceded.
+        """
 
-        # capacity not satisfied
-        return False
+        # Check if activity has smaller capacity than room
+        if activity.capacity <= self.room_capacity:
+            return None
+        else:
+            # capacity not satisfied
+            return activity.capacity - self.room_capacity
 
     def as_dict(self):
         """Return ScheduleSlot object as a dict (for pandas dataframes)."""

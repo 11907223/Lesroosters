@@ -12,6 +12,9 @@ if __name__ == "__main__":
     schedule = Schedule()
 
     schedule = random_schedule()
+    # random_schedule = Random(schedule, courses)
+    # random_schedule = random_schedule.run()
+
     compact = compact_fill(schedule)
     compact.fill(courses)
     print(pd.DataFrame(compact.fill(courses).as_list_of_dicts()))

@@ -107,7 +107,7 @@ def load_students(courses, path: str = "data"):
             courses=subjects,
         )
 
-        update_course_roster(courses, students[index])
+        update_course_rooster(courses, students[index])
     return students
 
 
@@ -119,7 +119,7 @@ def load_subjects(courses, student):
     }
 
 
-def update_course_roster(courses: "dict[str, Course]", student: Student):
+def update_course_rooster(courses: "dict[str, Course]", student: Student):
     for course in student.courses.keys():
         courses[course].add_student(student)
 
