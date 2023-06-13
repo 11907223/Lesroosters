@@ -29,7 +29,7 @@ class Schedule:
     def insert_activity(self, day, index, activity):
         """Try to insert activity into empty and valid slot."""
         slot = self.days[day].slots[index]
-        if slot.is_empty and slot.check_capacity(activity):
+        if slot.is_empty:  # and slot.check_capacity(activity):
             slot.fill(activity)
             return True
         return False

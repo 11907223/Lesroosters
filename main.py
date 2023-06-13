@@ -13,9 +13,6 @@ if __name__ == "__main__":
     schedule = random_schedule()
     # compact = fill_schedule(courses, schedule)
 
-    # points = penalty_point_calculator(schedule)
-    # print(points)
-    # print schedule
     print(schedule)
     # other examples
     df = pd.DataFrame(schedule.as_list_of_dicts())
@@ -32,5 +29,5 @@ if __name__ == "__main__":
 
     score = Penalty(schedule)
 
-    print(score.evening_penalty())
+    print(score.capacity_penalty())
     # print(schedule.as_list_of_dicts())

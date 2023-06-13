@@ -43,7 +43,7 @@ def index():
 
     penalty = Penalty(schedule)
 
-    evening_penalty = penalty.evening_penalty()
+    evening_penalty = penalty.total_penalty()
 
     return render_template(
         "index.html",

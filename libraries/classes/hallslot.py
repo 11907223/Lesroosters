@@ -25,9 +25,6 @@ class Hall_slot:
         # capacity not satisfied
         return False
 
-    def get_activity_exceeding_capacity(self, activity):
-        pass
-
     def as_dict(self):
         """Return ScheduleSlot object as a dict (for pandas dataframes)."""
 
@@ -49,4 +46,4 @@ class Hall_slot:
 
     def __repr__(self) -> str:
         """Return string representation of this ScheduleSlot object."""
-        return f"{self.day} starting at {self.time} in room {self.room}"
+        return f"{self.day} {self.time} {self.room}"

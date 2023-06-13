@@ -6,17 +6,31 @@ class Penalty:
 
     def total_penalty(self) -> int:
         """Total number of penalty points for a week schedule."""
-        return None
+        total = (
+            self.capacity_penalty() + self.evening_penalty() + self.student_penalty()
+        )
+        return total
 
     def capacity_penalty(self) -> int:
         """Check if the number of students of each activity exceeds the hall capacity.
         For every student that doesn't fit 1 penalty point is counted."""
-        return None
+        penalty_points = 0
+        day_schedules = self.schedule.days.values()
+
+        for day in day_schedules:
+            for slot in day.slots:
+                if slot.activity:
+                    if not slot.check_capacity(slot.activity):
+                        penalty_points += 1
+
+        return penalty_points
 
     def student_penalty(self) -> int:
         """Every course conflict (more than 1 activity in timeslot) for a student
         schedule is counted as 1 penalty point."""
-        return None
+        penalty_points = 0
+
+        return penalty_points
 
     def evening_penalty(self) -> int:
         """If the evening timeslot (17:00-19:00) is used, a penalty of 5 points is counted."""
