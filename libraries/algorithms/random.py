@@ -4,39 +4,13 @@ from libraries.helpers.load_data import load_courses
 import random
 import copy
 
-def random_schedule():
-    courses = load_courses()
-
-    # put all activities in a list
-    all_activities = []
-    for course_name in courses:
-        course = courses[course_name]
-        for act in course.activities():
-            all_activities.append(act)
-    # create empty schedule
-    s = Schedule("data")
-
-    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-
-    for activity in all_activities:
-        inserted_all_courses = False
-        # insert activity at random point
-        while not inserted_all_courses:
-            index = random.random() * (len(s.days[weekdays[1]].slots))
-            weekday = random.choice(weekdays)
-            inserted_all_courses = s.insert_activity(weekday, int(index), activity)
-            students = list(activity.course.students.values())
-            for student in students:
-                    activity.add_student(student)
-    return s
-
 class Random:
     def __init__(self, empty_schedule, courses):
         self.schedule = copy.deepcopy(empty_schedule)
         self.activities = self.load_activities(courses)
 
     def load_activities(self, courses):
-        # put all activities in a list
+        # put all activities in a list & add students to activities
         all_activities = []
 
         for course_name in courses:
@@ -45,16 +19,15 @@ class Random:
 
             for act in course.activities():
                 all_activities.append(act)
+
+                # add students to activity
                 act.add_students(student_dict)
 
+                # add activity to students
+                for student in student_dict.values():
+                    student.add_activity(act)
         return all_activities
     
-    # def assign_students(self, courses):
-    #     # add students to activities
-    #     for course in courses:
-    #         student_dict = courses[course].students
-
-
     def run(self):
         weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
