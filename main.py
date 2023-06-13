@@ -1,5 +1,5 @@
 from libraries.helpers.load_data import load_courses, load_students
-from libraries.algorithms.random import random_schedule
+from libraries.algorithms.random import Random
 from libraries.classes.schedule import Schedule
 from libraries.algorithms.compact_fill import compact_fill
 from libraries.classes.penalty import Penalty
@@ -18,9 +18,6 @@ if __name__ == "__main__":
     # random_schedule = Random(schedule, courses)
     # random_schedule = random_schedule.run()
 
-    compact = compact_fill(schedule)
-    compact.fill(courses)
-    print(pd.DataFrame(compact.fill(courses).as_list_of_dicts()))
     print(schedule.as_list_of_dicts())
     print(schedule)
     # other examples
@@ -30,13 +27,13 @@ if __name__ == "__main__":
         df,
     )
 
-    room_scheme = df[df.room == "A1.04"]
-    print("THESE ARE ALL ACTIVITIES IN A1.04 ACROSS THE WHOLE WEEK: \n", room_scheme)
+    # room_scheme = df[df.room == "A1.04"]
+    # print("THESE ARE ALL ACTIVITIES IN A1.04 ACROSS THE WHOLE WEEK: \n", room_scheme)
 
-    day_schema = df[df.day == "Monday"]
-    print("THESE ARE ALL ACTIVITIES ON MONDAY:\n", day_schema)
+    # day_schema = df[df.day == "Monday"]
+    # print("THESE ARE ALL ACTIVITIES ON MONDAY:\n", day_schema)
 
-    score = Penalty(schedule)
+    score = Penalty(random_schedule)
 
     print(score.course_conflict())
     # print(schedule.as_list_of_dicts())

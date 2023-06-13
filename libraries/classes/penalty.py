@@ -41,11 +41,11 @@ class Penalty:
         for day in days:
             for slot in day.slots:
                 if slot.activity:
-                    print(slot.activity.students)
-                    students.append(slot.activity.students.values())
+                    for object in slot.activity.students.values():
+                        students.append(object)
 
         for student in students:
-            student.activities
+            print(student)
 
         return penalty_points
 
