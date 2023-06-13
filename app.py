@@ -17,6 +17,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    """Homepage"""
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     schedule_list = {
         time: {
@@ -32,8 +33,6 @@ def index():
     for slot in schedule.days:
         if slot.activity:
             schedule_list[slot.time][slot.day].append([slot.activity.course, slot.room])
-
-    print(schedule_list)
 
     return render_template(
         "index.html",

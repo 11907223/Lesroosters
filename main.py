@@ -1,7 +1,7 @@
 from libraries.helpers.load_data import load_courses, load_students
 from libraries.algorithms.random import random_schedule
-# from libraries.helpers.penalty_calc import penalty_point_calculator
 from libraries.classes.schedule import Schedule
+from libraries.classes.penalty import Penalty
 import pandas as pd
 
 
@@ -29,3 +29,7 @@ if __name__ == "__main__":
 
     day_schema = df[df.day == "Monday"]
     print("THESE ARE ALL ACTIVITIES ON MONDAY:\n", day_schema)
+
+    score = Penalty(schedule)
+
+    print(score.evening_penalty())
