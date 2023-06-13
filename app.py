@@ -17,25 +17,32 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    """Homepage"""
-    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-    schedule_list = {
-        time: {
-            day: [] for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-        }
-        for time in ["9", "11", "13", "15", "17"]
-    }
+    """Renders homepage with a random schedule."""
 
+    # Create a list with weekdays
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    # Create an empty dictionary
+    schedule_dict = {
+        time: {day: [] for day in weekdays} for time in ["9", "11", "13", "15", "17"]
+    }
+    print(schedule_dict)
+    # Initialize a random schedule
     schedule = random_schedule()
 
-    print("EMPTY LIST!!!")
-    print(schedule_list)
-    for slot in schedule.days:
+    students = []
+
+    # Fill the empty schedule dict with information from the class
+    for slot in schedule.slots:
         if slot.activity:
-            schedule_list[slot.time][slot.day].append([slot.activity.course, slot.room])
+            schedule_dict[slot.time][slot.day].append([slot.activity.course, slot.room])
+            students.append(slot.activity.course.students)
+
+    malus_points = -50
 
     return render_template(
         "index.html",
         weekdays=weekdays,
-        schedule=schedule_list,
+        schedule=schedule_dict,
+        score=malus_points,
+        students=students,
     )

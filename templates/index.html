@@ -9,15 +9,29 @@
 
         <link href="../static/style.css" rel="stylesheet">
 
-        <title>University timetable</title>
+        <title>Timetable</title>
 
     </head>
 
     <body>
 
         <div class="header">
-            <h1> Schedule </h1>
+            <h1> Here's your timetable </h1>
         </div>
+        <form>
+            <label for="algorithm">Select an algorithm</label>
+            <select id="algorithm">
+                <option value="random">Random</option>
+                <option value="beam">Beam search</option>
+                <option value="hillclimber">Hillclimber</option>
+                <option value="genetic">Genetic</option>
+            </select>
+            <button id="btn">Create a timetable</button>
+        </form>
+        <div class="score">
+            <text> The score of this timetable is: {{score}}</text>
+        </div>
+        <div class="students">hallo {{students}}</div>
         <div class="schedule-box">
             <div class="grid-container">
                 <div class="timeslot-header">Timeslot</div>
