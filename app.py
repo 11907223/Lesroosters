@@ -36,6 +36,7 @@ def index():
     for day in schedule.days.items():
         for slot in day[1].slots:
             if slot.activity:
+                print(slot.activity.course)
                 schedule_dict[slot.time][slot.day].append(
                     [slot.activity.course, slot.room]
                 )
