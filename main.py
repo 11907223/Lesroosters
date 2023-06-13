@@ -1,6 +1,7 @@
 from libraries.helpers.load_data import load_courses, load_students
 from libraries.algorithms.random import random_schedule
 from libraries.classes.schedule import Schedule
+from libraries.algorithms.compact_fill import compact_fill
 from libraries.classes.penalty import Penalty
 import pandas as pd
 
@@ -8,11 +9,15 @@ import pandas as pd
 if __name__ == "__main__":
     courses = load_courses()
     students = load_students(courses)
-    # schedule = Schedule()
+    schedule = Schedule()
 
     schedule = random_schedule()
-    # compact = fill_schedule(courses, schedule)
+    compact = compact_fill(schedule)
+    compact.fill(courses)
+    print(compact)
 
+    # print(points)
+    # print schedule
     print(schedule)
     # other examples
     df = pd.DataFrame(schedule.as_list_of_dicts())
