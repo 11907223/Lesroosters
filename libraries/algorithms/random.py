@@ -21,7 +21,7 @@ def random_schedule():
         inserted_all_courses = False
         # insert activity at random point
         while not inserted_all_courses:
-            index = random.random() * (len(s.days[weekdays[1]].slots) - 1)
+            index = random.random() * (len(s.days[weekdays[1]].slots))
             weekday = random.choice(weekdays)
             inserted_all_courses = s.insert_activity(weekday, int(index), activity)
     return s

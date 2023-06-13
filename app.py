@@ -35,12 +35,11 @@ def index():
     # Fill the empty schedule dict with information from the class
     for day in schedule.days.items():
         for slot in day[1].slots:
-            print(slot)
             if slot.activity:
                 schedule_dict[slot.time][slot.day].append(
                     [slot.activity.course, slot.room]
                 )
-                students.append(slot.activity.course.students)
+                # students.append(slot.activity.course.students)
 
     penalty = Penalty(schedule)
 
