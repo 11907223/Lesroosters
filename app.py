@@ -2,6 +2,7 @@
 Flask app to visualize a university scheduling tool.
 """
 from libraries.algorithms.random import random_schedule
+from libraries.classes.penalty import Penalty
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,24 +26,30 @@ def index():
     schedule_dict = {
         time: {day: [] for day in weekdays} for time in ["9", "11", "13", "15", "17"]
     }
-    print(schedule_dict)
+
     # Initialize a random schedule
     schedule = random_schedule()
 
     students = []
 
     # Fill the empty schedule dict with information from the class
-    for slot in schedule.slots:
-        if slot.activity:
-            schedule_dict[slot.time][slot.day].append([slot.activity.course, slot.room])
-            students.append(slot.activity.course.students)
+    for day in schedule.days.items():
+        for slot in day[1].slots:
+            print(slot)
+            if slot.activity:
+                schedule_dict[slot.time][slot.day].append(
+                    [slot.activity.course, slot.room]
+                )
+                students.append(slot.activity.course.students)
 
-    malus_points = -50
+    penalty = Penalty(schedule)
+
+    evening_penalty = penalty.evening_penalty()
 
     return render_template(
         "index.html",
         weekdays=weekdays,
         schedule=schedule_dict,
-        score=malus_points,
+        score=evening_penalty,
         students=students,
     )
