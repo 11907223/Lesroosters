@@ -27,6 +27,9 @@ class Hall_slot:
         # capacity not satisfied
         return False
 
+    def get_activity_exceeding_capacity(self, activity):
+        
+
     def as_dict(self):
         """Return ScheduleSlot object as a dict (for pandas dataframes)."""
 
@@ -53,14 +56,33 @@ class Hall_slot:
 
 class Day:
     def __init__(self, weekday: str, timeslots, halls) -> None:
+        """Initialize a Day.
+         
+         Args:
+         	 weekday (list[str]): The weekday of the instance.
+         	 timeslots (list[str]): The timeslots of the instance.
+         	 halls (dict[str, int]): The halls of the instance.
+         
+         Returns: 
+        """
         self.name = weekday
-        self.slots = self.init_slots(halls, timeslots)
+        self.slots = self._init_slots(halls, timeslots)
 
-    def init_slots(self, halls, timeslots) -> list[Hall_slot]:
+    def _init_slots(self, halls, timeslots) -> list[Hall_slot]:
+        """
+         Initialize hall slots for this job. This is a helper method to initialize the timeslots and halls for this job.
+         
+         Args:
+         	 halls: Dictionary of halls keyed by timeslot id.
+         	 timeslots: List of timeslot objects. Each timeslot is represented as a dictionary with keys corresponding to the timeslot id and values corresponding to the capacity
+         
+         Returns: 
+         	 List of Hall_slot objects that have been
+        """
         slots = []
+        # Initiate empty schedule from 9:00 to 15:00.
         for timeslot in timeslots:
             for hall_id, capacity in halls.items():
-                # Initiate empty schedule from 9:00 to 15:00.
                 slots.append(Hall_slot(self.name, timeslot, hall_id, capacity))
 
         # Add 17:00 timeslot.
@@ -68,6 +90,12 @@ class Day:
         slots.append(Hall_slot(self.name, str(17), largest_hall, halls[largest_hall]))
 
         return slots
+    
+    def get_penalty_points(self) -> int:
+        penalty_points = 0
+        for slot in self.slots:
+            slot.get_
+
 
 class Schedule:
     def __init__(self, path: str = "data") -> None:

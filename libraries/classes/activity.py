@@ -1,3 +1,6 @@
+from libraries.classes.course import Course
+from libraries.classes.student import Student
+
 class Activity:
     """ "Class containing single activity in a course.
 
@@ -8,21 +11,29 @@ class Activity:
         """Initialize activity for a course.
 
         Args:
-            course (): The course which the activity belongs to.
-            category (): The category of the activity.
-                Options: (lecture, tutorial or practical).
-            capacity (): The maximum number of students in the activity.
-            students (): The list of students in the activity.
+            course (str): The course which the activity belongs to.
+            category (str): The category of the activity.
+                Options=lecture, tutorial or practical.
+            capacity (): Maximum number of students in the activity.
+            students (): List of students in the activity.
         """
-        self.course = course
-        self.students = {}
-        self.category = category
-        self.capacity = capacity
+        self.course: str = course
+        self.students: dict[str, Student] = {}
+        self.category: str = category
+        self.capacity: int = capacity
 
     def add_student(self, student) -> None:
         """Add a student to the list of students participating in activity.
 
         Args:
-                student (): Student to include in course activity.
+            student (Student): Student to add to activity.
         """
         self.students.update({student.index: student})
+
+    def get_course(self, courses):
+        """Return the course object of the activity.
+        
+        Args:
+            courses (dict[str, Course]): Contains all courses.
+        """
+        return courses[self.course]
