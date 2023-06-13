@@ -38,7 +38,7 @@ def index():
             if slot.activity:
                 print(slot.activity.course)
                 schedule_dict[slot.time][slot.day].append(
-                    [slot.activity.course, slot.room]
+                    [slot.activity.course.name, slot.room]
                 )
                 # students.append(slot.activity.course.students)
 
