@@ -22,10 +22,11 @@ class Activity:
         self.category: str = category
         self.capacity: int = capacity
 
-    def add_student(self, student) -> None:
-        """Add a student to the list of students participating in activity.
+    def add_students(self, students) -> None:
+        """Add students to the dict of students participating in activity.
 
         Args:
-            student (Student): Student to add to activity.
+            students (dict[str:Student]): dict of students to add to activity.
         """
-        self.students.update({student.index: student})
+        for student in students.values():
+            self.students.update({student.index: student})
