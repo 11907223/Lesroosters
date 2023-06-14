@@ -39,3 +39,16 @@ div.schedule-box {
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.students {
+    height: 150px;
+    border: 2px solid orange;
+}
+
+.student-title {
+    font-weight: 800;
+}
+
+.line {
+    border: 1px solid rgba(255, 166, 0, 0.383);
+}

@@ -8,6 +8,7 @@
         <meta name="viewport" content="initial-scale=1, width=device-width">
 
         <link href="../static/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
         <title>Timetable</title>
 
@@ -29,9 +30,17 @@
             <button id="btn">Create a timetable</button>
         </form>
         <div class="score">
-            <text> The score of this timetable is: {{score}}</text>
+            <text> The score of this timetable is: -{{score}}</text>
         </div>
-        <div class="students"> students {{students}}</div>
+        <div class="students overflow-auto">
+            <text class="student-title">Students</text>
+            {% for student in students %}
+            <li class="student-list">
+                <div class="line"></div>
+                {{student}}
+            </li>
+            {% endfor %}
+        </div>
         <div class="schedule-box">
             <div class="grid-container">
                 <div class="timeslot-header">Timeslot</div>

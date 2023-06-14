@@ -12,7 +12,12 @@ class Penalty:
 
     def total(self) -> int:
         """Total number of penalty points for a week schedule."""
-        total = self.capacity() + self.evening() + self.course_conflict()
+        total = (
+            self.capacity()
+            + self.evening()
+            + self.course_conflict()
+            + self.empty_timeslot()
+        )
         return total
 
     def capacity(self) -> int:
@@ -99,7 +104,9 @@ class Penalty:
     def empty_timeslot(self) -> int:
         penalty_points = 0
 
-        for day in self.schedule.days.values():
-            students_in_day = []
-            for slot in day:
-                students_in_day.append(slot.activity.students)
+        # for day in self.schedule.days.values():
+        #     students_in_day = []
+        #     for slot in day:
+        #         students_in_day.append(slot.activity.students)
+
+        return penalty_points
