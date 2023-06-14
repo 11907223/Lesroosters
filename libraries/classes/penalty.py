@@ -1,3 +1,9 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from libraries.classes.student import Student
+
+
 class Penalty:
     """Class to calculate the penalty points of a Schedule object."""
 
@@ -34,18 +40,42 @@ class Penalty:
     def course_conflict(self) -> int:
         """Every course conflict (more than 1 activity in timeslot) for a student
         schedule is counted as 1 penalty point."""
+
+        # Start with 0 penalty points
         penalty_points = 0
+        # Select all the Day objects from Schedule
         days = self.schedule.days.values()
-        students = []
+        # Temporary variables to store students and timeslot
+        temp_students: dict[int, Student] = {}
+        prev_slot_time = 0
 
+        # Iterate over Day objects
         for day in days:
+            # Iterate over Hallslot objects
             for slot in day.slots:
-                if slot.activity:
-                    for object in slot.activity.students.values():
-                        students.append(object)
+                # If slot contains an activity at a new time
+                if slot.activity and slot.time != prev_slot_time:
+                    # Empty temp_students
+                    temp_students = {}
+                    # Set previous time to time of slot
+                    prev_slot_time = slot.time
+                    # Iterate over students assigned to Activity
+                    for student in slot.activity.students.items():
+                        # Add students to temp_students
+                        temp_students.update({student[0]: student[1]})
 
-        for student in students:
-            print(student.activities)
+                # If slot contains activity at same time as previous slot
+                elif slot.activity and slot.time == prev_slot_time:
+                    # Iterate over students assigned to Activity
+                    for student in slot.activity.students.items():
+                        # If student is already in temp_students
+                        if student[0] in temp_students:
+                            # add penalty point
+                            penalty_points += 1
+                        # if student not in temp_students
+                        else:
+                            # add student to temp_students
+                            temp_students.update({student[0]: student[1]})
 
         return penalty_points
 

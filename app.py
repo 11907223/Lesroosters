@@ -1,8 +1,10 @@
 """
 Flask app to visualize a university scheduling tool.
 """
-from libraries.algorithms.random import random_schedule
+from libraries.algorithms.random import Random
 from libraries.classes.penalty import Penalty
+from libraries.classes.schedule import Schedule
+from libraries.helpers.load_data import load_courses, load_students
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,6 +22,13 @@ app = Flask(__name__)
 def index():
     """Renders homepage with a random schedule."""
 
+    courses = load_courses()
+    students = load_students(courses)
+    schedule = Schedule()
+
+    random_schedule = Random(schedule, courses)
+    random_schedule = random_schedule.run()
+
     # Create a list with weekdays
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     # Create an empty dictionary
@@ -27,13 +36,10 @@ def index():
         time: {day: [] for day in weekdays} for time in ["9", "11", "13", "15", "17"]
     }
 
-    # Initialize a random schedule
-    schedule = random_schedule()
-
     students = []
 
     # Fill the empty schedule dict with information from the class
-    for day in schedule.days.items():
+    for day in random_schedule.days.items():
         for slot in day[1].slots:
             if slot.activity:
                 print(slot.activity.course)
@@ -42,9 +48,9 @@ def index():
                 )
                 # students.append(slot.activity.course.students)
 
-    penalty = Penalty(schedule)
+    penalty = Penalty(random_schedule)
 
-    evening_penalty = penalty.total_penalty()
+    evening_penalty = penalty.total()
 
     return render_template(
         "index.html",
