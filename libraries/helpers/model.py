@@ -5,8 +5,8 @@ from libraries.algorithms.random import Random
 class Model:
     def __init__(self) -> None:
         self.courses = load_courses()
-        self.schedule = Random(Schedule(), self.courses).run()
         self.students = load_students(self.courses)
+        self.schedule = Random(Schedule(), self.courses).run()
 
     def add_activity_to_schedule(self, activity: str):
         pass
@@ -21,14 +21,33 @@ class Model:
 
     def translate_schedule_to_model(self):
         schedule_model = {}
+
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
+            day = entry['day']
+            local_index = index % 29
             activity = entry['activity']
             course = entry['course']
-            schedule_model[index] = {'activity': activity, 'course': course}
-        
-        students_per_activity = {}
+
+            if day not in schedule_model:
+                schedule_model[day] = {}
+
+            if 'index' not in schedule_model[day]:
+                schedule_model[day]['index'] = {}
+
+            schedule_model[day]['index'][local_index] = {'course': course, 'activity': activity}
+
+        students_in_activities = self.students_to_model()
+
+        return schedule_model, students_in_activities
+
+    def students_to_model(self):
+        students_in_activities = {}
         for day in self.schedule.days.values():
             for slot in day.slots:
                 if slot.activity is not None:
-                    students_per_activity[f"{slot.activity.course.name} {slot.activity.category}"] = slot.activity.students
-        print(students_per_activity)
+                    student_set = set()
+                    for student in slot.activity.students:
+                        student_set.add(student)
+                    students_in_activities.update({(slot.activity.course.name, slot.activity.category): student_set})
+
+        return students_in_activities

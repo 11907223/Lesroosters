@@ -1,6 +1,21 @@
 # UML Diagram
 
 <div hidden>
+@startuml
+'Change only this value depending of the number of @startuml/@enduml on the full file
+'https://forum.plantuml.net/13673/make-multiple-%40startuml%40enduml-blocks-file-generate-diagram
+!$max=2
+!$i=1
+label l [
+!while $i < $max+1
+  {{
+  !include %filename()!$i
+  }}
+  !$i = $i +1
+!endwhile
+]
+@enduml
+
 @startuml FirstDiagram
 
 class Schedule{
@@ -68,6 +83,26 @@ Course <-right-> Student
 
 
 @enduml
+
+@startuml ModelDiagram
+
+object Schedule{
+    {field} index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144 
+        ((4 timeslots * 7 rooms + 1 evening slot) * 5 days).
+    activity : str = string representation of the Activity object.
+}
+
+object Activity_participant_list{
+    activity : str = string representation of the Activity object.
+    student : str = string representation of the Student object. Based on their index number.
+}
+
+Schedule <- Activity_participant_list
+
+@enduml
+
 </div>
 
-![UMl Diagram](FirstDiagram.svg)
+![UML Diagram](FirstDiagram.svg)
+
+![Model Diagram](ModelDiagram.svg)

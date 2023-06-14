@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="79px" preserveAspectRatio="none" style="width:942px;height:79px;" version="1.1" viewBox="0 0 942 79" width="942px" zoomAndPan="magnify"><defs><filter height="300%" id="fsqj4h26qx348" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FEFECE" filter="url(#fsqj4h26qx348)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="449" x="6" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="58" x="201.5" y="21.1387">Schedule</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="454" y1="25.9688" y2="25.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="437" x="12" y="39.251">index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="247" x="12" y="50.8916">((4 timeslots * 7 rooms + 1 evening slot) * 5 days).</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="278" x="12" y="62.5322">activity : str = string representation of the Activity object.</text><rect fill="#FEFECE" filter="url(#fsqj4h26qx348)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="441" x="490" y="14"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="141" x="640" y="27.1387">Activity_participant_list</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="491" x2="930" y1="31.9688" y2="31.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="278" x="496" y="45.251">activity : str = string representation of the Activity object.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="429" x="496" y="56.8916">student : str = string representation of the Student object. Based on their index number.</text><!--MD5=[20cb0694eb88de527ed293dff0b63fba]
+reverse link Schedule to Activity_participant_list--><path d="M460.22,38.5 C470.13,38.5 480.04,38.5 489.96,38.5 " fill="none" id="Schedule&lt;-Activity_participant_list" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="455.03,38.5,464.03,42.5,460.03,38.5,464.03,34.5,455.03,38.5" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[8c29fff5beda7e60e566055e5cf5b92b]
+@startuml ModelDiagram
+
+object Schedule{
+    {field} index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144 
+        ((4 timeslots * 7 rooms + 1 evening slot) * 5 days).
+    activity : str = string representation of the Activity object.
+}
+
+object Activity_participant_list{
+    activity : str = string representation of the Activity object.
+    student : str = string representation of the Student object. Based on their index number.
+}
+
+Schedule <- Activity_participant_list
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 11:22:07 CET 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.19+7-post-Ubuntu-0ubuntu122.04.1
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
