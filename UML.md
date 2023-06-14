@@ -103,6 +103,6 @@ Schedule <- Activity_participant_list
 
 </div>
 
-![UML Diagram](FirstDiagram.svg)
+![UML Diagram](images/FirstDiagram.svg)
 
-![Model Diagram](ModelDiagram.svg)
+![Model Diagram](images/ModelDiagram.svg)
