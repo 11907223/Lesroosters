@@ -1,46 +1,56 @@
 from libraries.classes.schedule import Schedule
-from libraries.helpers.load_data import load_courses, load_students
-from libraries.algorithms.random import Random
+from libraries.classes.student import Student
+from libraries.classes.course import Course
+
 
 class Model:
-    def __init__(self) -> None:
-        self.courses = load_courses()
-        self.students = load_students(self.courses)
-        self.schedule = Random(Schedule(), self.courses).run()
+    def __init__(
+        self,
+        courses: dict[str, Course],
+        students: dict[str, Student],
+        schedule: Schedule,
+    ) -> None:
+        self.courses = courses
+        self.students = students
+        self.schedule = schedule
+        self.model = self.get_empty_model()
+        self.activities = self.empty_student_model()
+        self.index_penalties = {}  # empty model {index: penalty}
+        self.student_penalties = (
+            {}
+        )  # empty activities model with {activity: {student_id: penalty}}
 
-    def add_activity_to_schedule(self, activity: str):
-        pass
+    def get_empty_model(self) -> str:
+        """Takes Schedule object and flattens it into string representation.
+        string looks like:
 
-    def add_student_to_activity(self, student: str, activity: str):
-        pass
-
-    def call_algorithm(self, algorithm):
-        pass
-        # if algorithm == "random":
-            # random_schedule(self.courses, self.schedule)
-
-    def translate_schedule_to_model(self):
+        """
         schedule_model = {}
 
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
-            day = entry['day']
+            day = entry["day"]
             local_index = index % 29
-            activity = entry['activity']
-            course = entry['course']
+            activity = entry["activity"]
+            course = entry["course"]
 
             if day not in schedule_model:
                 schedule_model[day] = {}
 
-            if 'index' not in schedule_model[day]:
-                schedule_model[day]['index'] = {}
+            if "index" not in schedule_model[day]:
+                schedule_model[day]["index"] = {}
 
-            schedule_model[day]['index'][local_index] = {'course': course, 'activity': activity}
+            schedule_model[day]["index"][local_index] = {
+                "course": course,
+                "activity": activity,
+            }
 
-        students_in_activities = self.students_to_model()
+        return schedule_model
 
-        return schedule_model, students_in_activities
+    def empty_student_model(self) -> str:
+        """Flattens Students and Activity objects into strings:
+        example:
 
-    def students_to_model(self):
+        """
         students_in_activities = {}
         for day in self.schedule.days.values():
             for slot in day.slots:
@@ -48,6 +58,69 @@ class Model:
                     student_set = set()
                     for student in slot.activity.students:
                         student_set.add(student)
-                    students_in_activities.update({(slot.activity.course.name, slot.activity.category): student_set})
+                    students_in_activities.update(
+                        {
+                            (
+                                slot.activity.course.name,
+                                slot.activity.category,
+                            ): student_set
+                        }
+                    )
 
         return students_in_activities
+
+    def return_models(self):
+        """Returns schedule and activities-student strings"""
+        return self.model, self.activities
+
+    def add_activity(self, activity: tuple[str, str], day: str, index: int) -> bool:
+        """adds activity to given index in schedule model"""
+        pass
+
+    def remove_activity(self, activity: tuple[str, str], day: str, index: int) -> bool:
+        """removes activity to given index in schedule model"""
+        pass
+
+    def get_capacity(self, index: int) -> int:
+        """Returns capacity of index (hall)"""
+        pass
+
+    def get_index(self, activity: tuple[str, str]) -> int:
+        """get model index of activity"""
+        pass
+
+    def add_student(self, student: int, activity: tuple[str, str]) -> bool:
+        """Add student to student-activity model"""
+        pass
+
+    def remove_student(self, student: int, activity: tuple[str, str]) -> bool:
+        """remove student to student-activity model"""
+        pass
+
+    def student_activities(self, student: int) -> list[int]:
+        """Returns list of indexes of activities"""
+        pass
+
+    def capacity_penalty(self) -> int:
+        """Calculate penalties of activities and hall capacity.
+        Fills in empty model with {index: penalty}.
+        Returns total capacity penalty."""
+        pass
+
+    def evening_penalty(self) -> int:
+        """Calculate penalties of activities in evening slot.
+        Fills in empty model with {index: penalty}.
+        returns total evening penalty."""
+        pass
+
+    def conflict_penalty(self) -> int:
+        """Calculates penalties of students with course conflicts.
+        Fills in empty student activity model {activity: {student_id: penalty}}.
+        returns total conflict penalty."""
+        pass
+
+    def total_penalty(self) -> int:
+        total = (
+            self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
+        )
+        return total
