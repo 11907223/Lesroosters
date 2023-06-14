@@ -18,7 +18,7 @@ class Penalty:
             + self.course_conflict()
             + self.empty_timeslot()
         )
-        return total
+        return int(total)
 
     def capacity(self) -> int:
         """Check if the number of students of each activity exceeds the hall capacity.
