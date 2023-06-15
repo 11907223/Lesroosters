@@ -163,8 +163,26 @@ class Model:
         return halls_capacity[hall_index]
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
-        """Return capacity of an activity."""
-        pass
+        """Returns capacity of an activity."""
+        # Start with capacity 0
+        capacity = 0
+        # Extract course name and type from activity
+        course_name = activity[0]
+        type = activity[1]
+
+        # Find the course object the activity belongs to
+        course = self.courses[course_name]
+        # Combine all course activities in one list
+        all_activities = course.lectures + course.practicals + course.tutorials
+
+        # Iterate over all Activity objects
+        for object in all_activities:
+            # If type matches Activity category
+            if type == object.category:
+                # Set capacity
+                capacity = object.capacity
+
+        return int(capacity)
 
     def get_index(self, activity: tuple[str, str]) -> int:
         """Return index of activity in model.
@@ -172,9 +190,7 @@ class Model:
         Args:
             activity (tuple[str, str]): ('course name', 'lecture 1')
         """
-        return {
-            index for index in self.model if self.model[index] == activity
-        }.pop()
+        return {index for index in self.model if self.model[index] == activity}.pop()
 
     def get_activity(self, index: int) -> activity_type:
         """Return activity stored at index in model.
@@ -250,8 +266,6 @@ class Model:
 
         return: penalty (int)"""
         total = (
-            self.capacity_penalty()
-            + self.evening_penalty()
-            + self.conflict_penalty()
+            self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
         )
         return total
