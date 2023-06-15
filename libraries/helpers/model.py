@@ -1,6 +1,10 @@
 from libraries.classes.schedule import Schedule
 from libraries.classes.student import Student
 from libraries.classes.course import Course
+from typing import Optional, Union
+
+
+activity_type = tuple[Optional[str], Optional[str]]
 
 
 class Model:
@@ -13,15 +17,15 @@ class Model:
         self.courses = courses
         self.students = students
         self.schedule = schedule
-        self.model = self.get_empty_model()
-        self.activities = self.empty_student_model()
+        self.model: dict[int, activity_type] = self.init_model()
+        self.activities = self.init_student_model()
         # A model where index maps to penalty {index: penalty}
-        self.index_penalties = {}
+        self.index_penalties: dict[int, int] = self._init_index_penalties_model()
         # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
-        self.student_penalties: dict[int, list[int, set[int]]] = {}
+        self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
 
-    def get_empty_model(self) -> dict[int, dict[str, str]]:
+    def init_model(self) -> dict[int, tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
@@ -30,14 +34,28 @@ class Model:
                 {1: {'course': None, 'activity': None}, etc.}
 
         """
-        schedule_model = {}
+        schedule_model: dict[int, activity_type] = {}
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
             activity: str = entry["activity"]
             course: str = entry["course"]
-            schedule_model[index] = {
-                "course": course,
-                "activity": activity,
-            }
+            schedule_model[index] = (
+                course,
+                activity,
+            )
+
+        return schedule_model
+
+    def _init_index_penalties_model(self) -> dict[int, int]:
+        """Take a Schedule object and flatten it into an empty string representation.
+
+        Returns:
+            dict[int : int]: Index (0 - 144) mapping to the penalty of the activity in that index.
+                Example: {0: 10, 1: 0, etc.}
+
+        """
+        schedule_model: dict[int, int] = {}
+        for index, _entry in enumerate(self.schedule.as_list_of_dicts()):
+            schedule_model[index] = 0
 
         return schedule_model
 
@@ -47,23 +65,24 @@ class Model:
         Args:
             index (int): Value 0-144 mapping to a day-hall-timeslot combination.
         """
-        day = index // (5 * (7 - 1))
-        timeslot = index % 5
-        # Assymetry requires an if statement for the evening slot.
-        if index // 5 < 28:
-            hall = (index // 5) % 7
-        else:
+        day = index // 29
+        timeslot = (index % 29) // 7
+        if (index % 29) == 28:
+            # Evening slot exception.
             hall = 5
+        else:
+            # Regular hall indexing.
+            hall = (index % 29) % 7
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def empty_student_model(self) -> dict[tuple[str, str], set[str]]:
+    def init_student_model(self) -> dict[tuple[str, str], set[int]]:
         """Take the Schedule object and convert it into a activity - student dict.
 
         Activities are structured as a tuple('Heuristieken', 'lecture 1').
 
         Returns:
-            dict[tuple[str, str], set[str]]: 
+            dict[tuple[str, str], set[str]]:
                 Activity (as unique tuple of course-activity) and a set of student indices.
         """
         students_in_activities = {}
@@ -90,9 +109,9 @@ class Model:
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
-        return self.model[index]['course'] is None
+        return self.model[index][0] is None
 
-    def add_activity(self, index: int, activity: dict[str, str]) -> bool:
+    def add_activity(self, index: int, activity: tuple[str, str]) -> bool:
         """Add activity to given index in schedule model.
 
         Returns:
@@ -104,54 +123,184 @@ class Model:
         else:
             return False
 
-    def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
-        """removes activity to given index in schedule model. Function returns True if
-        activity was succesfully removed.
+    def remove_activity(
+        self,
+        activity: Optional[activity_type] = None,
+        index: Optional[int] = None,
+    ) -> bool:
+        """Remove activity from the schedule model.
 
-        Activities are structured as follows tuple("course name", "lecture 1)
+        Activities are structured as tuple("course name", "lecture 1).
+
+        If only activity is given, index is searched and activity is removed at found index.
+        If only index is given, activity at specified index is removed.
+        If both are given, given activity is compared to stored activity before removal.
+
+        Args:
+            activity (tuple[str, str]): course name, activity type.
+                Example: ("Heuristieken", "lecture 1)
+            index (int): Index in schedule, ranging from 0 - 144.
+
+        Returns:
+            bool: True if activity was succesfully removed,
+                False if nothing to remove or given activity does not match stored activity.
         """
-        pass
+        if activity is not None and index is not None:
+            # Check if stored activity and index match stored information.
+            check_index = self.get_index(activity)
+            check_activity = self.get_activity(index)
+
+            if check_index == index and check_activity == activity:
+                # Remove activity from stored index.
+                self.model[index] = (None, None)
+                return True
+            else:
+                return False
+
+        elif activity is not None:
+            # Remove activity from stored index.
+            index = self.get_index(activity)
+            self.model[index] = (None, None)
+            return True
+
+        elif index is not None:
+            # Remove activity from stored index.
+            self.model[index] = (None, None)
+            return True
+
+        return False
 
     def get_hall_capacity(self, index: int) -> int:
-        """Returns capacity of the hall that is represented by index."""
-        pass
+        """Return capacity of the hall that is represented by index."""
+        # List of the capacity of all lecture halls
+        halls_capacity = [41, 22, 20, 56, 48, 117, 60]
+        # Translate index into information
+        info = self.translate_index(index)
+        # Get the hall that is described by index
+        hall_index = info["hall"]
+        # Return hall capacity by from list
+        return halls_capacity[hall_index]
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
-        """Returns capacity of an activity."""
-        pass
+        """Returns capacity of an activity. If activity is None, returns zero."""
+        # Start with capacity 0
+        capacity = 0
+        # Extract course name and type from activity
+        course_name = activity[0]
+        type = activity[1]
+
+        if course_name and type:
+            # Find the course object the activity belongs to
+            course = self.courses[course_name]
+            # Combine all course activities in one list
+            all_activities = course.lectures + course.practicals + course.tutorials
+
+            # Iterate over all Activity objects
+            for object in all_activities:
+                # If type matches Activity category
+                if type == object.category:
+                    # Set capacity
+                    capacity = object.capacity
+
+            return int(capacity)
+        else:
+            # If activit is None, return 0
+            return 0
 
     def get_index(self, activity: tuple[str, str]) -> int:
-        """Get model index of activity. Activities should be
-        structured as tuple("course name", "lecture 1)"""
-        pass
+        """Return index of activity in model.
+
+        Args:
+            activity (tuple[str, str]): ('course name', 'lecture 1')
+        """
+        return {index for index in self.model if self.model[index] == activity}.pop()
+
+    def get_activity(self, index: int) -> activity_type:
+        """Return activity stored at index in model.
+
+        Args:
+            index (int): Value ranging from 0 - 144
+        """
+        return self.model[index]
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
-        """Add student to student-activity model. Activities should be
-        structured as tuple("course name", "lecture 1). Students are
-        represented by their index (int)"""
-        pass
+        """Add student to an activity in the model.
+
+        Args:
+            student (int): Index id of a student.
+            activity (tuple[str, str]) : tuple("course name", "lecture 1)
+
+        Returns:
+            bool: True if student not in activity yet, False otherwise.
+        """
+        if student not in self.activities[activity]:
+            self.activities[activity].add(student)
+            return True
+        else:
+            return False
 
     def remove_student(self, student: int, activity: tuple[str, str]) -> bool:
-        """Remove student to student-activity model. Activities should be
-        structured as tuple("course name", "lecture 1). Students are
-        represented by their index (int)"""
-        pass
+        """Remove student from an activity in the model.
 
-    def student_activities(self, student: int) -> list[int]:
-        """Returns list of activities that the student is assigned to.
-        The list contains the indices (int) of activities in the schedule."""
-        pass
+        Args:
+            student (int): Index id of a student.
+            activity (tuple[str, str]) : tuple("course name", "lecture 1)
 
-    def get_highest_penalties(self, n) -> list[list[tuple[str, str], int]]:
+        Returns:
+            bool: True if student succesfully removed from activity, False otherwise.
+        """
+        if student in self.activities[activity]:
+            self.activities[activity].remove(student)
+            return True
+        else:
+            return False
+
+    def student_activities(self, student: int) -> dict[int, tuple[str, str]]:
+        """Return a dict of activities and schedule indices of the student.
+
+        Args:
+            student (int): Index id of the student.
+        """
+        activity_set = {
+            activity
+            for activity, student_list in self.activities.items()
+            if student in student_list
+        }
+        index_set = {
+            index for index, activity in self.model.items() if activity in activity_set
+        }
+        return dict(zip(index_set, activity_set, strict=True))
+
+    def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
         """Searches the schedule for activities with highest penalties.
         Returns a list of length n where each element represents an activity that
-        caused a high penalty, this element is a list which contains a tuple with course name
+        caused a high penalty, this element is also a list which contains a tuple with course name
         and activity type, and the index. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
         activity with the lowest penalty.
 
-        returns: list[list[activity: tuple[str, str], index: int]]"""
-        pass
+        returns: list[list[index: int, activity: tuple[str, str]]]"""
+
+        # Run total_penalty() to update self.index_penalties
+        self.total_penalty()
+
+        # Initialize an empty list
+        highest_penalties = []
+        # Take the penalty model
+        model = self.index_penalties
+        # Find highest penalties in de model
+        highest_values = sorted(model.values(), reverse=True)[:n]
+
+        # Iterate over the highest values
+        for high_value in highest_values:
+            # Iterate over model
+            for index, value in model.items():
+                if value == high_value:
+                    # Add index and activity to list
+                    activity = self.get_activity(index)
+                    highest_penalties.append([index, activity])
+
+        return highest_penalties
 
     def get_highest_students(self, n) -> list[int]:
         """Searches the model for students in activities with highest penalties.
@@ -170,35 +319,95 @@ class Model:
         The function also keeps track of the model in self.index_penalties."""
         # Start counting at 0 penalty points
         penalty_points = 0
-        # Select all the Day objects in the schedule
-        day_schedules = self.schedule.days.values()
 
-        # Iterate over the Day objects
-        for day in day_schedules:
-            # Iterate over timeslots in day
-            for slot in day.slots:
-                # If slot is filled with activity
-                if slot.activity:
-                    # Check if capacity is exceded
-                    if slot.exceed_capacity(slot.activity):
-                        # Add 1 penalty point
-                        penalty_points += slot.exceed_capacity(slot.activity)
+        # Iterate over all indices in model
+        for index, activity in self.model.items():
+            temp_penalty = 0
+            # Get hall capacity for slot
+            hall_capacity = self.get_hall_capacity(index)
+            # Get activity capacity for slot
+            activity_capacity = self.get_activity_capacity(activity)
+            # If activity capacity exceeds hall capacity
+            if activity_capacity > hall_capacity:
+                # Add to penalty points and update index_penalties model
+                temp_penalty = activity_capacity - hall_capacity
+                penalty_points += temp_penalty
+                self.index_penalties[index] += temp_penalty
 
+        print("capacity penalty:", penalty_points)
         return penalty_points
-        pass
 
     def evening_penalty(self) -> int:
         """Calculate penalties of activities in evening slot.
         Fills in empty model with {index: penalty}.
         returns total evening penalty."""
-        pass
+
+        # Start with 0 penalty points, set evening penalty to 5
+        penalty_points = 0
+        evening_penalty = 5
+
+        # Iterate over indices and activities in model
+        for index, activity in self.model.items():
+            # If index is mapped to activity
+            if activity[0]:
+                # Get info on index
+                info = self.translate_index(index)
+                # Check if activity is in evening slot
+                if info["timeslot"] == 4:
+                    # If so, add penalty points
+                    penalty_points += evening_penalty
+                    self.index_penalties[index] += evening_penalty
+
+        print("evening penalty:", penalty_points)
+        return penalty_points
 
     def conflict_penalty(self) -> int:
         """Calculates penalties of students with course conflicts.
         Fills in empty student activity model {activity: {student_id: penalty}}.
         returns total conflict penalty. The function also keeps track of the model in
         self.student_penalties."""
-        pass
+
+        # Start with 0 penalty points
+        penalty_points = 0
+
+        # Iterate over students
+        for id in self.students.keys():
+            # Variable for previous activities of student
+            prev_slots = []
+            # Total penalty points of student
+            student_penalty = 0
+            # Get all activities from student
+            activities = self.student_activities(int(id))
+            # Iterate over activites
+            for activity in activities:
+                # Get info on activity
+                info = self.translate_index(activity)
+                # Save day-timeslot
+                temp = (info["timeslot"], info["day"])
+                # Check if day-timeslot was already used for other activity
+                if temp in prev_slots:
+                    # If so, update student penalty and total penalty
+                    student_penalty += 1
+                    penalty_points += 1
+                    # If student is not in student penalty model
+                    if id not in self.student_penalties.keys():
+                        # Add student to model
+                        self.student_penalties.update(
+                            {id: [student_penalty, {activity}]}
+                        )
+                    # If student already in model
+                    else:
+                        # Update student penalty and add activity index
+                        self.student_penalties[id][0] = student_penalty
+                        self.student_penalties[id][1].add(activity)
+                # If day-timeslot not used
+                else:
+                    # add to previous slot variable
+                    prev_slots.append(temp)
+
+        print("conflict penalty: ", penalty_points)
+
+        return penalty_points
 
     def total_penalty(self) -> int:
         """Calculates the total penalty of the schedule.
@@ -207,4 +416,5 @@ class Model:
         total = (
             self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
         )
+
         return total
