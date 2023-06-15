@@ -31,7 +31,10 @@ class Model:
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
             activity = entry["activity"]
             course = entry["course"]
-            schedule_model[index] = {"course": course, "activity": activity, }
+            schedule_model[index] = {
+                "course": course,
+                "activity": activity,
+            }
 
         return schedule_model
 
@@ -71,11 +74,17 @@ class Model:
         return self.model, self.activities
 
     def add_activity(self, activity: tuple[str, str], index: int) -> bool:
-        """adds activity to given index in schedule model"""
+        """adds activity to given index in schedule model. Function returns True
+        if activity was succesfully added.
+
+        Activities are structured as follows tuple("course name", "lecture 1)."""
         pass
 
     def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
-        """removes activity to given index in schedule model"""
+        """removes activity to given index in schedule model. Function returns True if
+        activity was succesfully removed.
+
+        Activities are structured as follows tuple("course name", "lecture 1)"""
         pass
 
     def get_capacity(self, index: int) -> int:
@@ -83,11 +92,14 @@ class Model:
         pass
 
     def get_index(self, activity: tuple[str, str]) -> int:
-        """get model index of activity"""
+        """Get model index of activity. Activities should be
+        structured as follows tuple("course name", "lecture 1)"""
         pass
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
-        """Add student to student-activity model"""
+        """Add student to student-activity model. Activities should be
+        structured as follows tuple("course name", "lecture 1). Students are
+        represented by their index (int)"""
         pass
 
     def remove_student(self, student: int, activity: tuple[str, str]) -> bool:
