@@ -63,7 +63,7 @@ class Model:
         Activities are structured as a tuple('Heuristieken', 'lecture 1').
 
         Returns:
-            dict[tuple[str, str], set[str]]: 
+            dict[tuple[str, str], set[str]]:
                 Activity (as unique tuple of course-activity) and a set of student indices.
         """
         students_in_activities = {}
@@ -90,7 +90,7 @@ class Model:
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
-        return self.model[index]['course'] is None
+        return self.model[index]["course"] is None
 
     def add_activity(self, index: int, activity: dict[str, str]) -> bool:
         """Add activity to given index in schedule model.
@@ -114,7 +114,10 @@ class Model:
 
     def get_hall_capacity(self, index: int) -> int:
         """Returns capacity of the hall that is represented by index."""
-        pass
+        capacity = 0
+        info = self.translate_index(index)
+        hall = info["hall"]
+        return capacity
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
         """Returns capacity of an activity."""
@@ -170,22 +173,8 @@ class Model:
         The function also keeps track of the model in self.index_penalties."""
         # Start counting at 0 penalty points
         penalty_points = 0
-        # Select all the Day objects in the schedule
-        day_schedules = self.schedule.days.values()
-
-        # Iterate over the Day objects
-        for day in day_schedules:
-            # Iterate over timeslots in day
-            for slot in day.slots:
-                # If slot is filled with activity
-                if slot.activity:
-                    # Check if capacity is exceded
-                    if slot.exceed_capacity(slot.activity):
-                        # Add 1 penalty point
-                        penalty_points += slot.exceed_capacity(slot.activity)
 
         return penalty_points
-        pass
 
     def evening_penalty(self) -> int:
         """Calculate penalties of activities in evening slot.
