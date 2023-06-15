@@ -1,7 +1,7 @@
 from libraries.classes.schedule import Schedule
 from libraries.classes.student import Student
 from libraries.classes.course import Course
-from typing import Optional
+from typing import Optional, Union
 
 
 activity_type = tuple[Optional[str], Optional[str]]
@@ -259,7 +259,7 @@ class Model:
         The list contains the indices (int) of activities in the schedule."""
         pass
 
-    def get_highest_penalties(self, n) -> list[list[int, tuple[str, str]]]:
+    def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
         """Searches the schedule for activities with highest penalties.
         Returns a list of length n where each element represents an activity that
         caused a high penalty, this element is also a list which contains a tuple with course name
