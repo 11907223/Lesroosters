@@ -105,8 +105,10 @@ class Model:
             return False
 
     def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
-        """removes activity to given index in schedule model. Function returns True if
-        activity was succesfully removed.
+        """Remove activity from the schedule model. 
+
+        Returns:
+            bool: True if activity was succesfully removed.
 
         Activities are structured as follows tuple("course name", "lecture 1)
         """
