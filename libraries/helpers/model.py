@@ -53,7 +53,7 @@ class Model:
         if index // 5 < 28:
             hall = (index // 5) % 7
         else:
-            hall = 6
+            hall = 5
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
