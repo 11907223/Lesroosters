@@ -1,7 +1,10 @@
 from libraries.classes.schedule import Schedule
 from libraries.classes.student import Student
 from libraries.classes.course import Course
+from typing import Optional
 
+
+activity_type = tuple[Optional[str], Optional[str]]
 
 class Model:
     def __init__(
@@ -13,7 +16,7 @@ class Model:
         self.courses = courses
         self.students = students
         self.schedule = schedule
-        self.model: dict[int, dict[str, None | str]] = self.get_empty_model()
+        self.model: dict[int, activity_type] = self.get_empty_model()
         self.activities = self.empty_student_model()
         # A model where index maps to penalty {index: penalty}
         self.index_penalties = {}
@@ -21,7 +24,7 @@ class Model:
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[int, set[int]]] = {}
 
-    def get_empty_model(self) -> dict[int, dict[str, str]]:
+    def get_empty_model(self) -> dict[int, tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
@@ -30,14 +33,14 @@ class Model:
                 {1: {'course': None, 'activity': None}, etc.}
 
         """
-        schedule_model = {}
+        schedule_model: dict[int, activity_type] = {}
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
             activity: str = entry["activity"]
             course: str = entry["course"]
-            schedule_model[index] = {
-                "course": course,
-                "activity": activity,
-            }
+            schedule_model[index] = (
+                course,
+                activity,
+            )
 
         return schedule_model
 
@@ -90,9 +93,9 @@ class Model:
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
-        return self.model[index]["course"] is None
+        return self.model[index][0] is None
 
-    def add_activity(self, index: int, activity: dict[str, str]) -> bool:
+    def add_activity(self, index: int, activity: tuple[str, str]) -> bool:
         """Add activity to given index in schedule model.
 
         Returns:
@@ -104,15 +107,7 @@ class Model:
         else:
             return False
 
-    def convert_activity_tuple_to_dict(self, activity: tuple[None | str, None | str]=(None, None)) -> dict[str, None | str]:
-        """Reformat a tuple of a course-activity combination into a dict.
-
-        Args:
-            activity (tuple[str, str]): A tuple containing course name and activity type.
-        """
-        return {'course': activity[0], 'activity': activity[1]}
-
-    def remove_activity(self, activity: tuple[str, str]=None, index: int=None) -> bool:
+    def remove_activity(self, activity: Optional[activity_type]=None, index: Optional[int]=None) -> bool:
         """Remove activity from the schedule model. 
 
         Activities are structured as tuple("course name", "lecture 1).
@@ -130,15 +125,29 @@ class Model:
             bool: True if activity was succesfully removed,
                 False if nothing to remove or given activity does not match stored activity.
         """
-        if activity is not None:
-            activity_dict = self.convert_activity_tuple_to_dict(activity)
-            {index for index in self.model if self.model[index] == activity_dict}
-            self.model[index] = self.convert_activity_tuple_to_dict()
+        if activity is not None and index is not None:
+            check_index = self.get_index(activity)
+            check_activity = self.get_activity(index)
+
+            if check_index == index and check_activity == activity:
+                self.model[index] = (None, None)
+                return True
+            else:
+                return False
+
+        elif activity is not None:
+            index = self.get_index(activity)
+            self.model[index] = (None, None)
+            return True
+
+        elif index is not None:
+            self.model[index] = (None, None)
             return True
         
+        return False
 
     def get_hall_capacity(self, index: int) -> int:
-        """Returns capacity of the hall that is represented by index."""
+        """Return capacity of the hall that is represented by index."""
         # List of the capacity of all lecture halls
         halls_capacity = [41, 22, 20, 56, 48, 117, 60]
         # Translate index into information
@@ -149,13 +158,24 @@ class Model:
         return halls_capacity[hall_index]
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
-        """Returns capacity of an activity."""
+        """Return capacity of an activity."""
         pass
 
     def get_index(self, activity: tuple[str, str]) -> int:
-        """Get model index of activity. Activities should be
-        structured as tuple("course name", "lecture 1)"""
-        pass
+        """Return index of activity in model.
+
+        Args:
+            activity (tuple[str, str]): ('course name', 'lecture 1')
+        """
+        return {index for index in self.model if self.model[index] == activity}.pop()
+
+    def get_activity(self, index: int) -> activity_type:
+        """Return activity stored at index in model.
+
+        Args:
+            index (int): Value ranging from 0 - 144
+        """
+        return self.model[index]
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
         """Add student to student-activity model. Activities should be
