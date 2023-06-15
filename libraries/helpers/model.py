@@ -53,13 +53,15 @@ class Model:
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def empty_student_model(self) -> dict[tuple[str, str], set[str]]:
+    def empty_student_model(self) -> dict[dict[str, str], set[str]]:
         """Take the Schedule object and convert it into a Student and Activity dictionary.
 
-        Activities are structured as a tuple('course name', 'lecture 1').
+        Activities are structured as a dict('course': Heuristieken, 'activity':'lecture 1').
 
         Returns:
-            dict[tuple[str, str], set[str]]:
+            dict[dict[str, str], set[str]]: 
+                Activity (as unique dict of course-activitytype combination) 
+                and a set of student indices.
         """
         students_in_activities = {}
         for day in self.schedule.days.values():
@@ -70,10 +72,10 @@ class Model:
                         student_set.add(student)
                     students_in_activities.update(
                         {
-                            (
-                                slot.activity.course.name,
-                                slot.activity.category,
-                            ): student_set
+                            {
+                                'course': slot.activity.course.name,
+                                'activity': slot.activity.category,
+                            }: student_set
                         }
                     )
 
