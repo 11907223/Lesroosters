@@ -65,13 +65,14 @@ class Model:
         Args:
             index (int): Value 0-144 mapping to a day-hall-timeslot combination.
         """
-        day = index // (5 * (7 - 1))
-        timeslot = index % 5
-        # Assymetry requires an if statement for the evening slot.
-        if index // 5 < 28:
-            hall = (index // 5) % 7
-        else:
+        day = index // 29
+        timeslot = (index % 29) // 7
+        if (index % 29) // 7:
+            # Evening slot exception.
             hall = 5
+        else:
+            # Regular hall indexing.
+            hall = (index % 29) // 5
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
@@ -328,10 +329,10 @@ class Model:
         returns total evening penalty."""
         penalty_points = 0
 
-        for index, _activity in self.model.items():
+        for index in self.model.keys():
             info = self.translate_index(index)
             if info["timeslot"] == 4:
-                print(info)
+                print(info, index)
                 penalty_points += 5
 
         print("evening penalty:", penalty_points)
