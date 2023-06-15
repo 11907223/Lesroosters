@@ -151,7 +151,23 @@ class Model:
         the hall capacity.For every student that doesn't fit 1 penalty
         point is counted. the total capacity penalty is returned (int).
         The function also keeps track of the model in self.index_penalties."""
+        # Start counting at 0 penalty points
+        penalty_points = 0
+        # Select all the Day objects in the schedule
+        day_schedules = self.schedule.days.values()
 
+        # Iterate over the Day objects
+        for day in day_schedules:
+            # Iterate over timeslots in day
+            for slot in day.slots:
+                # If slot is filled with activity
+                if slot.activity:
+                    # Check if capacity is exceded
+                    if slot.exceed_capacity(slot.activity):
+                        # Add 1 penalty point
+                        penalty_points += slot.exceed_capacity(slot.activity)
+
+        return penalty_points
         pass
 
     def evening_penalty(self) -> int:
