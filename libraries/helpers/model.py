@@ -120,8 +120,7 @@ class Model:
         caused a high penalty, this element is a list which contains a tuple with course name
         and activity type, and the index. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
-        activity with the lowest penalty.The function also keeps track of the model in
-        self.index_penalties.
+        activity with the lowest penalty.
 
         returns: list[list[activity: tuple[str, str], index: int]]"""
         pass
@@ -131,16 +130,17 @@ class Model:
         Returns a list of length n where each element is the student_index of a
         student that caused a high penalty. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
-        activity with the lowest penalty. The function also keeps track of the model in
-        self.student_penalties.
+        activity with the lowest penalty.
 
         returns: list[int]"""
         pass
 
     def capacity_penalty(self) -> int:
-        """Calculate penalties of activities and hall capacity.
-        Fills in empty model with {index: penalty}.
-        Returns total capacity penalty."""
+        """Checks if the number of students of each activity exceeds
+        the hall capacity.For every student that doesn't fit 1 penalty
+        point is counted. the total capacity penalty is returned (int).
+        The function also keeps track of the model in self.index_penalties."""
+
         pass
 
     def evening_penalty(self) -> int:
@@ -152,7 +152,8 @@ class Model:
     def conflict_penalty(self) -> int:
         """Calculates penalties of students with course conflicts.
         Fills in empty student activity model {activity: {student_id: penalty}}.
-        returns total conflict penalty."""
+        returns total conflict penalty. The function also keeps track of the model in
+        self.student_penalties."""
         pass
 
     def total_penalty(self) -> int:
