@@ -73,11 +73,11 @@ class Model:
         """Returns schedule and activities-student strings"""
         return self.model, self.activities
 
-    def add_activity(self, activity: tuple[str, str], day: str, index: int) -> bool:
+    def add_activity(self, activity: tuple[str, str], index: int) -> bool:
         """adds activity to given index in schedule model"""
         pass
 
-    def remove_activity(self, activity: tuple[str, str], day: str, index: int) -> bool:
+    def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
         """removes activity to given index in schedule model"""
         pass
 
@@ -100,6 +100,28 @@ class Model:
     def student_activities(self, student: int) -> list[int]:
         """Returns list of indexes of activities"""
         pass
+
+    def get_highest_n_penalties(self, n) -> list[list[tuple[str, str], int]]:
+        """Searches the schedule for activities with highest penalties.
+        Returns a list of length n where each element represents an activity that
+        caused a high penalty, this element is a list which contains a tuple with course name
+        and activity type, the day, and the index. The first element (list[0])
+        is the activty with the highest penalty and the last element (list[n]) is the
+        activity with the lowest penalty.
+
+        list[list[activity: tuple[str, str], index: int]]"""
+        pass
+
+    # def get_highest_n_students(self, n) -> list[list[int, tuple[str, str]]]:
+    #     """Searches the model for students in activities with highest penalties.
+    #     Returns a list of length n where each element represents a student that
+    #     caused a high penalty, this element is a list which contains a tuple with course name
+    #     and activity type, the day, and the index. The first element (list[0])
+    #     is the activty with the highest penalty and the last element (list[n]) is the
+    #     activity with the lowest penalty.
+
+    #     list[list[student: int, activity: tuple[str, str]]"""
+    #     pass
 
     def capacity_penalty(self) -> int:
         """Calculate penalties of activities and hall capacity.
