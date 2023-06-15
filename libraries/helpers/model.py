@@ -53,10 +53,10 @@ class Model:
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def empty_student_model(self) -> dict[tuple[str, str], str]:
+    def empty_student_model(self) -> dict[tuple[str, str], set[str]]:
         """Take the Schedule object and convert it into a Student and Activity dictionary.
 
-        Activities are structured as a tuple("course name", "lecture 1).
+        Activities are structured as a tuple('course name', 'lecture 1').
 
         Returns:
             dict[tuple[str, str], set[str]]:
