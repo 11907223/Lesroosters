@@ -167,26 +167,30 @@ class Model:
         return halls_capacity[hall_index]
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
-        """Returns capacity of an activity."""
+        """Returns capacity of an activity. If activity is None, returns zero."""
         # Start with capacity 0
         capacity = 0
         # Extract course name and type from activity
         course_name = activity[0]
         type = activity[1]
 
-        # Find the course object the activity belongs to
-        course = self.courses[course_name]
-        # Combine all course activities in one list
-        all_activities = course.lectures + course.practicals + course.tutorials
+        if course_name and type:
+            # Find the course object the activity belongs to
+            course = self.courses[course_name]
+            # Combine all course activities in one list
+            all_activities = course.lectures + course.practicals + course.tutorials
 
-        # Iterate over all Activity objects
-        for object in all_activities:
-            # If type matches Activity category
-            if type == object.category:
-                # Set capacity
-                capacity = object.capacity
+            # Iterate over all Activity objects
+            for object in all_activities:
+                # If type matches Activity category
+                if type == object.category:
+                    # Set capacity
+                    capacity = object.capacity
 
-        return int(capacity)
+            return int(capacity)
+        else:
+            # If activit is None, return 0
+            return 0
 
     def get_index(self, activity: tuple[str, str]) -> int:
         """Return index of activity in model.
@@ -269,6 +273,12 @@ class Model:
         The function also keeps track of the model in self.index_penalties."""
         # Start counting at 0 penalty points
         penalty_points = 0
+
+        for slot in self.model.items():
+            hall_capacity = self.get_hall_capacity(slot[0])
+            activity_capacity = self.get_activity_capacity(slot[1])
+            if activity_capacity > hall_capacity:
+                penalty_points += 1
 
         return penalty_points
 

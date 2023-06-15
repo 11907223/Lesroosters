@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     s = Model(courses, students, schedule)
     print(s.init_model())
-    print(s.init_student_model()[('Webprogrammeren en databases', 'lecture 2')])
+    print(s.init_student_model()[("Webprogrammeren en databases", "lecture 2")])
     print(s.check_index_is_empty(2))
 
     # start_time = time.time()
@@ -37,4 +37,4 @@ if __name__ == "__main__":
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
 
-    print(s.get_activity_capacity(("Advanced Heuristics", "practical 1")))
+    print(s.capacity_penalty())
