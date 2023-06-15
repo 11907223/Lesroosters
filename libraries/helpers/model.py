@@ -26,6 +26,8 @@ class Model:
 
         Returns:
             dict[int : dict(str, str)]: Index (0 - 144) mapping to a dict containing course and activity.
+                Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'}, 
+                {1: {'course': None, 'activity': None}, etc.}
 
         """
         schedule_model = {}
@@ -53,11 +55,11 @@ class Model:
 
     def empty_student_model(self) -> dict[tuple[str, str], str]:
         """Take the Schedule object and convert it into a Student and Activity dictionary.
-        
+
         Activities are structured as a tuple("course name", "lecture 1).
 
         Returns:
-            dict[tuple[str, str], set[str]]: 
+            dict[tuple[str, str], set[str]]:
         """
         students_in_activities = {}
         for day in self.schedule.days.values():
@@ -93,7 +95,8 @@ class Model:
         """removes activity to given index in schedule model. Function returns True if
         activity was succesfully removed.
 
-        Activities are structured as follows tuple("course name", "lecture 1)"""
+        Activities are structured as follows tuple("course name", "lecture 1)
+        """
         pass
 
     def get_capacity(self, index: int) -> int:
@@ -166,6 +169,8 @@ class Model:
 
     def total_penalty(self) -> int:
         total = (
-            self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
+            self.capacity_penalty()
+            + self.evening_penalty()
+            + self.conflict_penalty()
         )
         return total
