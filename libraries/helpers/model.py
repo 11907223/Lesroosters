@@ -255,10 +255,15 @@ class Model:
         else:
             return False
 
-    def student_activities(self, student: int) -> list[int]:
-        """Returns list of activities that the student is assigned to.
-        The list contains the indices (int) of activities in the schedule."""
-        pass
+    def student_activities(self, student: int) -> dict[int, tuple[str, str]]:
+        """Return a dict of activities and schedule indices of the student.
+
+        Args:
+            student (int): Index id of the student.
+        """
+        activity_set = {activity for activity, student_list in self.activities.items() if student in student_list}
+        index_set = {index for index, activity in self.model.items() if activity in activity_set}
+        return dict(zip(index_set, activity_set, strict=True))
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
         """Searches the schedule for activities with highest penalties.
