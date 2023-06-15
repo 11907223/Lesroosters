@@ -13,7 +13,7 @@ class Model:
         self.courses = courses
         self.students = students
         self.schedule = schedule
-        self.model = self.get_empty_model()
+        self.model: dict[int, dict[str, None | str]] = self.get_empty_model()
         self.activities = self.empty_student_model()
         # A model where index maps to penalty {index: penalty}
         self.index_penalties = {}
@@ -104,15 +104,38 @@ class Model:
         else:
             return False
 
-    def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
+    def convert_activity_tuple_to_dict(self, activity: tuple[None | str, None | str]=(None, None)) -> dict[str, None | str]:
+        """Reformat a tuple of a course-activity combination into a dict.
+
+        Args:
+            activity (tuple[str, str]): A tuple containing course name and activity type.
+        """
+        return {'course': activity[0], 'activity': activity[1]}
+
+    def remove_activity(self, activity: tuple[str, str]=None, index: int=None) -> bool:
         """Remove activity from the schedule model. 
 
-        Returns:
-            bool: True if activity was succesfully removed.
+        Activities are structured as tuple("course name", "lecture 1).
 
-        Activities are structured as follows tuple("course name", "lecture 1)
+        If only activity is given, index is searched and activity is removed at found index.
+        If only index is given, activity at specified index is removed.
+        If both are given, given activity is compared to stored activity before removal.
+
+        Args:
+            activity (tuple[str, str]): course name, activity type. 
+                Example: ("Heuristieken", "lecture 1)
+            index (int): Index in schedule, ranging from 0 - 144.
+
+        Returns:
+            bool: True if activity was succesfully removed,
+                False if nothing to remove or given activity does not match stored activity.
         """
-        pass
+        if activity is not None:
+            activity_dict = self.convert_activity_tuple_to_dict(activity)
+            {index for index in self.model if self.model[index] == activity_dict}
+            self.model[index] = self.convert_activity_tuple_to_dict()
+            return True
+        
 
     def get_hall_capacity(self, index: int) -> int:
         """Returns capacity of the hall that is represented by index."""
