@@ -15,10 +15,11 @@ class Model:
         self.schedule = schedule
         self.model = self.get_empty_model()
         self.activities = self.empty_student_model()
-        self.index_penalties = {}  # empty model {index: penalty}
-        self.student_penalties = (
-            {}
-        )  # empty activities model with {activity: {student_id: penalty}}
+        # A model where index maps to penalty {index: penalty}
+        self.index_penalties = {}
+        # A dictionary to store students, their penalty and the activities
+        # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
+        self.student_penalties: dict[int, list[int, set[int]]] = {}
 
     def get_empty_model(self) -> dict[int, dict[str, str]]:
         """Take a Schedule object and flatten it into string representation.
@@ -44,7 +45,7 @@ class Model:
         timeslot = index % 5
         hall = (index // 5) % (7 - 1)
 
-        return {'day':day, 'timeslot': timeslot, 'hall': hall}
+        return {"day": day, "timeslot": timeslot, "hall": hall}
 
     def empty_student_model(self) -> str:
         """Flattens Students and Activity objects into strings:
@@ -88,48 +89,52 @@ class Model:
         pass
 
     def get_capacity(self, index: int) -> int:
-        """Returns capacity of index (hall)"""
+        """Returns capacity of the hall that is represented by index."""
         pass
 
     def get_index(self, activity: tuple[str, str]) -> int:
         """Get model index of activity. Activities should be
-        structured as follows tuple("course name", "lecture 1)"""
+        structured as tuple("course name", "lecture 1)"""
         pass
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
         """Add student to student-activity model. Activities should be
-        structured as follows tuple("course name", "lecture 1). Students are
+        structured as tuple("course name", "lecture 1). Students are
         represented by their index (int)"""
         pass
 
     def remove_student(self, student: int, activity: tuple[str, str]) -> bool:
-        """remove student to student-activity model"""
+        """Remove student to student-activity model. Activities should be
+        structured as tuple("course name", "lecture 1). Students are
+        represented by their index (int)"""
         pass
 
     def student_activities(self, student: int) -> list[int]:
-        """Returns list of indexes of activities"""
+        """Returns list of activities that the student is assigned to.
+        The list contains the indices (int) of activities in the schedule."""
         pass
 
     def get_highest_penalties(self, n) -> list[list[tuple[str, str], int]]:
         """Searches the schedule for activities with highest penalties.
         Returns a list of length n where each element represents an activity that
         caused a high penalty, this element is a list which contains a tuple with course name
-        and activity type, the day, and the index. The first element (list[0])
+        and activity type, and the index. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
-        activity with the lowest penalty.
+        activity with the lowest penalty.The function also keeps track of the model in
+        self.index_penalties.
 
-        list[list[activity: tuple[str, str], index: int]]"""
+        returns: list[list[activity: tuple[str, str], index: int]]"""
         pass
 
-    def get_highest_students(self, n) -> list[list[int, tuple[str, str]]]:
+    def get_highest_students(self, n) -> list[int]:
         """Searches the model for students in activities with highest penalties.
-        Returns a list of length n where each element represents a student that
-        caused a high penalty, this element is a list which contains a tuple with course name
-        and activity type, the day, and the index. The first element (list[0])
+        Returns a list of length n where each element is the student_index of a
+        student that caused a high penalty. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
-        activity with the lowest penalty.
+        activity with the lowest penalty. The function also keeps track of the model in
+        self.student_penalties.
 
-        list[list[student: int, activity: tuple[str, str]]"""
+        returns: list[int]"""
         pass
 
     def capacity_penalty(self) -> int:
