@@ -26,7 +26,7 @@ class Model:
 
         Returns:
             dict[int : dict(str, str)]: Index (0 - 144) mapping to a dict containing course and activity.
-                Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'}, 
+                Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'},
                 {1: {'course': None, 'activity': None}, etc.}
 
         """
@@ -99,8 +99,12 @@ class Model:
         """
         pass
 
-    def get_capacity(self, index: int) -> int:
+    def get_hall_capacity(self, index: int) -> int:
         """Returns capacity of the hall that is represented by index."""
+        pass
+
+    def get_activity_capacity(self, activity: tuple[str, str]) -> int:
+        """Returns capacity of an activity."""
         pass
 
     def get_index(self, activity: tuple[str, str]) -> int:
@@ -188,8 +192,6 @@ class Model:
 
         return: penalty (int)"""
         total = (
-            self.capacity_penalty()
-            + self.evening_penalty()
-            + self.conflict_penalty()
+            self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
         )
         return total
