@@ -57,15 +57,14 @@ class Model:
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def empty_student_model(self) -> dict[dict[str, str], set[str]]:
-        """Take the Schedule object and convert it into a Student and Activity dictionary.
+    def empty_student_model(self) -> dict[tuple[str, str], set[str]]:
+        """Take the Schedule object and convert it into a activity - student dict.
 
-        Activities are structured as a dict('course': Heuristieken, 'activity':'lecture 1').
+        Activities are structured as a tuple('Heuristieken', 'lecture 1').
 
         Returns:
-            dict[dict[str, str], set[str]]: 
-                Activity (as unique dict of course-activitytype combination) 
-                and a set of student indices.
+            dict[tuple[str, str], set[str]]: 
+                Activity (as unique tuple of course-activity) and a set of student indices.
         """
         students_in_activities = {}
         for day in self.schedule.days.values():
@@ -76,10 +75,10 @@ class Model:
                         student_set.add(student)
                     students_in_activities.update(
                         {
-                            {
-                                'course': slot.activity.course.name,
-                                'activity': slot.activity.category,
-                            }: student_set
+                            (
+                                slot.activity.course.name,
+                                slot.activity.category,
+                            ): student_set
                         }
                     )
 
@@ -90,8 +89,8 @@ class Model:
         return self.model, self.activities
 
     def check_index_is_empty(self, index: int) -> bool:
-        activity = self.model[index]
-        return 
+        """Return a boolean indicating if index slot contains a course-activity pair."""
+        return self.model[index]['course'] is None
 
     def add_activity(self, index: int, activity: dict[str, str]) -> bool:
         """Add activity to given index in schedule model.
@@ -99,7 +98,7 @@ class Model:
         Returns:
             bool: True if activity was succesfully added, else False.
         """
-        if self.model[index] is not None:
+        if self.check_index_is_empty(index) is True:
             self.model[index] = activity
             return True
         else:

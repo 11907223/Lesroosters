@@ -10,7 +10,7 @@ import time
 if __name__ == "__main__":
     courses = load_courses()
     students = load_students(courses)
-    schedule = Schedule()
+    schedule = Random(Schedule(), courses).run()
 
     # # other examples
     # df = pd.DataFrame(schedule.as_list_of_dicts())
@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     s = Model(courses, students, schedule)
     print(s.get_empty_model())
-    print(s.translate_index(144))
+    print(s.check_index_is_empty(2))
 
     start_time = time.time()
 
