@@ -2,7 +2,7 @@ from libraries.classes.hallslot import Hall_slot
 
 
 class Day:
-    def __init__(self, weekday: str, timeslots, halls) -> None:
+    def __init__(self, weekday: str, timeslots: list[str], halls: dict[str, int]) -> None:
         """Initialize a Day.
 
         Args:
@@ -13,7 +13,7 @@ class Day:
         self.name = weekday
         self.slots = self._init_slots(halls, timeslots)
 
-    def _init_slots(self, halls, timeslots) -> 'list[Hall_slot]':
+    def _init_slots(self, halls: dict[str, int], timeslots: list[str]) -> 'list[Hall_slot]':
         """
         Initialize hall slots for this job. This is a helper method to initialize the timeslots and halls for this job.
 

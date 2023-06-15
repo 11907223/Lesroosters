@@ -1,10 +1,15 @@
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .activity import Activity
+
+
 class Hall_slot:
     def __init__(self, day, time, room, room_capacity, activity=None) -> None:
-        self.day = day
-        self.time = time
-        self.room = room
-        self.room_capacity = room_capacity
-        self.activity = activity
+        self.day: str = day
+        self.time: str = time
+        self.room: str = room
+        self.room_capacity: int = room_capacity
+        self.activity: Activity = activity
 
     def is_empty(self) -> bool:
         """Check if slot is empty."""
