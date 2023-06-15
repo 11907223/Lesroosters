@@ -168,6 +168,9 @@ class Model:
         pass
 
     def total_penalty(self) -> int:
+        """Calculates the total penalty of the schedule.
+
+        return: penalty (int)"""
         total = (
             self.capacity_penalty()
             + self.evening_penalty()
