@@ -308,12 +308,17 @@ class Model:
         # Start counting at 0 penalty points
         penalty_points = 0
 
-        for slot in self.model.items():
-            hall_capacity = self.get_hall_capacity(slot[0])
-            activity_capacity = self.get_activity_capacity(slot[1])
+        # Iterate over all indices in model
+        for index, activity in self.model.items():
+            # Get hall capacity for slot
+            hall_capacity = self.get_hall_capacity(index)
+            # Get activity capacity for slot
+            activity_capacity = self.get_activity_capacity(activity)
+            # If activity capacity exceeds hall capacity
             if activity_capacity > hall_capacity:
+                # Add to penalty points and update index_penalties model
                 penalty_points += activity_capacity - hall_capacity
-                self.index_penalties[slot[0]] = penalty_points
+                self.index_penalties[index] = penalty_points
 
         return penalty_points
 
@@ -321,7 +326,16 @@ class Model:
         """Calculate penalties of activities in evening slot.
         Fills in empty model with {index: penalty}.
         returns total evening penalty."""
-        return 0
+        penalty_points = 0
+
+        for index, _activity in self.model.items():
+            info = self.translate_index(index)
+            if info["timeslot"] == 4:
+                print(info)
+                penalty_points += 5
+
+        print("evening penalty:", penalty_points)
+        return penalty_points
 
     def conflict_penalty(self) -> int:
         """Calculates penalties of students with course conflicts.
@@ -337,4 +351,5 @@ class Model:
         total = (
             self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
         )
+
         return total
