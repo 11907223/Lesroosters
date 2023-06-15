@@ -6,6 +6,7 @@ from typing import Optional
 
 activity_type = tuple[Optional[str], Optional[str]]
 
+
 class Model:
     def __init__(
         self,
@@ -16,15 +17,15 @@ class Model:
         self.courses = courses
         self.students = students
         self.schedule = schedule
-        self.model: dict[int, activity_type] = self.get_empty_model()
-        self.activities = self.empty_student_model()
+        self.model: dict[int, activity_type] = self.init_model()
+        self.activities = self.init_student_model()
         # A model where index maps to penalty {index: penalty}
         self.index_penalties = {}
         # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[int, set[int]]] = {}
 
-    def get_empty_model(self) -> dict[int, tuple[Optional[str], Optional[str]]]:
+    def init_model(self) -> dict[int, tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
@@ -60,7 +61,7 @@ class Model:
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def empty_student_model(self) -> dict[tuple[str, str], set[str]]:
+    def init_student_model(self) -> dict[tuple[str, str], set[str]]:
         """Take the Schedule object and convert it into a activity - student dict.
 
         Activities are structured as a tuple('Heuristieken', 'lecture 1').
@@ -107,8 +108,12 @@ class Model:
         else:
             return False
 
-    def remove_activity(self, activity: Optional[activity_type]=None, index: Optional[int]=None) -> bool:
-        """Remove activity from the schedule model. 
+    def remove_activity(
+        self,
+        activity: Optional[activity_type] = None,
+        index: Optional[int] = None,
+    ) -> bool:
+        """Remove activity from the schedule model.
 
         Activities are structured as tuple("course name", "lecture 1).
 
@@ -117,7 +122,7 @@ class Model:
         If both are given, given activity is compared to stored activity before removal.
 
         Args:
-            activity (tuple[str, str]): course name, activity type. 
+            activity (tuple[str, str]): course name, activity type.
                 Example: ("Heuristieken", "lecture 1)
             index (int): Index in schedule, ranging from 0 - 144.
 
@@ -143,7 +148,7 @@ class Model:
         elif index is not None:
             self.model[index] = (None, None)
             return True
-        
+
         return False
 
     def get_hall_capacity(self, index: int) -> int:
@@ -167,7 +172,9 @@ class Model:
         Args:
             activity (tuple[str, str]): ('course name', 'lecture 1')
         """
-        return {index for index in self.model if self.model[index] == activity}.pop()
+        return {
+            index for index in self.model if self.model[index] == activity
+        }.pop()
 
     def get_activity(self, index: int) -> activity_type:
         """Return activity stored at index in model.
@@ -243,6 +250,8 @@ class Model:
 
         return: penalty (int)"""
         total = (
-            self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
+            self.capacity_penalty()
+            + self.evening_penalty()
+            + self.conflict_penalty()
         )
         return total

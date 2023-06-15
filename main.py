@@ -20,7 +20,7 @@ if __name__ == "__main__":
     # )
 
     s = Model(courses, students, schedule)
-    print(s.get_empty_model())
+    print(s.init_model())
     print(s.check_index_is_empty(2))
 
     # start_time = time.time()
