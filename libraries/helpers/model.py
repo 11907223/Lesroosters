@@ -23,7 +23,7 @@ class Model:
         self.index_penalties: dict[int, int] = self._init_index_penalties_model()
         # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
-        self.student_penalties: dict[int, list[int, set[int]]] = {}
+        self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
 
     def init_model(self) -> dict[int, tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
@@ -261,8 +261,14 @@ class Model:
         Args:
             student (int): Index id of the student.
         """
-        activity_set = {activity for activity, student_list in self.activities.items() if student in student_list}
-        index_set = {index for index, activity in self.model.items() if activity in activity_set}
+        activity_set = {
+            activity
+            for activity, student_list in self.activities.items()
+            if student in student_list
+        }
+        index_set = {
+            index for index, activity in self.model.items() if activity in activity_set
+        }
         return dict(zip(index_set, activity_set, strict=True))
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
@@ -360,19 +366,47 @@ class Model:
         Fills in empty student activity model {activity: {student_id: penalty}}.
         returns total conflict penalty. The function also keeps track of the model in
         self.student_penalties."""
+
+        # Start with 0 penalty points
         penalty_points = 0
 
-        for id, student in self.students.items():
+        # Iterate over students
+        for id in self.students.keys():
+            # Variable for previous activities of student
             prev_slots = []
+            # Total penalty points of student
+            student_penalty = 0
+            # Get all activities from student
             activities = self.student_activities(int(id))
+            # Iterate over activites
             for activity in activities:
+                # Get info on activity
                 info = self.translate_index(activity)
+                # Save day-timeslot
                 temp = (info["timeslot"], info["day"])
+                # Check if day-timeslot was already used for other activity
                 if temp in prev_slots:
+                    # If so, update student penalty and total penalty
+                    student_penalty += 1
                     penalty_points += 1
+                    # If student is not in student penalty model
+                    if id not in self.student_penalties.keys():
+                        # Add student to model
+                        self.student_penalties.update(
+                            {id: [student_penalty, {activity}]}
+                        )
+                    # If student already in model
+                    else:
+                        # Update student penalty and add activity index
+                        self.student_penalties[id][0] = student_penalty
+                        self.student_penalties[id][1].add(activity)
+                # If day-timeslot not used
                 else:
+                    # add to previous slot variable
                     prev_slots.append(temp)
-        print("conflict penalty:", penalty_points)
+
+        print("conflict penalty: ", penalty_points)
+
         return penalty_points
 
     def total_penalty(self) -> int:
