@@ -8,9 +8,7 @@ class Day:
         Args:
                 weekday (list[str]): The weekday of the instance.
                 timeslots (list[str]): The timeslots of the instance.
-                halls (dict[str, int]): The halls of the instance.
-
-        Returns:
+                halls (dict[str, int]): The halls of the instance.6
         """
         self.name = weekday
         self.slots = self._init_slots(halls, timeslots)

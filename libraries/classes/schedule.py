@@ -4,15 +4,15 @@ from libraries.classes.day import Day
 
 class Schedule:
     def __init__(self, path: str = "data") -> None:
-        self.days = self._init_schedule(path)
+        self.days: dict[str, Day] = self._init_schedule(path)
 
-    def _init_schedule(self, path):
-        halls = load_halls(path)
+    def _init_schedule(self, path) -> dict[str, Day]:
+        halls: dict[str, int] = load_halls(path)
 
         # create empty timeslots for each day
         weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         timeslots = [str(i) for i in range(9, 17, 2)]
-        days = {}
+        days: dict[str, Day] = {}
         for day in weekdays:
             # Initiate empty schedule 9:00 to 15:00.
             days.update({day: Day(day, timeslots, halls)})

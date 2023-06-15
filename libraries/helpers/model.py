@@ -40,17 +40,24 @@ class Model:
         return schedule_model
 
     def translate_index(self, index: int) -> dict[str, int]:
-        """Return index value as day, timeslot and hall indices."""
+        """Return index value as day, timeslot and hall indices.
+
+        Args:
+            index (int): Value 0-144 mapping to a day-hall-timeslot combination.
+        """
         day = index // (5 * (7 - 1))
         timeslot = index % 5
         hall = (index // 5) % (7 - 1)
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def empty_student_model(self) -> str:
-        """Flattens Students and Activity objects into strings:
-        example:
+    def empty_student_model(self) -> dict[tuple[str, str], str]:
+        """Take the Schedule object and convert it into a Student and Activity dictionary.
+        
+        Activities are structured as a tuple("course name", "lecture 1).
 
+        Returns:
+            dict[tuple[str, str], set[str]]: 
         """
         students_in_activities = {}
         for day in self.schedule.days.values():
@@ -71,14 +78,15 @@ class Model:
         return students_in_activities
 
     def return_models(self):
-        """Returns schedule and activities-student strings"""
+        """Return schedule and activities-student dicts of strings."""
         return self.model, self.activities
 
-    def add_activity(self, activity: tuple[str, str], index: int) -> bool:
-        """adds activity to given index in schedule model. Function returns True
-        if activity was succesfully added.
+    def add_activity(self, index: int, activity: tuple[str, str]) -> bool:
+        """Add activity to given index in schedule model.
 
-        Activities are structured as follows tuple("course name", "lecture 1)."""
+        Returns:
+            bool: True if activity was succesfully added.
+        """
         pass
 
     def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
