@@ -20,29 +20,18 @@ class Model:
             {}
         )  # empty activities model with {activity: {student_id: penalty}}
 
-    def get_empty_model(self) -> str:
-        """Takes Schedule object and flattens it into string representation.
-        string looks like:
+    def get_empty_model(self) -> dict[int, dict[str, str]]:
+        """Take a Schedule object and flatten it into string representation.
+
+        Returns:
+            dict[int : dict(str, str)]: index (0 - 144) mapping to a course-activity tuple.
 
         """
         schedule_model = {}
-
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
-            day = entry["day"]
-            local_index = index % 29
             activity = entry["activity"]
             course = entry["course"]
-
-            if day not in schedule_model:
-                schedule_model[day] = {}
-
-            if "index" not in schedule_model[day]:
-                schedule_model[day]["index"] = {}
-
-            schedule_model[day]["index"][local_index] = {
-                "course": course,
-                "activity": activity,
-            }
+            schedule_model[index] = {"course": course, "activity": activity, }
 
         return schedule_model
 
