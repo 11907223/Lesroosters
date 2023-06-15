@@ -23,7 +23,7 @@ if __name__ == "__main__":
     print(s.get_empty_model())
     print(s.check_index_is_empty(2))
 
-    start_time = time.time()
+    # start_time = time.time()
 
     # with open("baseline.txt", "a+") as file:
     #     for _i in range(100000):
@@ -32,6 +32,8 @@ if __name__ == "__main__":
     #         penalty = Penalty(random_schedule)
     #         file.write(f"{penalty.total()}\n")
 
-    total_runtime = time.time() - start_time
+    # total_runtime = time.time() - start_time
 
-    print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
+    # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
+
+    print(s.get_hall_capacity(144))

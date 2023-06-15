@@ -114,9 +114,13 @@ class Model:
 
     def get_hall_capacity(self, index: int) -> int:
         """Returns capacity of the hall that is represented by index."""
+        # List of the capacity of all lecture halls
         halls_capacity = [41, 22, 20, 56, 48, 117, 60]
+        # Translate index into information
         info = self.translate_index(index)
+        # Get the hall that is described by index
         hall_index = info["hall"]
+        # Return hall capacity by from list
         return halls_capacity[hall_index]
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
