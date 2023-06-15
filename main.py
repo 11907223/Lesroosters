@@ -37,4 +37,4 @@ if __name__ == "__main__":
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
 
-    print(s.capacity_penalty())
+    print(s.get_highest_penalties(10))

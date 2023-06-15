@@ -20,7 +20,7 @@ class Model:
         self.model: dict[int, activity_type] = self.init_model()
         self.activities = self.init_student_model()
         # A model where index maps to penalty {index: penalty}
-        self.index_penalties = {}
+        self.index_penalties: dict[int, int] = self.init_index_penalties_model()
         # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[int, set[int]]] = {}
@@ -42,6 +42,20 @@ class Model:
                 course,
                 activity,
             )
+
+        return schedule_model
+
+    def init_index_penalties_model(self) -> dict[int, int]:
+        """Take a Schedule object and flatten it into an empty string representation.
+
+        Returns:
+            dict[int : int]: Index (0 - 144) mapping to the penalty of the activity in that index.
+                Example: {0: 10, 1: 0, etc.}
+
+        """
+        schedule_model: dict[int, int] = {}
+        for index, _entry in enumerate(self.schedule.as_list_of_dicts()):
+            schedule_model[index] = 0
 
         return schedule_model
 
@@ -245,16 +259,36 @@ class Model:
         The list contains the indices (int) of activities in the schedule."""
         pass
 
-    def get_highest_penalties(self, n) -> list[list[tuple[str, str], int]]:
+    def get_highest_penalties(self, n) -> list[list[int, tuple[str, str]]]:
         """Searches the schedule for activities with highest penalties.
         Returns a list of length n where each element represents an activity that
-        caused a high penalty, this element is a list which contains a tuple with course name
+        caused a high penalty, this element is also a list which contains a tuple with course name
         and activity type, and the index. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
         activity with the lowest penalty.
 
-        returns: list[list[activity: tuple[str, str], index: int]]"""
-        pass
+        returns: list[list[index: int, activity: tuple[str, str]]]"""
+
+        # Run total_penalty() to update self.index_penalties
+        self.total_penalty()
+
+        # Initialize an empty list
+        highest_penalties = []
+        # Take the penalty model
+        model = self.index_penalties
+        # Find highest penalties in de model
+        highest_values = sorted(model.values(), reverse=True)[:n]
+
+        # Iterate over the highest values
+        for high_value in highest_values:
+            # Iterate over model
+            for index, value in model.items():
+                if value == high_value:
+                    # Add index and activity to list
+                    activity = self.get_activity(index)
+                    highest_penalties.append([index, activity])
+
+        return highest_penalties
 
     def get_highest_students(self, n) -> list[int]:
         """Searches the model for students in activities with highest penalties.
@@ -278,7 +312,8 @@ class Model:
             hall_capacity = self.get_hall_capacity(slot[0])
             activity_capacity = self.get_activity_capacity(slot[1])
             if activity_capacity > hall_capacity:
-                penalty_points += 1
+                penalty_points += activity_capacity - hall_capacity
+                self.index_penalties[slot[0]] = penalty_points
 
         return penalty_points
 
@@ -286,14 +321,14 @@ class Model:
         """Calculate penalties of activities in evening slot.
         Fills in empty model with {index: penalty}.
         returns total evening penalty."""
-        pass
+        return 0
 
     def conflict_penalty(self) -> int:
         """Calculates penalties of students with course conflicts.
         Fills in empty student activity model {activity: {student_id: penalty}}.
         returns total conflict penalty. The function also keeps track of the model in
         self.student_penalties."""
-        pass
+        return 0
 
     def total_penalty(self) -> int:
         """Calculates the total penalty of the schedule.
