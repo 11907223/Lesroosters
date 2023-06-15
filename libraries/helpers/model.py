@@ -25,13 +25,13 @@ class Model:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
-            dict[int : dict(str, str)]: index (0 - 144) mapping to a course-activity tuple.
+            dict[int : dict(str, str)]: Index (0 - 144) mapping to a dict containing course and activity.
 
         """
         schedule_model = {}
         for index, entry in enumerate(self.schedule.as_list_of_dicts()):
-            activity = entry["activity"]
-            course = entry["course"]
+            activity: str = entry["activity"]
+            course: str = entry["course"]
             schedule_model[index] = {
                 "course": course,
                 "activity": activity,
