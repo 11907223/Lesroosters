@@ -61,7 +61,7 @@ class Model:
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
-    def init_student_model(self) -> dict[tuple[str, str], set[str]]:
+    def init_student_model(self) -> dict[tuple[str, str], set[int]]:
         """Take the Schedule object and convert it into a activity - student dict.
 
         Activities are structured as a tuple('Heuristieken', 'lecture 1').
@@ -131,21 +131,25 @@ class Model:
                 False if nothing to remove or given activity does not match stored activity.
         """
         if activity is not None and index is not None:
+            # Check if stored activity and index match stored information.
             check_index = self.get_index(activity)
             check_activity = self.get_activity(index)
 
             if check_index == index and check_activity == activity:
+                # Remove activity from stored index.
                 self.model[index] = (None, None)
                 return True
             else:
                 return False
 
         elif activity is not None:
+            # Remove activity from stored index.
             index = self.get_index(activity)
             self.model[index] = (None, None)
             return True
 
         elif index is not None:
+            # Remove activity from stored index.
             self.model[index] = (None, None)
             return True
 
@@ -201,16 +205,36 @@ class Model:
         return self.model[index]
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
-        """Add student to student-activity model. Activities should be
-        structured as tuple("course name", "lecture 1). Students are
-        represented by their index (int)"""
-        pass
+        """Add student to an activity in the model.
+
+        Args:
+            student (int): Index id of a student.
+            activity (tuple[str, str]) : tuple("course name", "lecture 1)
+
+        Returns:
+            bool: True if student not in activity yet, False otherwise.
+        """
+        if student not in self.activities[activity]:
+            self.activities[activity].add(student)
+            return True
+        else:
+            return False
 
     def remove_student(self, student: int, activity: tuple[str, str]) -> bool:
-        """Remove student to student-activity model. Activities should be
-        structured as tuple("course name", "lecture 1). Students are
-        represented by their index (int)"""
-        pass
+        """Remove student from an activity in the model.
+
+        Args:
+            student (int): Index id of a student.
+            activity (tuple[str, str]) : tuple("course name", "lecture 1)
+
+        Returns:
+            bool: True if student succesfully removed from activity, False otherwise.
+        """
+        if student in self.activities[activity]:
+            self.activities[activity].remove(student)
+            return True
+        else:
+            return False
 
     def student_activities(self, student: int) -> list[int]:
         """Returns list of activities that the student is assigned to.

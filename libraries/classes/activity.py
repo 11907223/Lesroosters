@@ -18,7 +18,7 @@ class Activity:
             students (): List of students in the activity.
         """
         self.course: Course = course
-        self.students: dict[str, Student] = {}
+        self.students: dict[int, Student] = {}
         self.category: str = category
         self.capacity: int = capacity
 
