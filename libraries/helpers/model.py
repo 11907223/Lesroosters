@@ -49,7 +49,11 @@ class Model:
         """
         day = index // (5 * (7 - 1))
         timeslot = index % 5
-        hall = (index // 5) % (7 - 1)
+        # Assymetry requires an if statement for the evening slot.
+        if index // 5 < 28:
+            hall = (index // 5) % 7
+        else:
+            hall = 6
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
@@ -85,13 +89,21 @@ class Model:
         """Return schedule and activities-student dicts of strings."""
         return self.model, self.activities
 
-    def add_activity(self, index: int, activity: tuple[str, str]) -> bool:
+    def check_index_is_empty(self, index: int) -> bool:
+        activity = self.model[index]
+        return 
+
+    def add_activity(self, index: int, activity: dict[str, str]) -> bool:
         """Add activity to given index in schedule model.
 
         Returns:
-            bool: True if activity was succesfully added.
+            bool: True if activity was succesfully added, else False.
         """
-        pass
+        if self.model[index] is not None:
+            self.model[index] = activity
+            return True
+        else:
+            return False
 
     def remove_activity(self, activity: tuple[str, str], index: int) -> bool:
         """removes activity to given index in schedule model. Function returns True if

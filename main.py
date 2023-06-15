@@ -19,14 +19,18 @@ if __name__ == "__main__":
     #     df,
     # )
 
+    s = Model(courses, students, schedule)
+    print(s.get_empty_model())
+    print(s.translate_index(144))
+
     start_time = time.time()
 
-    with open("baseline.txt", "a+") as file:
-        for _i in range(100000):
-            random_schedule = Random(schedule, courses)
-            random_schedule = random_schedule.run()
-            penalty = Penalty(random_schedule)
-            file.write(f"{penalty.total()}\n")
+    # with open("baseline.txt", "a+") as file:
+    #     for _i in range(100000):
+    #         random_schedule = Random(schedule, courses)
+    #         random_schedule = random_schedule.run()
+    #         penalty = Penalty(random_schedule)
+    #         file.write(f"{penalty.total()}\n")
 
     total_runtime = time.time() - start_time
 
