@@ -67,12 +67,12 @@ class Model:
         """
         day = index // 29
         timeslot = (index % 29) // 7
-        if (index % 29) // 7:
+        if (index % 29) == 28:
             # Evening slot exception.
             hall = 5
         else:
             # Regular hall indexing.
-            hall = (index % 29) // 5
+            hall = (index % 29) % 7
 
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
@@ -332,7 +332,7 @@ class Model:
         for index in self.model.keys():
             info = self.translate_index(index)
             if info["timeslot"] == 4:
-                print(info, index)
+                # print(info, index)
                 penalty_points += 5
 
         print("evening penalty:", penalty_points)

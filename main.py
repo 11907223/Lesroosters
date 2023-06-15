@@ -37,4 +37,7 @@ if __name__ == "__main__":
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
 
+    for i in range(145):
+        print(s.translate_index(i), i)
+
     print(s.total_penalty())
