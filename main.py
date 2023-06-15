@@ -37,6 +37,4 @@ if __name__ == "__main__":
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
 
-    print(s.student_activities(5))
-
     print(s.total_penalty())

@@ -20,7 +20,7 @@ class Model:
         self.model: dict[int, activity_type] = self.init_model()
         self.activities = self.init_student_model()
         # A model where index maps to penalty {index: penalty}
-        self.index_penalties: dict[int, int] = self.init_index_penalties_model()
+        self.index_penalties: dict[int, int] = self._init_index_penalties_model()
         # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[int, set[int]]] = {}
@@ -45,7 +45,7 @@ class Model:
 
         return schedule_model
 
-    def init_index_penalties_model(self) -> dict[int, int]:
+    def _init_index_penalties_model(self) -> dict[int, int]:
         """Take a Schedule object and flatten it into an empty string representation.
 
         Returns:
@@ -316,6 +316,7 @@ class Model:
 
         # Iterate over all indices in model
         for index, activity in self.model.items():
+            temp_penalty = 0
             # Get hall capacity for slot
             hall_capacity = self.get_hall_capacity(index)
             # Get activity capacity for slot
@@ -323,22 +324,33 @@ class Model:
             # If activity capacity exceeds hall capacity
             if activity_capacity > hall_capacity:
                 # Add to penalty points and update index_penalties model
-                penalty_points += activity_capacity - hall_capacity
-                self.index_penalties[index] = penalty_points
+                temp_penalty = activity_capacity - hall_capacity
+                penalty_points += temp_penalty
+                self.index_penalties[index] += temp_penalty
 
+        print("capacity penalty:", penalty_points)
         return penalty_points
 
     def evening_penalty(self) -> int:
         """Calculate penalties of activities in evening slot.
         Fills in empty model with {index: penalty}.
         returns total evening penalty."""
-        penalty_points = 0
 
-        for index in self.model.keys():
-            info = self.translate_index(index)
-            if info["timeslot"] == 4:
-                # print(info, index)
-                penalty_points += 5
+        # Start with 0 penalty points, set evening penalty to 5
+        penalty_points = 0
+        evening_penalty = 5
+
+        # Iterate over indices and activities in model
+        for index, activity in self.model.items():
+            # If index is mapped to activity
+            if activity[0]:
+                # Get info on index
+                info = self.translate_index(index)
+                # Check if activity is in evening slot
+                if info["timeslot"] == 4:
+                    # If so, add penalty points
+                    penalty_points += evening_penalty
+                    self.index_penalties[index] += evening_penalty
 
         print("evening penalty:", penalty_points)
         return penalty_points
@@ -348,7 +360,20 @@ class Model:
         Fills in empty student activity model {activity: {student_id: penalty}}.
         returns total conflict penalty. The function also keeps track of the model in
         self.student_penalties."""
-        return 0
+        penalty_points = 0
+
+        for id, student in self.students.items():
+            prev_slots = []
+            activities = self.student_activities(int(id))
+            for activity in activities:
+                info = self.translate_index(activity)
+                temp = (info["timeslot"], info["day"])
+                if temp in prev_slots:
+                    penalty_points += 1
+                else:
+                    prev_slots.append(temp)
+        print("conflict penalty:", penalty_points)
+        return penalty_points
 
     def total_penalty(self) -> int:
         """Calculates the total penalty of the schedule.
