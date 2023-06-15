@@ -35,6 +35,14 @@ class Model:
 
         return schedule_model
 
+    def translate_index(self, index: int) -> dict[str, int]:
+        """Return index value as day, timeslot and hall indices."""
+        day = index // (5 * (7 - 1))
+        timeslot = index % 5
+        hall = (index // 5) % (7 - 1)
+
+        return {'day':day, 'timeslot': timeslot, 'hall': hall}
+
     def empty_student_model(self) -> str:
         """Flattens Students and Activity objects into strings:
         example:
