@@ -239,7 +239,9 @@ class Model:
             return False
 
     def student_activities(self, student: int) -> dict[int, tuple[str, str]]:
-        """Return a dict of activities and schedule indices of the student.
+        """Return a dict of schedule and activities of the student.
+
+        Example: {0: (Heuristieken, lecture 1), 1: (Algoritmes, werkcollege 1)}
 
         Args:
             student (int): Index id of the student.
@@ -400,12 +402,12 @@ class Model:
         return penalty_points
 
     def schedule_gaps_penalty(self) -> int:
-        """Calculates The function also keeps track of the model in
+        """Calculate The function also keeps track of the model in
         self.student_penalties."""
         return 0
 
     def total_penalty(self) -> int:
-        """Calculates the total penalty of the schedule.
+        """Calculate the total penalty of the schedule.
 
         return: penalty (int)"""
         total = (
