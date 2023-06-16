@@ -76,6 +76,13 @@ class Model:
         """Return schedule and activities-student dicts of strings."""
         return self.model, self.participants
 
+    def add_all_students(self) -> None:
+        """Add all students to activities."""
+        for activity_tuple in self.participants:
+            for student in self.students.keys():
+                self.add_student(int(student), activity_tuple)
+        return None
+
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
         return self.model[index][0] is None
