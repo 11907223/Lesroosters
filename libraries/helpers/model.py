@@ -19,13 +19,8 @@ class Model:
         self.students = students
         self.halls = halls
         self.model: dict[int, activity_type] = self.init_model((None, None))
-        self.participants = (
-            self.init_student_model()
-        )  # A model where index maps to penalty {index: penalty}
-        self.index_penalties: dict[int, int] = self.init_model(
-            0
-        )  # A dictionary to store students, their penalty and the activities
-        # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
+        self.participants = self.init_student_model()
+        self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
 
     def init_model(
@@ -155,7 +150,7 @@ class Model:
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
         """Return the capacity of an activity.
-         
+
         If activity is None, return zero.
         """
         # Start with capacity 0
@@ -263,7 +258,6 @@ class Model:
         # Run total_penalty() to update self.index_penalties
         self.total_penalty()
 
-        # Initialize an empty list
         highest_penalties = []
         # Take the penalty model
         model = self.index_penalties
@@ -289,7 +283,28 @@ class Model:
         activity with the lowest penalty.
 
         returns: list[int]"""
-        pass
+        self.total_penalty()
+
+        highest_penalties = []
+        # Take the student penalty model
+        model = self.student_penalties
+
+        # Find highest penalties in de model
+        values = model.values()
+        penalty_values = []
+        for value in values:
+            penalty_values.append(value[0])
+
+        highest_values = sorted(penalty_values, reverse=True)[:n]
+
+        # Iterate over the highest values
+        for high_value in highest_values:
+            # Iterate over model
+            for index, value in model.items():
+                if value == high_value:
+                    # Add student to list
+
+        return highest_values
 
     def capacity_penalty(self, index: int, activity: tuple[str, str]) -> int:
         # Get hall capacity for slot
@@ -410,5 +425,5 @@ class Model:
         new_copy = copy.copy(self)
         new_copy.model = copy.copy(self.model)
         new_copy.participants = copy.copy(self.participants)
-        
+
         return new_copy
