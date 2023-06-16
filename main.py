@@ -18,6 +18,8 @@ if __name__ == "__main__":
 
     # start_time = time.time()
 
+    print(r.total_penalty())
+
     # with open("baseline.txt", "a+") as file:
     #     for _i in range(100000):
     #         random_schedule = Random(schedule, courses)

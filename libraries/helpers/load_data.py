@@ -32,8 +32,9 @@ def load_courses(path: str = "data"):
     for _index, course in df_courses.iterrows():
         courses[course["Vak"]] = Course(course_name=course["Vak"])
         for activities in init_activities(courses[course["Vak"]], course):
-            for activity_name, activity in activities.items():
-                courses[course["Vak"]].add_activity(activity_name, activity)
+            for activity_name, activity_set in activities.items():
+                for activity in activity_set:
+                    courses[course["Vak"]].add_activity(activity_name, activity)
 
     return courses
 
@@ -54,30 +55,30 @@ def init_activities(course_obj: Course, course: pd.Series):
 
     # Add lectures.
     lectures = {
-        "lectures": Activity(
+        "lectures": {Activity(
             course=course_obj, category=f"lecture {i+1}", capacity=course["Verwacht"]
         )
-        for i in range(n_lectures)
+        for i in range(n_lectures)}
     }
 
     # Add practicals.
     practicals = {
-        "practicals": Activity(
+        "practicals": {Activity(
             course=course_obj,
             category=f"practical {i+1}",
             capacity=course["Max. stud. Practicum"],
         )
-        for i in range(n_practicals)
+        for i in range(n_practicals)}
     }
 
     # Add tutorials.
     tutorials = {
-        "tutorials": Activity(
+        "tutorials": {Activity(
             course=course_obj,
             category=f"tutorial {i+1}",
             capacity=course["Max. stud. Werkcollege"],
         )
-        for i in range(n_tutorials)
+        for i in range(n_tutorials)}
     }
 
     return lectures, tutorials, practicals
