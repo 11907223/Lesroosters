@@ -194,7 +194,7 @@ class Model:
         return self.model[index]
 
     def student_in_course(self, student: int, course) -> bool:
-        """"Return bool if student in specified course."""
+        """ "Return bool if student in specified course."""
         return True if student in self.courses[course].students else False
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
@@ -207,7 +207,9 @@ class Model:
         Returns:
             bool: True if student not in activity yet, False otherwise.
         """
-        if student not in self.participants[activity] and self.student_in_course(student, activity[0]):
+        if student not in self.participants[activity] and self.student_in_course(
+            student, activity[0]
+        ):
             self.participants[activity].add(student)
             return True
         else:
@@ -287,24 +289,8 @@ class Model:
 
         highest_penalties = []
         # Take the student penalty model
-        model = self.student_penalties
 
-        # Find highest penalties in de model
-        values = model.values()
-        penalty_values = []
-        for value in values:
-            penalty_values.append(value[0])
-
-        highest_values = sorted(penalty_values, reverse=True)[:n]
-
-        # Iterate over the highest values
-        for high_value in highest_values:
-            # Iterate over model
-            for index, value in model.items():
-                if value == high_value:
-                    # Add student to list
-
-        return highest_values
+        return print("LET OP !!!get_highest_students(self, n) werkt nog niet !!")
 
     def capacity_penalty(self, index: int, activity: tuple[str, str]) -> int:
         # Get hall capacity for slot
@@ -409,19 +395,22 @@ class Model:
     def schedule_gaps_penalty(self) -> int:
         """Calculates The function also keeps track of the model in
         self.student_penalties."""
-        pass
+        return 0
 
     def total_penalty(self) -> int:
         """Calculates the total penalty of the schedule.
 
         return: penalty (int)"""
         total = (
-            self.total_capacity_penalties() + self.evening_penalty() + self.conflict_penalty()
+            self.total_capacity_penalties()
+            + self.evening_penalty()
+            + self.conflict_penalty()
+            + self.schedule_gaps_penalty()
         )
 
         return total
 
-    def copy(self) -> 'Model':
+    def copy(self) -> "Model":
         new_copy = copy.copy(self)
         new_copy.model = copy.copy(self.model)
         new_copy.participants = copy.copy(self.participants)
