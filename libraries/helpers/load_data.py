@@ -138,6 +138,6 @@ def load_halls(path: str = "data"):
     halls = {}
     for index, hall in enumerate(halls_raw):
         hall_name, capacity = hall.values()
-        halls.update({index: Hall(hall_name, capacity)})
+        halls.update({index: Hall(hall_name, int(capacity))})
 
     return halls
