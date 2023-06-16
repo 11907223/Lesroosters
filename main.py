@@ -16,6 +16,8 @@ if __name__ == "__main__":
     print(s.init_student_model()[("Webprogrammeren en databases", "lecture 2")])
     print(s.check_index_is_empty(2))
 
+    r = Random(s).run()
+    print(r.model)
     # start_time = time.time()
 
     # with open("baseline.txt", "a+") as file:

@@ -73,7 +73,7 @@ class Model:
         participants: dict[tuple[str, str], set[int]] = {}
         for course in self.courses.values():
             for activity in course.activities():
-                participants.update({(course.name, activity.category): {}})
+                participants.update({(course.name, activity.category): set()})
 
         return participants
 
@@ -200,7 +200,7 @@ class Model:
 
     def student_in_course(self, student: int, course) -> bool:
         """"Return bool if student in specified course."""
-        return True if student in self.courses[course] else False
+        return True if student in self.courses[course].students else False
 
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
         """Add student to an activity in the model.

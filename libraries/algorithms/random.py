@@ -1,9 +1,8 @@
 from random import randrange
-import copy
 
 class Random:
     def __init__(self, empty_model):
-        self.model = copy.deepcopy(empty_model)
+        self.model = empty_model.copy()
 
         # add students to activities
         for activity_tuple in self.model.participants:
@@ -13,6 +12,6 @@ class Random:
     def run(self):
 
         for activity_tuple in self.model.participants:
-            random_slot = randrange(144)
+            random_slot = randrange(145)
             self.model.add_activity(random_slot, activity_tuple)
         return self.model
