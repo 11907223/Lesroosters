@@ -1,5 +1,5 @@
 import libraries.helpers.load_data as ld
-from libraries.algorithms.random import Random
+from libraries.algorithms.randomise import Random
 from libraries.classes.model import Model
 import pandas as pd
 import time

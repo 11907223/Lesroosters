@@ -1,7 +1,7 @@
 """
 Flask app to visualize a university scheduling tool.
 """
-from libraries.algorithms.random import Random
+from libraries.algorithms.randomise import Random
 from libraries.classes.penalty import Penalty
 from libraries.classes.schedule import Schedule
 from libraries.classes.student import Student
