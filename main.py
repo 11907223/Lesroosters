@@ -1,6 +1,6 @@
 import libraries.helpers.load_data as ld
 from libraries.algorithms.random import Random
-from libraries.helpers.model import Model
+from libraries.classes.model import Model
 import pandas as pd
 import time
 
@@ -31,4 +31,4 @@ if __name__ == "__main__":
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
 
-    print(s.total_penalty())
+    print(s.get_highest_students(3))
