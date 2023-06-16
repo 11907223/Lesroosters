@@ -11,12 +11,8 @@ if __name__ == "__main__":
     halls = ld.load_halls()
 
     s = Model(courses, students, halls)
-    print(s.init_model((None, None)))
-    print(s.participants)
-    print(s.init_student_model()[("Webprogrammeren en databases", "lecture 2")])
-    print(s.check_index_is_empty(2))
-
-    r = Random(s).run()
+    r = Random(s.copy()).run()
+    print(s.get_highest_students(3))
     print(r.model)
     # start_time = time.time()
 
@@ -31,4 +27,3 @@ if __name__ == "__main__":
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
 
-    print(s.get_highest_students(3))

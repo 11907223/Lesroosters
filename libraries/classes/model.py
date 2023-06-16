@@ -254,6 +254,7 @@ class Model:
         index_set = {
             index for index, activity in self.model.items() if activity in activity_set
         }
+        print(activity_set, index_set)
         return dict(zip(index_set, activity_set, strict=True))
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
@@ -363,13 +364,13 @@ class Model:
         penalty_points = 0
 
         # Iterate over students
-        for id in self.students.keys():
+        for id in self.students:
             # Variable for previous activities of student
             prev_slots = []
             # Total penalty points of student
             student_penalty = 0
             # Get all activities from student
-            activities = self.student_activities(int(id))
+            activities = self.student_activities(id)
             # Iterate over activites
             for activity in activities:
                 # Get info on activity
