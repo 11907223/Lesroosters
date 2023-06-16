@@ -10,8 +10,9 @@ class Random:
                 self.model.add_student(student, activity_tuple)
     
     def run(self):
-
+        # insert activities in random slot
         for activity_tuple in self.model.participants:
             random_slot = randrange(145)
             self.model.add_activity(random_slot, activity_tuple)
+            
         return self.model
