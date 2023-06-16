@@ -1,9 +1,6 @@
 import libraries.helpers.load_data as ld
 from libraries.algorithms.randomise import Random
 from libraries.classes.model import Model
-import pandas as pd
-import time
-
 
 if __name__ == "__main__":
     courses = ld.load_courses()
@@ -14,7 +11,7 @@ if __name__ == "__main__":
     r = Random(s.copy()).run()
     # print(s.get_highest_students(3))
     print(r.model)
-    # print(r.total_penalty())
+    print(r.total_penalty())
 
     # start_time = time.time()
 

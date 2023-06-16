@@ -1,4 +1,3 @@
-from libraries.classes.schedule import Schedule
 from libraries.classes.student import Student
 from libraries.classes.course import Course
 from libraries.classes.hall import Hall
@@ -246,16 +245,18 @@ class Model:
         Args:
             student (int): Index id of the student.
         """
-        activity_set = {
+        activities = [
             activity
             for activity, student_list in self.participants.items()
             if student in student_list
+        ]
+        activity_and_indices: dict[int, tuple[str, str]] = {
+            index: activity for index, activity in self.model.items() if activity in activities
         }
-        index_set = {
-            index for index, activity in self.model.items() if activity in activity_set
-        }
-        print(activity_set, index_set)
-        return dict(zip(index_set, activity_set, strict=True))
+        print(activity_and_indices)
+        indices = [activity for index, activity in self.model.items() if activity in activities]
+        dict(zip(indices, activities, strict=True))
+        return activity_and_indices
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
         """Search the schedule for activities with highest penalties.
