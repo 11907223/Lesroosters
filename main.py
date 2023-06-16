@@ -12,8 +12,10 @@ if __name__ == "__main__":
 
     s = Model(courses, students, halls)
     r = Random(s.copy()).run()
-    print(s.get_highest_students(3))
+    # print(s.get_highest_students(3))
     print(r.model)
+    # print(r.total_penalty())
+
     # start_time = time.time()
 
     # with open("baseline.txt", "a+") as file:

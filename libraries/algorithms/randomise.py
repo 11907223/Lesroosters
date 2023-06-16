@@ -13,7 +13,9 @@ class Random:
     def run(self):
         # insert activities in random slot
         for activity_tuple in self.model.participants:
-            random_slot = randrange(145)
-            self.model.add_activity(random_slot, activity_tuple)
+            while True:
+                random_slot = randrange(145)
+                if not self.model.add_activity(random_slot, activity_tuple):
+                    break
             
         return self.model
