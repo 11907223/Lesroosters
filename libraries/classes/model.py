@@ -79,7 +79,7 @@ class Model:
     def add_all_students(self) -> None:
         """Add all students to activities."""
         for activity_tuple in self.participants:
-            for student in self.students.keys():
+            for student in self.students:
                 self.add_student(int(student), activity_tuple)
         return None
 
