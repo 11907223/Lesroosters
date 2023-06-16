@@ -18,7 +18,7 @@ class Model:
         self.students = students
         self.schedule = schedule
         self.model: dict[int, activity_type] = self.init_model()
-        self.activities = self.init_student_model()
+        self.participants = self.init_student_model()
         # A model where index maps to penalty {index: penalty}
         self.index_penalties: dict[int, int] = self._init_index_penalties_model()
         # A dictionary to store students, their penalty and the activities
@@ -105,7 +105,7 @@ class Model:
 
     def return_models(self):
         """Return schedule and activities-student dicts of strings."""
-        return self.model, self.activities
+        return self.model, self.participants
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
@@ -233,8 +233,8 @@ class Model:
         Returns:
             bool: True if student not in activity yet, False otherwise.
         """
-        if student not in self.activities[activity]:
-            self.activities[activity].add(student)
+        if student not in self.participants[activity]:
+            self.participants[activity].add(student)
             return True
         else:
             return False
@@ -249,8 +249,8 @@ class Model:
         Returns:
             bool: True if student succesfully removed from activity, False otherwise.
         """
-        if student in self.activities[activity]:
-            self.activities[activity].remove(student)
+        if student in self.participants[activity]:
+            self.participants[activity].remove(student)
             return True
         else:
             return False
@@ -263,7 +263,7 @@ class Model:
         """
         activity_set = {
             activity
-            for activity, student_list in self.activities.items()
+            for activity, student_list in self.participants.items()
             if student in student_list
         }
         index_set = {
