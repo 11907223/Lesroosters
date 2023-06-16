@@ -198,6 +198,9 @@ class Model:
         """
         return self.model[index]
 
+    def student_in_course(self, student: int) -> bool:
+        return {True for course in self.courses if student in course.students}
+
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
         """Add student to an activity in the model.
 
@@ -208,7 +211,7 @@ class Model:
         Returns:
             bool: True if student not in activity yet, False otherwise.
         """
-        if student not in self.participants[activity]:
+        if student not in self.participants[activity] and self.student_in_course(student):
             self.participants[activity].add(student)
             return True
         else:
