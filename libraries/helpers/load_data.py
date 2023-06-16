@@ -3,6 +3,7 @@ import csv
 from libraries.classes.course import Course
 from libraries.classes.activity import Activity
 from libraries.classes.student import Student
+from libraries.classes.hall import Hall
 
 
 def load_courses(path: str = "data"):
@@ -135,8 +136,8 @@ def load_halls(path: str = "data"):
 
     # create a dictionary with halls and their capacity
     halls = {}
-    for hall in halls_raw:
-        hall_id, capacity = hall.values()
-        halls.update({str(hall_id): int(capacity)})
+    for index, hall in enumerate(halls_raw):
+        hall_name, capacity = hall.values()
+        halls.update({index: Hall(hall_name, capacity)})
 
     return halls

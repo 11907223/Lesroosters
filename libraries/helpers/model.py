@@ -1,6 +1,7 @@
 from libraries.classes.schedule import Schedule
 from libraries.classes.student import Student
 from libraries.classes.course import Course
+from libraries.classes.hall import Hall
 from typing import Optional, Union
 
 
@@ -12,50 +13,33 @@ class Model:
         self,
         courses: dict[str, Course],
         students: dict[str, Student],
-        schedule: Schedule,
+        halls: dict[str, Hall],
     ) -> None:
         self.courses = courses
         self.students = students
-        self.schedule = schedule
-        self.model: dict[int, activity_type] = self.init_model()
-        self.participants = self.init_student_model()
-        # A model where index maps to penalty {index: penalty}
-        self.index_penalties: dict[int, int] = self._init_index_penalties_model()
-        # A dictionary to store students, their penalty and the activities
+        self.model: dict[int, activity_type] = self.init_model((None, None))
+        self.participants = (
+            self.init_student_model()
+        )  # A model where index maps to penalty {index: penalty}
+        self.index_penalties: dict[
+            int, int
+        ] = (
+            self.init_model(0)
+        )  # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
 
-    def init_model(self) -> dict[int, tuple[Optional[str], Optional[str]]]:
+    def init_model(self, dict_val) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
             dict[int : dict(str, str)]: Index (0 - 144) mapping to a dict containing course and activity.
                 Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'},
                 {1: {'course': None, 'activity': None}, etc.}
-
         """
-        schedule_model: dict[int, activity_type] = {}
-        for index, entry in enumerate(self.schedule.as_list_of_dicts()):
-            activity: str = entry["activity"]
-            course: str = entry["course"]
-            schedule_model[index] = (
-                course,
-                activity,
-            )
-
-        return schedule_model
-
-    def _init_index_penalties_model(self) -> dict[int, int]:
-        """Take a Schedule object and flatten it into an empty string representation.
-
-        Returns:
-            dict[int : int]: Index (0 - 144) mapping to the penalty of the activity in that index.
-                Example: {0: 10, 1: 0, etc.}
-
-        """
-        schedule_model: dict[int, int] = {}
-        for index, _entry in enumerate(self.schedule.as_list_of_dicts()):
-            schedule_model[index] = 0
+        schedule_model: dict[int, activity_type] = {
+            index: dict_val for index in range((7 * 4 + 1) * 5)
+        }
 
         return schedule_model
 
@@ -85,23 +69,12 @@ class Model:
             dict[tuple[str, str], set[str]]:
                 Activity (as unique tuple of course-activity) and a set of student indices.
         """
-        students_in_activities = {}
-        for day in self.schedule.days.values():
-            for slot in day.slots:
-                if slot.activity is not None:
-                    student_set = set()
-                    for student in slot.activity.students:
-                        student_set.add(student)
-                    students_in_activities.update(
-                        {
-                            (
-                                slot.activity.course.name,
-                                slot.activity.category,
-                            ): student_set
-                        }
-                    )
+        participants: dict[tuple[str, str], set[int]] = {}
+        for course in self.courses.values():
+            for activity in course.activities():
+                participants.update({(course.name, activity.category): set()})
 
-        return students_in_activities
+        return participants
 
     def return_models(self):
         """Return schedule and activities-student dicts of strings."""
@@ -204,7 +177,7 @@ class Model:
 
             return int(capacity)
         else:
-            # If activit is None, return 0
+            # If activity is None, return 0
             return 0
 
     def get_index(self, activity: tuple[str, str]) -> int:
