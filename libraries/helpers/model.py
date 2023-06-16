@@ -21,15 +21,15 @@ class Model:
         self.participants = (
             self.init_student_model()
         )  # A model where index maps to penalty {index: penalty}
-        self.index_penalties: dict[
-            int, int
-        ] = (
-            self.init_model(0)
+        self.index_penalties: dict[int, int] = self.init_model(
+            0
         )  # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
 
-    def init_model(self, dict_val) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
+    def init_model(
+        self, dict_val
+    ) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
@@ -340,7 +340,6 @@ class Model:
         returns total conflict penalty. The function also keeps track of the model in
         self.student_penalties."""
 
-        # Start with 0 penalty points
         penalty_points = 0
 
         # Iterate over students
@@ -381,6 +380,11 @@ class Model:
         print("conflict penalty: ", penalty_points)
 
         return penalty_points
+
+    def schedule_gaps_penalty(self) -> int:
+        """Calculates The function also keeps track of the model in
+        self.student_penalties."""
+        pass
 
     def total_penalty(self) -> int:
         """Calculates the total penalty of the schedule.
