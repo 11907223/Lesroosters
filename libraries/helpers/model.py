@@ -13,23 +13,24 @@ class Model:
         self,
         courses: dict[str, Course],
         students: dict[str, Student],
-        halls: dict[str, Hall],
+        halls: dict[int, Hall],
     ) -> None:
         self.courses = courses
         self.students = students
+        self.halls = halls
         self.model: dict[int, activity_type] = self.init_model((None, None))
         self.participants = (
             self.init_student_model()
         )  # A model where index maps to penalty {index: penalty}
-        self.index_penalties: dict[
-            int, int
-        ] = (
-            self.init_model(0)
+        self.index_penalties: dict[int, int] = self.init_model(
+            0
         )  # A dictionary to store students, their penalty and the activities
         # that cause the penalty {student_id: [total_penalty, set(2, 140, 23)]}
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
 
-    def init_model(self, dict_val) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
+    def init_model(
+        self, dict_val
+    ) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
         """Take a Schedule object and flatten it into string representation.
 
         Returns:
@@ -72,7 +73,7 @@ class Model:
         participants: dict[tuple[str, str], set[int]] = {}
         for course in self.courses.values():
             for activity in course.activities():
-                participants.update({(course.name, activity.category): set()})
+                participants.update({(course.name, activity.category): {}})
 
         return participants
 
@@ -145,17 +146,18 @@ class Model:
 
     def get_hall_capacity(self, index: int) -> int:
         """Return capacity of the hall that is represented by index."""
-        # List of the capacity of all lecture halls
-        halls_capacity = [41, 22, 20, 56, 48, 117, 60]
         # Translate index into information
         info = self.translate_index(index)
         # Get the hall that is described by index
         hall_index = info["hall"]
         # Return hall capacity by from list
-        return halls_capacity[hall_index]
+        return self.halls[hall_index].capacity
 
     def get_activity_capacity(self, activity: tuple[str, str]) -> int:
-        """Returns capacity of an activity. If activity is None, returns zero."""
+        """Return the capacity of an activity.
+         
+        If activity is None, return zero.
+        """
         # Start with capacity 0
         capacity = 0
         # Extract course name and type from activity
@@ -196,6 +198,10 @@ class Model:
         """
         return self.model[index]
 
+    def student_in_course(self, student: int, course) -> bool:
+        """"Return bool if student in specified course."""
+        return True if student in self.courses[course] else False
+
     def add_student(self, student: int, activity: tuple[str, str]) -> bool:
         """Add student to an activity in the model.
 
@@ -206,7 +212,7 @@ class Model:
         Returns:
             bool: True if student not in activity yet, False otherwise.
         """
-        if student not in self.participants[activity]:
+        if student not in self.participants[activity] and self.student_in_course(student, activity[0]):
             self.participants[activity].add(student)
             return True
         else:
@@ -245,7 +251,7 @@ class Model:
         return dict(zip(index_set, activity_set, strict=True))
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
-        """Searches the schedule for activities with highest penalties.
+        """Search the schedule for activities with highest penalties.
         Returns a list of length n where each element represents an activity that
         caused a high penalty, this element is also a list which contains a tuple with course name
         and activity type, and the index. The first element (list[0])
@@ -276,7 +282,7 @@ class Model:
         return highest_penalties
 
     def get_highest_students(self, n) -> list[int]:
-        """Searches the model for students in activities with highest penalties.
+        """Search the model for students in activities with highest penalties.
         Returns a list of length n where each element is the student_index of a
         student that caused a high penalty. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
@@ -286,7 +292,7 @@ class Model:
         pass
 
     def capacity_penalty(self) -> int:
-        """Checks if the number of students of each activity exceeds
+        """Check if the number of students of each activity exceeds
         the hall capacity.For every student that doesn't fit 1 penalty
         point is counted. the total capacity penalty is returned (int).
         The function also keeps track of the model in self.index_penalties."""
@@ -335,12 +341,11 @@ class Model:
         return penalty_points
 
     def conflict_penalty(self) -> int:
-        """Calculates penalties of students with course conflicts.
+        """Calculate the penalties of students with course conflicts.
         Fills in empty student activity model {activity: {student_id: penalty}}.
         returns total conflict penalty. The function also keeps track of the model in
         self.student_penalties."""
 
-        # Start with 0 penalty points
         penalty_points = 0
 
         # Iterate over students
@@ -381,6 +386,11 @@ class Model:
         print("conflict penalty: ", penalty_points)
 
         return penalty_points
+
+    def schedule_gaps_penalty(self) -> int:
+        """Calculates The function also keeps track of the model in
+        self.student_penalties."""
+        pass
 
     def total_penalty(self) -> int:
         """Calculates the total penalty of the schedule.

@@ -1,5 +1,4 @@
 from libraries.classes.course import Course
-from libraries.classes.student import Student
 
 
 class Activity:
@@ -16,7 +15,6 @@ class Activity:
             category (str): The category of the activity.
                 Options=lecture, tutorial or practical.
             capacity (): Maximum number of students in the activity.
-            students (): List of students in the activity.
         """
         self.course: Course = course
         self.category: str = category

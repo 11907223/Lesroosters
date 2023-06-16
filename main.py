@@ -1,24 +1,16 @@
-from libraries.helpers.load_data import load_courses, load_students
+import libraries.helpers.load_data as ld
 from libraries.algorithms.random import Random
-from libraries.classes.schedule import Schedule
 from libraries.helpers.model import Model
 import pandas as pd
 import time
 
 
 if __name__ == "__main__":
-    courses = load_courses()
-    students = load_students(courses)
-    # schedule = Random(Schedule(), courses).run()
+    courses = ld.load_courses()
+    students = ld.load_students(courses)
+    halls = ld.load_halls()
 
-    # # other examples
-    # df = pd.DataFrame(schedule.as_list_of_dicts())
-    # print(
-    #     "THIS IS A DATAFRAME OF THE WHOLE SCHEDULE WHEN ACCOUNTING FOR ROOM SIZE: \n",
-    #     df,
-    # )
-
-    s = Model(courses, students, 6)
+    s = Model(courses, students, halls)
     print(s.init_model((None, None)))
     print(s.participants)
     print(s.init_student_model()[("Webprogrammeren en databases", "lecture 2")])
