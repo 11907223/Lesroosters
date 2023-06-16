@@ -1,7 +1,6 @@
 from libraries.helpers.load_data import load_courses, load_students
 from libraries.algorithms.random import Random
 from libraries.classes.schedule import Schedule
-from libraries.classes.penalty import Penalty
 from libraries.helpers.model import Model
 import pandas as pd
 import time
@@ -10,7 +9,7 @@ import time
 if __name__ == "__main__":
     courses = load_courses()
     students = load_students(courses)
-    schedule = Random(Schedule(), courses).run()
+    # schedule = Random(Schedule(), courses).run()
 
     # # other examples
     # df = pd.DataFrame(schedule.as_list_of_dicts())
@@ -19,9 +18,9 @@ if __name__ == "__main__":
     #     df,
     # )
 
-    s = Model(courses, students, schedule)
+    s = Model(courses, students, 6)
     print(s.init_model((None, None)))
-    print(s.activities)
+    print(s.participants)
     print(s.init_student_model()[("Webprogrammeren en databases", "lecture 2")])
     print(s.check_index_is_empty(2))
 

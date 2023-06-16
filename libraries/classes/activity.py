@@ -1,6 +1,7 @@
 from libraries.classes.course import Course
 from libraries.classes.student import Student
 
+
 class Activity:
     """ "Class containing single activity in a course.
 
@@ -18,15 +19,5 @@ class Activity:
             students (): List of students in the activity.
         """
         self.course: Course = course
-        self.students: dict[int, Student] = {}
         self.category: str = category
         self.capacity: int = capacity
-
-    def add_students(self, students) -> None:
-        """Add students to the dict of students participating in activity.
-
-        Args:
-            students (dict[str:Student]): dict of students to add to activity.
-        """
-        for student in students.values():
-            self.students.update({student.index: student})
