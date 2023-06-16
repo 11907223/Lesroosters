@@ -3,7 +3,7 @@ from libraries.classes.student import Student
 from libraries.classes.course import Course
 from libraries.classes.hall import Hall
 from typing import Optional, Union
-
+import copy
 
 activity_type = tuple[Optional[str], Optional[str]]
 
@@ -291,27 +291,31 @@ class Model:
         returns: list[int]"""
         pass
 
-    def capacity_penalty(self) -> int:
+    def capacity_penalty(self, index: int, activity: tuple[str, str]) -> int:
+        # Get hall capacity for slot
+        hall_capacity = self.get_hall_capacity(index)
+        # Get activity capacity for slot
+        activity_capacity = self.get_activity_capacity(activity)
+
+        if activity_capacity > hall_capacity:
+            # Return penalty points for each student over capacity.
+            return activity_capacity > hall_capacity
+        # Return no added penalty points.
+        return 0
+
+    def total_capacity_penalties(self) -> int:
         """Check if the number of students of each activity exceeds
         the hall capacity.For every student that doesn't fit 1 penalty
         point is counted. the total capacity penalty is returned (int).
         The function also keeps track of the model in self.index_penalties."""
-        # Start counting at 0 penalty points
+
         penalty_points = 0
 
         # Iterate over all indices in model
         for index, activity in self.model.items():
-            temp_penalty = 0
-            # Get hall capacity for slot
-            hall_capacity = self.get_hall_capacity(index)
-            # Get activity capacity for slot
-            activity_capacity = self.get_activity_capacity(activity)
-            # If activity capacity exceeds hall capacity
-            if activity_capacity > hall_capacity:
-                # Add to penalty points and update index_penalties model
-                temp_penalty = activity_capacity - hall_capacity
-                penalty_points += temp_penalty
-                self.index_penalties[index] += temp_penalty
+            index_penalty = self.capacity_penalty(index, activity)
+            penalty_points += index_penalty
+            self.index_penalties[index] += index_penalty
 
         print("capacity penalty:", penalty_points)
         return penalty_points
@@ -397,7 +401,14 @@ class Model:
 
         return: penalty (int)"""
         total = (
-            self.capacity_penalty() + self.evening_penalty() + self.conflict_penalty()
+            self.total_capacity_penalties() + self.evening_penalty() + self.conflict_penalty()
         )
 
         return total
+
+    def copy(self) -> 'Model':
+        new_copy = copy.copy(self)
+        new_copy.model = copy.copy(self.model)
+        new_copy.participants = copy.copy(self.participants)
+        
+        return new_copy
