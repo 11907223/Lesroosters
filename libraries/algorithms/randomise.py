@@ -10,11 +10,9 @@ class Random:
 
         # copy empty model object
         self.model = deepcopy(empty_model.copy())
-
+        
         # add students to activities
-        for activity_tuple in self.model.participants:
-            for student in self.model.students:
-                self.model.add_student(int(student), activity_tuple)
+        self.model.add_all_students()
     
     def run(self) -> Model: 
         # randomly assign activities to slots
