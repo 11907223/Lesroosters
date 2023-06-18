@@ -253,7 +253,6 @@ class Model:
         activity_and_indices: dict[int, tuple[str, str]] = {
             index: activity for index, activity in self.model.items() if activity in activities
         }
-        print(activity_and_indices)
         indices = [activity for index, activity in self.model.items() if activity in activities]
         dict(zip(indices, activities, strict=True))
         return activity_and_indices
