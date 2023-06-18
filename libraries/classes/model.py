@@ -328,7 +328,7 @@ class Model:
             penalty_points += index_penalty
             self.index_penalties[index] += index_penalty
 
-        print("capacity penalty:", penalty_points)
+        # print("capacity penalty:", penalty_points)
         return penalty_points
 
     def evening_penalty(self) -> int:
@@ -352,7 +352,7 @@ class Model:
                     penalty_points += evening_penalty
                     self.index_penalties[index] += evening_penalty
 
-        print("evening penalty:", penalty_points)
+        # print("evening penalty:", penalty_points)
         return penalty_points
 
     def conflict_penalty(self) -> int:
@@ -398,7 +398,7 @@ class Model:
                     # add to previous slot variable
                     prev_slots.append(temp)
 
-        print("conflict penalty: ", penalty_points)
+        # print("conflict penalty: ", penalty_points)
 
         return penalty_points
 

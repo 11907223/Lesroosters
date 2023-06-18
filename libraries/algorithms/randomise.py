@@ -4,7 +4,7 @@ from libraries.classes.model import Model
 
 class Random:
     """
-    Random class randomly assigns all activities to schedule slots. 
+    Random generates a random schedule by randomly assigning activities to slots. 
     """
     def __init__(self, empty_model: Model):
 
@@ -30,3 +30,21 @@ class Random:
 
         # return randomly filled model object
         return self.model
+
+def random_algorithm(iterations, empty_model: Model) -> Model:
+    """
+    Generates a random schedule x times and returns the best one.
+    """
+    lowest_penalty = 1000
+    for _ in range(iterations):
+
+        # generate random schedule
+        r = Random(empty_model).run()
+
+        # save best schedule 
+        penalty_points = r.total_penalty()
+        if penalty_points < lowest_penalty:
+            best_schedule = deepcopy(r)
+            lowest_penalty = penalty_points
+
+    return best_schedule

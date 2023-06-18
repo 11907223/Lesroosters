@@ -1,5 +1,5 @@
 import libraries.helpers.load_data as ld
-from libraries.algorithms.randomise import Random
+from libraries.algorithms.randomise import Random, random_algorithm
 from libraries.classes.model import Model
 
 if __name__ == "__main__":
@@ -16,6 +16,13 @@ if __name__ == "__main__":
     # start_time = time.time()
 
     print(r.total_penalty())
+
+    # _________________________RANDOM ALGORITHM_______________________
+    iterations = 1
+    solution   = random_algorithm(iterations, s)
+
+    print('THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n', solution.model, '\n POINTS: ', solution.total_penalty())
+    # ________________________________________________________________
 
     # with open("baseline.txt", "a+") as file:
     #     for _i in range(100000):
