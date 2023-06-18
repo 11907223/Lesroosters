@@ -1,6 +1,7 @@
 import libraries.helpers.load_data as ld
 from libraries.algorithms.randomise import Random, random_algorithm
 from libraries.classes.model import Model
+from libraries.algorithms.greedy import Greedy
 
 if __name__ == "__main__":
     courses = ld.load_courses()
@@ -19,10 +20,16 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM_______________________
     iterations = 1
-    solution   = random_algorithm(iterations, s)
+    random_solution   = random_algorithm(iterations, s)
 
-    print('THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n', solution.model, '\n POINTS: ', solution.total_penalty())
+    print('THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n', random_solution.model, '\n POINTS: ', random_solution.total_penalty())
     # ________________________________________________________________
+
+    # ________________________GREEDY ALGORITHM________________________
+    greedy_solution = Greedy(s).run()
+    print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.model, '\n POINTS: ', greedy_solution.total_penalty())
+    # ________________________________________________________________
+
 
     # with open("baseline.txt", "a+") as file:
     #     for _i in range(100000):
