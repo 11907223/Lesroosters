@@ -6,7 +6,7 @@ from typing import Optional, Union
 import copy
 import random
 
-activity_type = tuple[Optional[str], Optional[str]]
+activity_type = tuple[str, str]
 
 
 class Model:
@@ -18,31 +18,43 @@ class Model:
         courses (dict[str, Course]): A mapping of a course name to a Course object.
         students (dict[str, Student]): A mapping of a student index (based on loading order) to a Student object.
         halls (dict[str, Hall]): A mapping of a hall index (based on loading order) to a Hall object.
-
+        solution (dict[int, tuple[str, str]]): A mapping of a schedule slot index
+            (which maps to day-timeslot-hall) to an activity. An activity is represented as ('Course name', 'Activity').
+            Example of an activity: ('Heuristieken 1', 'lecture 1').
+        participants (dict[tuple[str, str], set[int]]): A dictionary containing activities and their set of students
+            students are represented by their index number.
     """
 
-    def __init__(self, path: str = "data") -> None:
+    def __init__(self, path: str = "data", auto_load_students: bool = True) -> None:
+        """Initiatizes a model for a schedule.
+
+        Args:
+            path (str): Path for data to load. Defaults to "data".
+            auto_load_students (bool): evaluate if  students have to be added to
+                their respective activities in initialisation. Defaults to True.
+        """
         self.courses: dict[str, Course] = load_courses(path)
-        self.students: dict[str, Student] = load_students(self.courses, path)
+        self.students: dict[int, Student] = load_students(self.courses, path)
         self.halls: dict[int, Hall] = load_halls(path)
         self.solution: dict[int, activity_type] = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
-        self.add_all_students()
 
-    def init_model(
-        self, dict_val
-    ) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
-        """Take a Schedule object and flatten it into string representation.
+        if auto_load_students is True:
+            # Add members to activities in self.participants.
+            self.add_all_students()
+
+    def init_model(self, dict_value) -> dict[int, int | tuple[str, str]]:
+        """Initiate a string representation of a schedule.
 
         Returns:
             dict[int : dict(str, str)]: Index (0 - 144) mapping to a dict containing course and activity.
                 Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'},
                 {1: {'course': None, 'activity': None}, etc.}
         """
-        schedule_model: dict[int, activity_type] = {
-            index: dict_val for index in range((7 * 4 + 1) * 5)
+        schedule_model: dict[int, int | activity_type] = {
+            index: dict_value for index in range((7 * 4 + 1) * 5)
         }
 
         return schedule_model
@@ -65,7 +77,7 @@ class Model:
         return {"day": day, "timeslot": timeslot, "hall": hall}
 
     def init_student_model(self) -> dict[tuple[str, str], set[int]]:
-        """Take the Schedule object and convert it into a activity - student dict.
+        """Initiate an activity mapping to a set of students.
 
         Activities are structured as a tuple('Heuristieken', 'lecture 1').
 
@@ -80,20 +92,15 @@ class Model:
 
         return participants
 
-    def return_models(self):
-        """Return schedule and activities-student dicts of strings."""
-        return self.solution, self.participants
-
     def add_all_students(self) -> None:
         """Add all students to activities."""
         for activity_tuple in self.participants:
             for student in self.students:
                 self.add_student(int(student), activity_tuple)
-        return None
 
-    def get_random_index(self, empty: bool=False) -> int:
+    def get_random_index(self, empty: bool = False) -> int:
         """Return random empty index in the schedule.
-        
+
         Args:
             empty (bool): Flag if random index contains nothing.
                 Defaults to false.
@@ -102,7 +109,7 @@ class Model:
             # Acquire index independent of content in index.
             index = random.choice(list(self.solution.keys()))
             if empty is False:
-                # Stop loop if slot content is irrelevant.
+                # Return first found index if slot content is irrelevant.
                 return index
             if self.check_index_is_empty(index) and empty is True:
                 return index
@@ -110,6 +117,18 @@ class Model:
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
         return self.solution[index][0] is None
+
+    def swap_activities(self, index_1, index_2) -> None:
+        """Swap activities stored at two indices.
+
+        Args:
+            index_1 (int): Index of first activity to be swapped.
+            index_2 (int): Index of second activity to be swapped.
+        """
+        self.solution[index_1], self.solution[index_2] = (
+            self.solution[index_2],
+            self.solution[index_1],
+        )
 
     def add_activity(self, index: int, activity: tuple[str, str]) -> bool:
         """Add activity to given index in schedule model.

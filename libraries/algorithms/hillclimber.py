@@ -18,20 +18,14 @@ class HillClimber:
         self.schedule = model.copy()
         self.penalties = model.total_penalty()
 
-    def random_index(self, new_model: Model) -> int:
-        return random.choice(list(new_model.solution))
-
     def swap_slots(self, new_model: Model) -> None:
         """
         Swap two slots in the schedule at random.
         """
-        index_1 = self.random_index(new_model)
-        index_2 = self.random_index(new_model)
+        index_1 = new_model.get_random_index()
+        index_2 = new_model.get_random_index()
 
-        new_model.solution[index_1], new_model.solution[index_2] = (
-            new_model.solution[index_2],
-            new_model.solution[index_1],
-        )
+        new_model.swap_activities(index_1, index_2)
 
     def mutate_model(self, new_model: Model, number_of_slots: int = 1) -> None:
         """
