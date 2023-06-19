@@ -21,6 +21,7 @@ class Model:
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
+        self.add_all_students()
 
     def init_model(
         self, dict_val

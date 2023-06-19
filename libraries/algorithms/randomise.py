@@ -10,9 +10,6 @@ class Random:
 
         # copy empty model object
         self.model = empty_model.copy()
-        
-        # add students to activities
-        self.model.add_all_students()
     
     def run(self) -> Model: 
         # randomly assign activities to slots
@@ -46,3 +43,10 @@ def random_algorithm(iterations, empty_model: Model) -> Model:
             lowest_penalty = penalty_points
 
     return best_schedule
+
+
+i =0 
+for index in self.solution:
+
+    if self.solution[index][0] != None:
+        i += 1
