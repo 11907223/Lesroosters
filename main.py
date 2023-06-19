@@ -9,7 +9,7 @@ if __name__ == "__main__":
     halls = ld.load_halls()
 
     empty_model = Model(courses, students, halls)
-    random_model = Random(empty_model.copy()).run()
+    random_model = Random(empty_model).run()
     # print(s.get_highest_students(3))
     print(random_model.solution)
     print(random_model.total_penalty())
