@@ -1,7 +1,4 @@
-from copy import deepcopy
 from libraries.classes.model import Model
-import random
-
 
 class Greedy:
     """
@@ -61,7 +58,6 @@ class Greedy:
             previous_penalty = lowest_penalty
 
         return self.model
-    
 
     # VOOR RANDOM GREEDY
         # randomly shuffle activities
