@@ -263,7 +263,7 @@ class Model:
             for index, activity in self.solution.items()
             if activity in activities
         ]
-        dict(zip(indices, activities, strict=True))
+        # dict(zip(indices, activities, strict=True))
         return activity_and_indices
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:

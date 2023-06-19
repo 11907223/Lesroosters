@@ -10,7 +10,7 @@ class Greedy:
 
     def __init__(self, empty_model: Model) -> None:
         self.solution = deepcopy(empty_model.copy())
-        self.solution.add_all_students()
+        # self.solution.add_all_students()
         self.activity_tuples = list(self.solution.participants.keys())
         # maybe randomly shuffle activities here
 

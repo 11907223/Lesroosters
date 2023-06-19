@@ -11,10 +11,7 @@ class Random:
         # copy empty model object
         self.model = empty_model.copy()
     
-    def run(self) -> Model: 
-        # randomly assign activities to slots
-        for activity_tuple in self.model.participants:
-
+    def insert_randomly(self, activity_tuple):
             # while loop ensures activity is added
             while True:
                 random_slot = randrange(145)
@@ -22,6 +19,12 @@ class Random:
                 # addition successful
                 if self.model.add_activity(random_slot, activity_tuple) is True:
                     break
+            return None
+    
+    def run(self) -> Model: 
+        # randomly assign activities to slots
+        for activity_tuple in self.model.participants:
+            self.insert_randomly(activity_tuple)
 
         # return randomly filled model object
         return self.model
