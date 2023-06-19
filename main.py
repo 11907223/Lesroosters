@@ -16,6 +16,8 @@ if __name__ == "__main__":
 
     # start_time = time.time()
 
+    print("empty index: ", random_model.get_empty_index())
+
     # _________________________RANDOM ALGORITHM_______________________
     iterations = 1
     random_solution = random_algorithm(iterations, empty_model)
@@ -53,7 +55,7 @@ if __name__ == "__main__":
     # ________________________GREEDY ALGORITHM________________________
     # greedy_solution = Greedy(empty_model).run()
     # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, '\n POINTS: ', greedy_solution.total_penalty())
-    # ________________________________________________________________
+    # __________________________BASELINE______________________________________
 
     # with open("baseline.txt", "a+") as file:
     #     for _i in range(100000):

@@ -3,6 +3,7 @@ from libraries.classes.course import Course
 from libraries.classes.hall import Hall
 from typing import Optional, Union
 import copy
+import random
 
 activity_type = tuple[Optional[str], Optional[str]]
 
@@ -82,6 +83,20 @@ class Model:
             for student in self.students:
                 self.add_student(int(student), activity_tuple)
         return None
+
+    def get_empty_index(self) -> int:
+        """Returns random empty index in the schedule."""
+        random.seed(0)
+        index_list = list(self.solution.keys())
+        empty = False
+        index = 0
+
+        while not empty:
+            index = random.choice(index_list)
+            if self.check_index_is_empty(index):
+                empty = True
+
+        return index
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
@@ -442,14 +457,14 @@ class Model:
             dict(zip(indices, activities, strict=True))
         except ValueError:
             return False
-        
+
         return True
 
     def is_solution(self) -> bool:
         if self.student_has_valid_schedule(261) is False:
             return False
-        
-        #compare with set
+
+        # compare with set
         n_activities = 0
         for course in self.courses.values():
             n_activities += len(course.activities())
