@@ -13,37 +13,37 @@ class Greedy:
         self.empty_slots = list(self.model.solution.keys())
 
     def get_optimal_index(self, activity_tuple, previous_penalty):
-            # reset lowest penalty
-            lowest_penalty = 1000
-            
-            # loop over timeslots
-            # for index in self.model.solution:
-            for i, index in enumerate(self.empty_slots):
-                added = self.model.add_activity(index, activity_tuple)
+        # reset lowest penalty
+        lowest_penalty = 1000
+        
+        # loop over timeslots
+        # for index in self.model.solution:
+        for i, index in enumerate(self.empty_slots):
+            added = self.model.add_activity(index, activity_tuple)
 
-                if added is True:
-                    new_penalty = self.model.total_penalty()
+            if added is True:
+                new_penalty = self.model.total_penalty()
 
-                    # if penalty unchanged, optimal index is found
-                    if new_penalty == previous_penalty:
-                        optimal_index = index
-                        rm = i
-                        lowest_penalty = new_penalty
-                        self.model.remove_activity(index=index)
-                        break
-
-                    # if penalty lower than best, save index en best points
-                    elif new_penalty < lowest_penalty:
-                        lowest_penalty = new_penalty
-                        rm = i
-                        optimal_index = index
-
+                # if penalty unchanged, optimal index is found
+                if new_penalty == previous_penalty:
+                    optimal_index = index
+                    rm = i
+                    lowest_penalty = new_penalty
                     self.model.remove_activity(index=index)
+                    break
 
-            # remove filled slot from empty slots
-            self.empty_slots.pop(rm)
+                # if penalty lower than best, save index en best points
+                elif new_penalty < lowest_penalty:
+                    lowest_penalty = new_penalty
+                    rm = i
+                    optimal_index = index
 
-            return optimal_index, lowest_penalty
+                self.model.remove_activity(index=index)
+
+        # remove filled slot from empty slots
+        self.empty_slots.pop(rm)
+
+        return optimal_index, lowest_penalty
     
     def run(self) -> Model:
 
