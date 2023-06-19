@@ -9,9 +9,11 @@ class Course:
     """ "Contains all information in a course.
 
     Attributes:
-        lectures (list[Activity]): List of lectures in the course.
-        tutorials (list[Activity]): List of tutorials in the course.
-        practicals (list[Activity]): List of practicals in the course.
+        name (str) : Name of the course (e.g. Heuristieken 1).
+        lectures (list[Activity]): List of lecture Activity objects in the course.
+        tutorials (list[Activity]): List of tutorial Activity objects in the course.
+        practicals (list[Activity]): List of practical Activity objects in the course.
+        students (dict[str, Student]): Mapping of student indices to Student objects.
     """
 
     def __init__(self, course_name) -> None:

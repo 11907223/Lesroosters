@@ -10,13 +10,13 @@ if __name__ == "__main__":
     students = ld.load_students(courses)
     halls = ld.load_halls()
 
-    empty_model = Model(courses, students, halls)
+    empty_model = Model()
     random_model = Random(empty_model).run()
     # print(s.get_highest_students(3))
 
     # start_time = time.time()
 
-    print("empty index: ", random_model.get_empty_index())
+    print("empty index: ", random_model.get_random_index())
 
     # _________________________RANDOM ALGORITHM_______________________
     iterations = 1

@@ -11,22 +11,22 @@ class HillClimber:
     equivalent solution is kept for the next iteration.
     """
 
-    def __init__(self, schedule: Model):
-        if schedule.is_solution() is False:
+    def __init__(self, model: Model):
+        if model.is_solution() is False:
             raise Exception("Please provide a complete solution.")
 
-        self.schedule = schedule.copy()
-        self.penalties = schedule.total_penalty()
+        self.schedule = model.copy()
+        self.penalties = model.total_penalty()
 
-    def random_slot(self, new_model: Model) -> int:
+    def random_index(self, new_model: Model) -> int:
         return random.choice(list(new_model.solution))
 
     def swap_slots(self, new_model: Model) -> None:
         """
         Swap two slots in the schedule at random.
         """
-        index_1 = self.random_slot(new_model)
-        index_2 = self.random_slot(new_model)
+        index_1 = self.random_index(new_model)
+        index_2 = self.random_index(new_model)
 
         new_model.solution[index_1], new_model.solution[index_2] = (
             new_model.solution[index_2],
