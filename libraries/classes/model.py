@@ -433,17 +433,17 @@ class Model:
     def student_has_valid_schedule(self, student: int) -> bool:
         try:
             activities = self.student_activities(student)
-            print(activities)
             indices = [
                 activity
                 for activity in self.solution.values()
                 if activity in activities.values()
             ]
+            print(indices)
             dict(zip(indices, activities, strict=True))
         except ValueError:
             return False
-        else:
-            return True
+        
+        return True
 
     def is_solution(self) -> bool:
         if self.student_has_valid_schedule(261) is False:
@@ -458,7 +458,7 @@ class Model:
         for activity in self.solution.values():
             activity_set.add(activity)
 
-        if n_activities <= len(activity_set) - 1:
+        if n_activities <= len(activity_set):
             return True
         else:
             return False
