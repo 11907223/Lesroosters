@@ -9,7 +9,7 @@ class Random:
     def __init__(self, empty_model: Model):
 
         # copy empty model object
-        self.model = deepcopy(empty_model.copy())
+        self.model = empty_model.copy()
         
         # add students to activities
         self.model.add_all_students()
