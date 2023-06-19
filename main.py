@@ -8,28 +8,21 @@ if __name__ == "__main__":
     students = ld.load_students(courses)
     halls = ld.load_halls()
 
-    s = Model(courses, students, halls)
-<<<<<<< HEAD
-    r = Random(s.copy()).run()
+    empty_model = Model(courses, students, halls)
+    random_model = Random(empty_model.copy()).run()
     # print(s.get_highest_students(3))
-    print(r.model)
-    print(r.total_penalty())
+    print(random_model.solution)
+    print(random_model.total_penalty())
 
-=======
-    r = Random(s).run()
-    print(s.get_highest_students(3))
-    print(r.model)
-    print(s.total_penalty())
->>>>>>> 77772d9 (visualization compatible with model dict)
     # start_time = time.time()
 
-    print(r.total_penalty())
+    print(random_model.total_penalty())
 
     # _________________________RANDOM ALGORITHM_______________________
     iterations = 1
-    random_solution   = random_algorithm(iterations, s)
+    random_solution   = random_algorithm(iterations, empty_model)
 
-    print('THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n', random_solution.model, '\n POINTS: ', random_solution.total_penalty())
+    print('THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n', random_solution.solution, '\n POINTS: ', random_solution.total_penalty())
     # ________________________________________________________________
 
     # ________________________GREEDY ALGORITHM________________________

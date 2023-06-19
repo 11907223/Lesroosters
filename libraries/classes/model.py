@@ -17,7 +17,7 @@ class Model:
         self.courses = courses
         self.students = students
         self.halls = halls
-        self.model: dict[int, activity_type] = self.init_model((None, None))
+        self.solution: dict[int, activity_type] = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
@@ -73,7 +73,7 @@ class Model:
 
     def return_models(self):
         """Return schedule and activities-student dicts of strings."""
-        return self.model, self.participants
+        return self.solution, self.participants
 
     def add_all_students(self) -> None:
         """Add all students to activities."""
@@ -84,7 +84,7 @@ class Model:
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
-        return self.model[index][0] is None
+        return self.solution[index][0] is None
 
     def add_activity(self, index: int, activity: tuple[str, str]) -> bool:
         """Add activity to given index in schedule model.
@@ -93,7 +93,7 @@ class Model:
             bool: True if activity was succesfully added, else False.
         """
         if self.check_index_is_empty(index) is True:
-            self.model[index] = activity
+            self.solution[index] = activity
             return True
         else:
             return False
@@ -127,7 +127,7 @@ class Model:
 
             if check_index == index and check_activity == activity:
                 # Remove activity from stored index.
-                self.model[index] = (None, None)
+                self.solution[index] = (None, None)
                 return True
             else:
                 return False
@@ -135,12 +135,12 @@ class Model:
         elif activity is not None:
             # Remove activity from stored index.
             index = self.get_index(activity)
-            self.model[index] = (None, None)
+            self.solution[index] = (None, None)
             return True
 
         elif index is not None:
             # Remove activity from stored index.
-            self.model[index] = (None, None)
+            self.solution[index] = (None, None)
             return True
 
         return False
@@ -189,7 +189,9 @@ class Model:
         Args:
             activity (tuple[str, str]): ('course name', 'lecture 1')
         """
-        return {index for index in self.model if self.model[index] == activity}.pop()
+        return {
+            index for index in self.solution if self.solution[index] == activity
+        }.pop()
 
     def get_activity(self, index: int) -> activity_type:
         """Return activity stored at index in model.
@@ -197,7 +199,7 @@ class Model:
         Args:
             index (int): Value ranging from 0 - 144
         """
-        return self.model[index]
+        return self.solution[index]
 
     def student_in_course(self, student: int, course) -> bool:
         """ "Return bool if student in specified course."""
@@ -252,11 +254,13 @@ class Model:
         ]
         activity_and_indices: dict[int, tuple[str, str]] = {
             index: activity
-            for index, activity in self.model.items()
+            for index, activity in self.solution.items()
             if activity in activities
         }
         indices = [
-            activity for index, activity in self.model.items() if activity in activities
+            activity
+            for index, activity in self.solution.items()
+            if activity in activities
         ]
         dict(zip(indices, activities, strict=True))
         return activity_and_indices
@@ -327,7 +331,7 @@ class Model:
         penalty_points = 0
 
         # Iterate over all indices in model
-        for index, activity in self.model.items():
+        for index, activity in self.solution.items():
             index_penalty = self.capacity_penalty(index, activity)
             penalty_points += index_penalty
             self.index_penalties[index] += index_penalty
@@ -345,7 +349,7 @@ class Model:
         evening_penalty = 5
 
         # Iterate over indices and activities in model
-        for index, activity in self.model.items():
+        for index, activity in self.solution.items():
             # If index is mapped to activity
             if activity[0]:
                 # Get info on index
@@ -426,7 +430,7 @@ class Model:
 
     def copy(self) -> "Model":
         new_copy = copy.copy(self)
-        new_copy.model = copy.copy(self.model)
+        new_copy.solution = copy.copy(self.solution)
         new_copy.participants = copy.deepcopy(self.participants)
 
         return new_copy

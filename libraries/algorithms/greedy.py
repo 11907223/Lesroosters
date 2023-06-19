@@ -1,11 +1,13 @@
-from copy import deepcopy 
+from copy import deepcopy
 from libraries.classes.model import Model
-import random 
+import random
+
 
 class Greedy:
     """
     Greedy class constructively generates a schedule by locally taking optimal decisions.
     """
+
     def __init__(self, empty_model: Model) -> None:
         self.solution = deepcopy(empty_model.copy())
         self.solution.add_all_students()
@@ -19,14 +21,12 @@ class Greedy:
 
         # loop over activities
         for activity_tuple in self.activity_tuples:
-
             # initial value
             lowest_points = 1000
 
             # loop over timeslots
             # miss als slot gevuld is, hem weghalen uit de lijst als dat werkt
-            for slot in self.solution.model:
-
+            for slot in self.solution.solution:
                 added = self.solution.add_activity(slot, activity_tuple)
                 if added is True:
                     # miss als de penalty hetzelfde blijft, dan gewoon toevoegen.
@@ -41,9 +41,9 @@ class Greedy:
                     elif self.solution.total_penalty() < lowest_points:
                         lowest_points = self.solution.total_penalty()
                         optimal_index = slot
-                    
+
                     self.solution.remove_activity(index=slot)
-            
+
             # add activity to optimal slot
             self.solution.add_activity(optimal_index, activity_tuple)
 
