@@ -24,11 +24,13 @@ class Greedy:
             lowest_points = 1000
 
             # loop over timeslots
+            # miss als slot gevuld is, hem weghalen uit de lijst als dat werkt
             for slot in self.solution.model:
 
                 added = self.solution.add_activity(slot, activity_tuple)
                 if added is True:
-
+                    # miss als de penalty hetzelfde blijft, dan gewoon toevoegen.
+                    # PSEUDOCODE
                     # schedule not full enough yet
                     if self.solution.total_penalty() <= 3:
                         optimal_index = slot
