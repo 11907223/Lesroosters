@@ -1,5 +1,4 @@
 from random import randrange
-from copy import deepcopy
 from libraries.classes.model import Model
 
 class Random:
@@ -13,8 +12,7 @@ class Random:
         """
         Insert activity in random slot.
         """
-
-        # while loop ensures activity is added
+        # while-loop ensures activity is added
         while True:
             random_slot = randrange(145)
             if self.model.add_activity(random_slot, activity_tuple) is True:
@@ -24,7 +22,7 @@ class Random:
     
     def run(self) -> Model: 
         """
-        Generate a random solution.
+        Generates a random solution.
         """
         # randomly assign activities to slots
         for activity_tuple in self.model.participants:
