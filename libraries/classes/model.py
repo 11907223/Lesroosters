@@ -18,7 +18,7 @@ class Model:
         courses (dict[str, Course]): A mapping of a course name to a Course object.
         students (dict[str, Student]): A mapping of a student index (based on loading order) to a Student object.
         halls (dict[str, Hall]): A mapping of a hall index (based on loading order) to a Hall object.
-        
+
     """
 
     def __init__(self, path: str = "data") -> None:
@@ -91,19 +91,21 @@ class Model:
                 self.add_student(int(student), activity_tuple)
         return None
 
-    def get_empty_index(self) -> int:
-        """Returns random empty index in the schedule."""
-        random.seed(0)
-        index_list = list(self.solution.keys())
-        empty = False
-        index = 0
-
-        while not empty:
-            index = random.choice(index_list)
-            if self.check_index_is_empty(index):
-                empty = True
-
-        return index
+    def get_random_index(self, empty: bool=False) -> int:
+        """Return random empty index in the schedule.
+        
+        Args:
+            empty (bool): Flag if random index contains nothing.
+                Defaults to false.
+        """
+        while True:
+            # Acquire index independent of content in index.
+            index = random.choice(list(self.solution.keys()))
+            if empty is False:
+                # Stop loop if slot content is irrelevant.
+                return index
+            if self.check_index_is_empty(index) and empty is True:
+                return index
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""

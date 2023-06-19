@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     # start_time = time.time()
 
-    print("empty index: ", random_model.get_empty_index())
+    print("empty index: ", random_model.get_random_index())
 
     # _________________________RANDOM ALGORITHM_______________________
     iterations = 1
