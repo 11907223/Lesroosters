@@ -10,7 +10,7 @@ if __name__ == "__main__":
     students = ld.load_students(courses)
     halls = ld.load_halls()
 
-    empty_model = Model(courses, students, halls)
+    empty_model = Model()
     random_model = Random(empty_model).run()
     # print(s.get_highest_students(3))
 

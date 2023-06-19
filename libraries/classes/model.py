@@ -1,6 +1,7 @@
 from libraries.classes.student import Student
 from libraries.classes.course import Course
 from libraries.classes.hall import Hall
+from libraries.helpers.load_data import load_courses, load_students, load_halls
 from typing import Optional, Union
 import copy
 import random
@@ -9,15 +10,21 @@ activity_type = tuple[Optional[str], Optional[str]]
 
 
 class Model:
-    def __init__(
-        self,
-        courses: dict[str, Course],
-        students: dict[str, Student],
-        halls: dict[int, Hall],
-    ) -> None:
-        self.courses = courses
-        self.students = students
-        self.halls = halls
+    """A model representation for a schedule.
+
+    Contains methods for manipulation of data in schedule indices and manipulation of members of activities.
+
+    Attributes:
+        courses (dict[str, Course]): A mapping of a course name to a Course object.
+        students (dict[str, Student]): A mapping of a student index (based on loading order) to a Student object.
+        halls (dict[str, Hall]): A mapping of a hall index (based on loading order) to a Hall object.
+        
+    """
+
+    def __init__(self, path: str = "data") -> None:
+        self.courses: dict[str, Course] = load_courses(path)
+        self.students: dict[str, Student] = load_students(self.courses, path)
+        self.halls: dict[int, Hall] = load_halls(path)
         self.solution: dict[int, activity_type] = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
