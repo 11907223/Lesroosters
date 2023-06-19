@@ -3,6 +3,7 @@ from libraries.classes.course import Course
 from libraries.classes.hall import Hall
 from typing import Optional, Union
 import copy
+import random
 
 activity_type = tuple[Optional[str], Optional[str]]
 
@@ -82,6 +83,20 @@ class Model:
             for student in self.students:
                 self.add_student(int(student), activity_tuple)
         return None
+
+    def get_empty_index(self) -> int:
+        """Returns random empty index in the schedule."""
+        random.seed(0)
+        index_list = list(self.solution.keys())
+        empty = False
+        index = 0
+
+        while not empty:
+            index = random.choice(index_list)
+            if self.check_index_is_empty(index):
+                empty = True
+
+        return index
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
@@ -258,12 +273,6 @@ class Model:
             for index, activity in self.solution.items()
             if activity in activities
         }
-        indices = [
-            activity
-            for index, activity in self.solution.items()
-            if activity in activities
-        ]
-        # dict(zip(indices, activities, strict=True))
         return activity_and_indices
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
@@ -435,3 +444,36 @@ class Model:
         new_copy.participants = copy.deepcopy(self.participants)
 
         return new_copy
+
+    def student_has_valid_schedule(self, student: int) -> bool:
+        try:
+            activities = self.student_activities(student)
+            indices = [
+                activity
+                for activity in self.solution.values()
+                if activity in activities.values()
+            ]
+            print(indices)
+            dict(zip(indices, activities, strict=True))
+        except ValueError:
+            return False
+
+        return True
+
+    def is_solution(self) -> bool:
+        if self.student_has_valid_schedule(261) is False:
+            return False
+
+        # compare with set
+        n_activities = 0
+        for course in self.courses.values():
+            n_activities += len(course.activities())
+
+        activity_set = set()
+        for activity in self.solution.values():
+            activity_set.add(activity)
+
+        if n_activities <= len(activity_set):
+            return True
+        else:
+            return False
