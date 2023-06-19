@@ -43,10 +43,3 @@ def random_algorithm(iterations, empty_model: Model) -> Model:
             lowest_penalty = penalty_points
 
     return best_schedule
-
-
-i =0 
-for index in self.solution:
-
-    if self.solution[index][0] != None:
-        i += 1
