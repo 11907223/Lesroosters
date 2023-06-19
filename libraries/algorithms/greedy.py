@@ -7,6 +7,7 @@ class Greedy:
     """
     Greedy class constructively generates a schedule by locally taking optimal decisions.
     """
+
     def __init__(self, empty_model: Model) -> None:
         self.model = empty_model.copy()
         self.activity_tuples = list(self.model.participants.keys())
@@ -15,7 +16,7 @@ class Greedy:
     def get_optimal_index(self, activity_tuple, previous_penalty):
         # reset lowest penalty
         lowest_penalty = 1000
-        
+
         # loop over timeslots
         # for index in self.model.solution:
         for i, index in enumerate(self.empty_slots):
@@ -44,9 +45,10 @@ class Greedy:
         self.empty_slots.pop(rm)
 
         return optimal_index, lowest_penalty
-    
+
     def run(self) -> Model:
 
+    def run(self) -> Model:
         # loop over activities
         previous_penalty = 0
         for activity_tuple in self.activity_tuples:
@@ -61,7 +63,6 @@ class Greedy:
             previous_penalty = lowest_penalty
 
         return self.model
-    
 
     # VOOR RANDOM GREEDY
         # randomly shuffle activities
