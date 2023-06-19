@@ -1,5 +1,6 @@
 from libraries.algorithms.greedy import Greedy
 from libraries.classes.model import Model
+import random
 
 
 class BeamSearch(Greedy):
@@ -21,17 +22,25 @@ class BeamSearch(Greedy):
         return self.states.pop()
 
     def get_empty_index(self) -> int:
-        return self.solution.get_empty_index()
+        return self.model.get_empty_index()
 
-    def build_children(self, solution: Model, index) -> None:
+    def get_random_activity(self, n: int) -> list(tuple):
+        return random.choice(self.activity_tuples, k=n)
+
+    def create_children(self, n: int, model: Model, index: int) -> None:
         """
-        Creates all possible child-states and adds them to the list of states.
+        Creates the n best child-states and adds them to the list of states.
         """
-        # Retrieve all valid possible values for the node.
-        values = model.get_possibilities(node)
+        # Retrieve n random activities
+        activities = self.get_random_activity(n)
+        optimal_indices = []
+
+        # Find optimal index for each activity
+        for activity in activities:
+            optimal_index = self.get_optimal_slot
 
         # Add an instance of the model to the stack, with each unique value assigned to the node.
-        for value in values:
+        for value in optimal_indices:
             new_model = model.copy()
             new_model.set_value(node, value)
             self.states.append(new_model)
@@ -50,6 +59,7 @@ class BeamSearch(Greedy):
             # Find empty index in state
             new_index = self.get_empty_index()
             # Create n best children for index
+            self.create_children(n, new_model, new_index)
             # if done
             # calculate score
 
