@@ -7,36 +7,43 @@ class Greedy:
     """
     Greedy class constructively generates a schedule by locally taking optimal decisions.
     """
-
     def __init__(self, empty_model: Model) -> None:
-        self.solution = deepcopy(empty_model.copy())
-        self.activity_tuples = list(self.solution.participants.keys())
-        # maybe randomly shuffle activities here
+        self.model = deepcopy(empty_model.copy())
+        self.activity_tuples = list(self.model.participants.keys())
+        self.empty_slots = list(self.model.solution.keys())
 
-    # maybe slots arg, that carries the empty slots, so it doesnt loop over unused slots
-    def get_optimal_index(self, activity_tuple, previous_penalty):
-            # initial value
-            lowest_points = 1000
+    def get_optimal_slot(self, activity_tuple, previous_penalty):
+            # reset lowest penalty
+            lowest_penalty = 1000
             
             # loop over timeslots
-            for slot in self.solution.solution:
-                added = self.solution.add_activity(slot, activity_tuple)
-                if added is True:
+            # for slot in self.model.solution:
+            for i, slot in enumerate(self.empty_slots):
+                added = self.model.add_activity(slot, activity_tuple)
 
-                    # if penalty unchanged, optimal index is found
-                    if self.solution.total_penalty() == previous_penalty:
-                        optimal_index = slot
-                        self.solution.remove_activity(index=slot)
+                if added is True:
+                    new_penalty = self.model.total_penalty()
+
+                    # if penalty unchanged, optimal slot is found
+                    if new_penalty == previous_penalty:
+                        optimal_slot = slot
+                        rm = i
+                        lowest_penalty = new_penalty
+                        self.model.remove_activity(index=slot)
                         break
 
-                    # if penalty lower than best, save index en best points
-                    elif self.solution.total_penalty() < lowest_points:
-                        lowest_points = self.solution.total_penalty()
-                        optimal_index = slot
+                    # if penalty lower than best, save slot en best points
+                    elif new_penalty < lowest_penalty:
+                        lowest_penalty = new_penalty
+                        rm = i
+                        optimal_slot = slot
 
-                    self.solution.remove_activity(index=slot)
-                    
-            return optimal_index
+                    self.model.remove_activity(index=slot)
+
+            # remove filled slot from empty slots
+            self.empty_slots.pop(rm)
+
+            return optimal_slot, lowest_penalty
     
     def run(self) -> Model:
 
@@ -45,12 +52,16 @@ class Greedy:
         for activity_tuple in self.activity_tuples:
 
             # find optimal slot
-            optimal_index = self.get_optimal_index(activity_tuple, previous_penalty)
+            optimal_slot, lowest_penalty = self.get_optimal_slot(activity_tuple, previous_penalty)
 
             # add activity to optimal slot
-            self.solution.add_activity(optimal_index, activity_tuple)
+            self.model.add_activity(optimal_slot, activity_tuple)
 
             # update current penalty
-            previous_penalty = self.solution.total_penalty()
+            previous_penalty = lowest_penalty
 
-        return self.solution
+        return self.model
+    
+
+    # VOOR RANDOM GREEDY
+        # randomly shuffle activities
