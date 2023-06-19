@@ -22,10 +22,10 @@ class BeamSearch(Greedy):
         return self.states.pop()
 
     def get_empty_index(self) -> int:
-        return self.model.get_empty_index()
+        return self.model.get_random_index(True)
 
-    def get_random_activity(self, n: int) -> list(tuple):
-        return random.choice(self.activity_tuples, k=n)
+    def get_random_activity(self, n: int) -> list[tuple]:
+        return random.choices(self.activity_tuples, k=n)
 
     def create_children(self, n: int, model: Model, index: int) -> None:
         """
@@ -33,16 +33,18 @@ class BeamSearch(Greedy):
         """
         # Retrieve n random activities
         activities = self.get_random_activity(n)
-        optimal_indices = []
+        optimal_indices = {}
+        previous_penalty = 0
 
         # Find optimal index for each activity
         for activity in activities:
-            optimal_index = self.get_optimal_slot
+            optimal_index = self.get_optimal_index(activity, previous_penalty)
+            optimal_indices.update({activity: optimal_index})
 
         # Add an instance of the model to the stack, with each unique value assigned to the node.
-        for value in optimal_indices:
+        for activity, index in optimal_indices:
             new_model = model.copy()
-            new_model.set_value(node, value)
+            new_model.add_activity(index, activity)
             self.states.append(new_model)
 
     def run(self, n: int) -> Model:
