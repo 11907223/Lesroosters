@@ -258,12 +258,6 @@ class Model:
             for index, activity in self.solution.items()
             if activity in activities
         }
-        indices = [
-            activity
-            for index, activity in self.solution.items()
-            if activity in activities
-        ]
-        # dict(zip(indices, activities, strict=True))
         return activity_and_indices
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
@@ -435,3 +429,36 @@ class Model:
         new_copy.participants = copy.deepcopy(self.participants)
 
         return new_copy
+
+    def student_has_valid_schedule(self, student: int) -> bool:
+        try:
+            activities = self.student_activities(student)
+            print(activities)
+            indices = [
+                activity
+                for activity in self.solution.values()
+                if activity in activities.values()
+            ]
+            dict(zip(indices, activities, strict=True))
+        except ValueError:
+            return False
+        else:
+            return True
+
+    def is_solution(self) -> bool:
+        if self.student_has_valid_schedule(261) is False:
+            return False
+        
+        #compare with set
+        n_activities = 0
+        for course in self.courses.values():
+            n_activities += len(course.activities())
+
+        activity_set = set()
+        for activity in self.solution.values():
+            activity_set.add(activity)
+
+        if n_activities <= len(activity_set) - 1:
+            return True
+        else:
+            return False
