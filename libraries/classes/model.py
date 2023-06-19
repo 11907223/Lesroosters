@@ -423,6 +423,6 @@ class Model:
     def copy(self) -> "Model":
         new_copy = copy.copy(self)
         new_copy.model = copy.copy(self.model)
-        new_copy.participants = copy.copy(self.participants)
+        new_copy.participants = copy.deepcopy(self.participants)
 
         return new_copy
