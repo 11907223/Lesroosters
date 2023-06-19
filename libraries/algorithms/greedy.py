@@ -8,7 +8,7 @@ class Greedy:
     Greedy class constructively generates a schedule by locally taking optimal decisions.
     """
     def __init__(self, empty_model: Model) -> None:
-        self.model = deepcopy(empty_model.copy())
+        self.model = empty_model.copy()
         self.activity_tuples = list(self.model.participants.keys())
         self.empty_slots = list(self.model.solution.keys())
 
