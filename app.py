@@ -35,22 +35,16 @@ def index():
     model = Model(courses, students, halls)
     # random_schedule = Random(model)
     greedy_schedule = Greedy(model)
-    schedule = greedy_schedule.run()
+    schedule_solution = greedy_schedule.run()
 
     # Create a dict of the solution
-    schedule_dict = create_dict(schedule, halls, weekdays, timeslots)
+    schedule_dict = create_dict(schedule_solution, halls, weekdays, timeslots)
 
-    print(students)
-    students_list = []
-
-    for student in students.values():
-        student_info = (
-            f"{student.first_name} {student.last_name}, {student.student_number}"
-        )
-        students_list.append(student_info)
+    # Create a list of all students
+    students_list = create_student_list(students)
 
     # Calcualte penalty
-    penalty = schedule.total_penalty()
+    penalty = schedule_solution.total_penalty()
 
     return render_template(
         "index.html",
@@ -61,12 +55,9 @@ def index():
     )
 
 
-def create_dict(
-    model: Model,
-    halls: dict,
-    weekdays: dict,
-    timeslot: dict,
-) -> dict:
+def create_dict(model: Model, halls: dict, weekdays: dict, timeslot: dict) -> dict:
+    """Create a dict from a model object."""
+
     # Create an empty dictionary
     schedule_dict: dict = {
         time: {day: [] for day in weekdays.values()} for time in timeslot.values()
@@ -82,3 +73,16 @@ def create_dict(
             schedule_dict[time][day].append([activity[0], activity[1], hall])
 
     return schedule_dict
+
+
+def create_student_list(students: dict) -> list:
+    """Create a list of all students."""
+    students_list = []
+
+    for student in students.values():
+        student_info = (
+            f"{student.first_name} {student.last_name}, {student.student_number}"
+        )
+        students_list.append(student_info)
+
+    return students_list
