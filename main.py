@@ -9,11 +9,18 @@ if __name__ == "__main__":
     halls = ld.load_halls()
 
     s = Model(courses, students, halls)
+<<<<<<< HEAD
     r = Random(s.copy()).run()
     # print(s.get_highest_students(3))
     print(r.model)
     print(r.total_penalty())
 
+=======
+    r = Random(s).run()
+    print(s.get_highest_students(3))
+    print(r.model)
+    print(s.total_penalty())
+>>>>>>> 77772d9 (visualization compatible with model dict)
     # start_time = time.time()
 
     print(r.total_penalty())

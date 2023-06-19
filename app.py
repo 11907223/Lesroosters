@@ -2,10 +2,8 @@
 Flask app to visualize a university scheduling tool.
 """
 from libraries.algorithms.randomise import Random
-from libraries.classes.penalty import Penalty
-from libraries.classes.schedule import Schedule
-from libraries.classes.student import Student
-from libraries.helpers.load_data import load_courses, load_students
+from libraries.classes.model import Model
+from libraries.helpers.load_data import load_courses, load_students, load_halls
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,41 +23,47 @@ def index():
 
     courses = load_courses()
     students = load_students(courses)
-    schedule = Schedule()
+    halls = load_halls()
+    model = Model(courses, students, halls)
 
-    random_schedule = Random(schedule, courses)
+    random_schedule = Random(model)
     random_schedule = random_schedule.run()
 
-    # Create a list with weekdays
-    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-    # Create an empty dictionary
-    schedule_dict = {
-        time: {day: [] for day in weekdays} for time in ["9", "11", "13", "15", "17"]
-    }
+    # student_objects = slot.activity.students.values()
 
-    students = []
+    # for student in student_objects:
+    #     student_info = (
+    #         f"{student.first_name} {student.last_name}, {student.student_number}"
+    #     )
+    #     students.append(student_info)
 
-    # Fill the empty schedule dict with information from the class
-    for day in random_schedule.days.items():
-        for slot in day[1].slots:
-            if slot.activity:
-                schedule_dict[slot.time][slot.day].append(
-                    [slot.activity.course.name, slot.room]
-                )
-                student_objects = slot.activity.students.values()
-
-                for student in student_objects:
-                    student_info = f"{student.first_name} {student.last_name}, {student.student_number}"
-                    students.append(student_info)
-
-    penalty = Penalty(random_schedule)
-
-    evening_penalty = penalty.total()
+    penalty = model.total_penalty()
 
     return render_template(
         "index.html",
         weekdays=weekdays,
         schedule=schedule_dict,
-        score=evening_penalty,
+        score=penalty,
         students=students,
     )
+
+
+def create_dict(model: Model(), courses, students, halls) -> dict:
+    # Create a list with weekdays
+    weekdays = {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday"}
+    timeslot = {0: "9", 1: "11", 2: "13", 3: "15", 4: "17"}
+    # Create an empty dictionary
+    schedule_dict = {
+        time: {day: [] for day in weekdays.values()} for time in timeslot.values()
+    }
+
+    students = []
+
+    # Fill the empty schedule dict with information from the class
+    for index, activity in random_schedule.model.items():
+        info = random_schedule.translate_index(index)
+        day = weekdays[info["day"]]
+        time = timeslot[info["timeslot"]]
+        hall = halls[info["hall"]]
+        if activity[0]:
+            schedule_dict[time][day].append([activity[0], activity[1], hall])

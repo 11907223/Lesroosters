@@ -1,5 +1,7 @@
-class DepthFirst:
-    def __init__(self, empty_model) -> None:
-        self.model = empty_model.copy()
+from libraries.classes.model import Model
 
-        self.model.add_all_students()
+class DepthFirst:
+    def __init__(self, model: Model) -> None:
+        self.model = model.copy()
+
+    def run(self, n: int, heuristic_function: function) -

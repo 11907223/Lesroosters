@@ -44,7 +44,7 @@
         <div class="schedule-box">
             <div class="grid-container">
                 <div class="timeslot-header">Timeslot</div>
-                {% for day in weekdays %}
+                {% for day in weekdays.values() %}
                     <div class="weekday-header">{{day}}</div>
                 {% endfor %}
 
@@ -53,40 +53,45 @@
                     <div class="grid-item">
                         {% for activity in element[1]["Monday"] %}
                             <div class="activity">
-                                <text class="course-name">{{activity[0]}}</text>
-                                <text class="location">{{activity[1]}}</text>
+                                <text class="course-name">{{activity[0]}},</text>
+                                <text class="course-name">{{activity[1]}}</text>
+                                <text class="location">{{activity[2]}}</text>
                             </div>
                         {% endfor %}
                     </div>
                     <div class="grid-item">
                         {% for activity in element[1]["Tuesday"] %}
                             <div class="activity">
-                                <text class="course-name">{{activity[0]}}</text>
-                                <text class="location">{{activity[1]}}</text>
+                                <text class="course-name">{{activity[0]}},</text>
+                                <text class="course-name">{{activity[1]}}</text>
+                                <text class="location">{{activity[2]}}</text>
                             </div>
                         {% endfor %}
                     </div>
                     <div class="grid-item">
                         {% for activity in element[1]["Wednesday"] %}
                             <div class="activity">
-                                <text class="course-name">{{activity[0]}}</text>
-                                <text class="location">{{activity[1]}}</text>
+                                <text class="course-name">{{activity[0]}},</text>
+                                <text class="course-name">{{activity[1]}}</text>
+                                <text class="location">{{activity[2]}}</text>
                             </div>
                         {% endfor %}
                     </div>
                     <div class="grid-item">
                         {% for activity in element[1]["Thursday"] %}
                             <div class="activity">
-                                <text class="course-name">{{activity[0]}}</text>
-                                <text class="location">{{activity[1]}}</text>
+                                <text class="course-name">{{activity[0]}},</text>
+                                <text class="course-name">{{activity[1]}}</text>
+                                <text class="location">{{activity[2]}}</text>
                             </div>
                         {% endfor %}
                     </div>
                     <div class="grid-item">
                         {% for activity in element[1]["Friday"] %}
                             <div class="activity">
-                                <text class="course-name">{{activity[0]}}</text>
-                                <text class="location">{{activity[1]}}</text>
+                                <text class="course-name">{{activity[0]}},</text>
+                                <text class="course-name">{{activity[1]}}</text>
+                                <text class="location">{{activity[2]}}</text>
                             </div>
                         {% endfor %}
                     </div>
