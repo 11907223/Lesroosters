@@ -22,30 +22,39 @@ class BeamSearch:
         return self.states.pop()
 
     def get_possibilities(
-        self, model: Model, index: int, beam: int, heuristic="random"
-    ):
+        self, model: Model, index: int, n: int, heuristic="random"
+    ) -> list[tuple[str, str]]:
+        """Gets n (int) possible activities that would match with the given index of a model.
+        Possibilities could be picked with no heuristic (random) or according to capacity (heursitic="capacity").
+        """
         possibilities = []
+
         if heuristic == "random":
-            if len(model.activity_tuples) >= beam:
-                possibilities = random.choices(model.activity_tuples, k=beam)
+            if len(model.activity_tuples) >= n:
+                # Pick random activities
+                possibilities = random.choices(model.activity_tuples, k=n)
             else:
+                # If list activities smaller than n, return full list
                 possibilities = model.activity_tuples
 
         elif heuristic == "capacity":
             capacity = model.get_hall_capacity(index)
 
+            # Check if activity capacity matches hall capacity
             for activity in model.activity_tuples:
                 if model.get_activity_capacity(activity) < capacity:
                     possibilities.append(activity)
 
-        return possibilities[:beam]
+        return possibilities[:n]
 
-    def create_children(self, model: Model, index: int, beam: int) -> bool:
+    def create_children(
+        self, model: Model, index: int, beam: int, heuristic="random"
+    ) -> bool:
         """
         Creates all possible child-states and adds them to the list of states.
         """
         # Retrieve all valid possible activities for the index
-        values = self.get_possibilities(model, index, beam, heuristic="capacity")
+        values = self.get_possibilities(model, index, beam, heuristic)
 
         if not values:
             return False
@@ -66,17 +75,22 @@ class BeamSearch:
         new_value = new_model.total_penalty()
         old_value = self.best_value
 
-        # We are looking for maps that cost less!
+        # Minimalization of penalty score
         if new_value <= old_value:
             self.best_solution = new_model
             self.best_value = new_value
 
-    def run(self, beam=5, iterations=1, verbose: bool = False) -> None:
+    def run(
+        self, beam=5, iterations=1, heuristic="random", verbose: bool = False
+    ) -> None:
         """
         Runs the algorithm untill all possible states are visited.
         """
         for i in range(iterations):
-            print("Best penalty: ", self.best_value)
+            # Reset variables
+            self.model = Model()
+            self.states = []
+            self.model.activity_tuples = list(self.model.participants.keys())
             self.states.append(self.model.copy())
 
             step = 0
@@ -91,7 +105,7 @@ class BeamSearch:
                 # Retrieve a random empty index from the model.
                 index = new_model.get_random_index(empty=True)
 
-                if not self.create_children(new_model, index, beam):
+                if not self.create_children(new_model, index, beam, heuristic):
                     # Stop if we find a solution
                     self.check_solution(new_model)
                     print(f"Iteration {i} penalty: ", new_model.total_penalty())
@@ -100,5 +114,7 @@ class BeamSearch:
                 # if self.best_value < 300:
                 #     break
 
-            # Update the input graph with the best result found.
-            self.model = self.best_solution
+            print("Best penalty: ", self.best_value)
+
+        # Update the input graph with the best result found.
+        self.model = self.best_solution
