@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     beam_search = BeamSearch(empty_model)
     beam_search = beam_search.run(2)
-    print(beam_search)
+    print(beam_search.solution)
 
     # # ______________________HILLCLIMBER ALGORITHM_____________________
     # hillclimber = HillClimber(random_solution)

@@ -23,6 +23,9 @@ class Greedy:
             if added is True:
                 new_penalty = self.solution.total_penalty()
 
+                # update empty slots
+                self.empty_slots.remove(index)
+
                 # if penalty unchanged, optimal index is found
                 if new_penalty == previous_penalty:
                     optimal_index = index
@@ -53,9 +56,6 @@ class Greedy:
 
             # update current penalty
             previous_penalty = lowest_penalty
-
-            # update empty slots
-            self.empty_slots.remove(optimal_index)
 
         return self.solution
 

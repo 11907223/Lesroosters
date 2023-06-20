@@ -22,30 +22,55 @@ class BeamSearch(Greedy):
         return self.states.pop()
 
     def get_empty_index(self) -> int:
-        return self.solution.get_random_index(True)
+        return self.solution.get_random_index(empty=True)
 
     def get_random_activity(self, n: int) -> list[tuple]:
-        return random.choices(self.activity_tuples, k=n)
+        random_activities = []
 
-    def create_children(self, n: int, model: Model, index: int) -> None:
+        for _ in range(n):
+            if not self.activity_tuples:
+                break
+            activity = random.choice(self.activity_tuples)
+            random_activities.append(activity)
+            self.activity_tuples.remove(activity)
+
+        return random_activities
+
+    def check_solution(self, new_model: Model) -> None:
+        """
+        Checks and accepts better solutions than the current solution.
+        """
+        new_value = new_model.total_penalty()
+        old_value = self.best_value
+
+        # See if new schedule has a lower penalty than old schedule
+        if new_value <= old_value:
+            self.best_solution = new_model
+            self.best_value = new_value
+            print(f"New best value: {self.best_value}")
+
+    def create_children(self, n: int, model: Model, index: int) -> bool:
         """
         Creates the n best child-states and adds them to the list of states.
         """
         # Retrieve n random activities
         activities = self.get_random_activity(n)
-        optimal_indices = {}
         previous_penalty = 0
 
         # Find optimal index for each activity
         for activity in activities:
-            optimal_index = self.get_optimal_index(activity, previous_penalty)
-            optimal_indices.update({activity: optimal_index})
-
-        # Add an instance of the model to the stack, with each unique value assigned to the node.
-        for activity, index in optimal_indices:
+            optimal_index = self.get_optimal_index(activity, previous_penalty)[0]
             new_model = model.copy()
-            new_model.add_activity(index, activity)
+            print(new_model.solution)
+            new_model.add_activity(optimal_index, activity)
+            print("ADDD ACTIVITY: ", optimal_index, activity)
+            print(new_model.solution)
             self.states.append(new_model)
+
+        if len(activities) < n:
+            return False
+
+        return True
 
     def run(self, n: int) -> Model:
         """Run the beam search algorithm."""
@@ -61,8 +86,11 @@ class BeamSearch(Greedy):
             # Find empty index in state
             new_index = self.get_empty_index()
             # Create n best children for index
-            self.create_children(n, new_model, new_index)
+            children = self.create_children(n, new_model, new_index)
+
             # if done
-            # calculate score
+            if not children:
+                # calculate score
+                self.check_solution(new_model)
 
         return self.solution
