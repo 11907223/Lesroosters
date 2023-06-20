@@ -5,57 +5,94 @@ from libraries.classes.model import Model
 
 
 class SimulatedAnnealing(HillClimber):
-    """
-    The SimulatedAnnealing class that changes a random node in the model to a random valid value.
-    Each improvement or equivalent solution is kept for the next iteration.
-    Also sometimes accepts solutions that are worse, depending on the current temperature.
+    """This class randomly swaps the indices of two activities.
 
-    Most of the functions are similar to those of the HillClimber class, which is why
-    we use that as a parent class.
+    Each improvement is kept for the next iteration.
+    Some solutions are accepted that result in a higher penalty score,
+    depending on the current temperature.
+
+    As most methods function in the same was as a HillClimber,
+    this is a child of the HillClimber algorithm.
     """
+
+    # NOTE: grootste courses
+    # split total penalty
+    # vervelende tijdstippen
+    # rekening houden met eerst grote lokalen vullen met grote groepen
+    # 5 grote courses, 11-3 inplannen
+    # gewilde lokalen, gewilde tijdstippen
+    # identificeer knelpunten, focus daarop
 
     def __init__(self, model: Model, temperature: int or float = 1):
-        # Use the init of the Hillclimber class
+        """Initialise the Simulated Annealing algorithm class.
+        
+        Args:
+            model (Model): A model with a filled in solution.
+            temperature (int): starting temperature which accepts changes.
+                Defaults to 1.
+        
+        Raises:
+            Exception: Provided solution is invalid."""
+
+        # Use the init method of the Hillclimber parent class.
         super().__init__(model)
 
         # Starting temperature and current temperature
         self.T0 = temperature
         self.T = temperature
 
-    def update_temperature(self) -> None:
-        """
-        This function implements a *linear* cooling scheme.
-        Temperature will become zero after all iterations passed to the run()
-        method have passed.
-        """
-        self.T = self.T - (self.T0 / self.iterations)
+    def update_temperature(self, type: str="linear", alpha: float=0.99) -> None:
+        """Update the temperature based on a cooling scheme.
 
-        # Exponential would look like this:
-        # alpha = 0.99
-        # self.T = self.T * alpha
+        Temperature will approach zero as the 
+            number of the current iteration increases.
 
-        # where alpha can be any value below 1 but above 0
+        Args:
+            type (str): Type of cooling scheme. 
+                Can be linear or exponential. Defaults to linear.
+            alpha (float): Degree of change for an exponential cooling scheme.
+                Has to be a number below 1 and above 0.
+                Has no effect on the linear cooling scheme.
 
-    def check_solution(self, new_model: Model) -> None:
+        Raises:
+            Exception: Given type not found or invalid.
+            AssertionError: Given Alpha not within bounds. 
         """
-        Checks and accepts better solutions than the current solution.
+        if type == "linear":
+            self.T = self.T - (self.T0 / self.iterations)
+        elif type == "exponential":
+            assert 0 < alpha < 1, "Value not within bounds." 
+            self.T = self.T * alpha
+        else:
+            raise Exception("Type not found or invalid.")
+
+    def check_solution(self, new_model: Model) -> bool:
+        """Check and accept better solutions than the current solution.
+
         Also sometimes accepts solutions that are worse, depending on the current
-        temperature.
+            temperature.
+        
+        Args:
+            new_model (Model): A copy of the currently stored model with mutations.
+        
+        Returns:
+            bool: True if new solution has been accepted, else False.
         """
-        new_value = new_model.total_penalty()
-        old_value = self.penalties
+        new_penalties = new_model.total_penalty()
+        old_penalties = self.penalties
 
         # Calculate the probability of accepting this new solution
-        delta = new_value - old_value
+        delta = new_penalties - old_penalties
         probability = math.exp(-delta / self.T)
 
-        # NOTE: Keep in mind that if we want to maximize the value, we use:
-        # delta = old_value - new_value
-
-        # Pull a random number between 0 and 1 and see if we accept the soltuion!
+        # Evaluate against a random number between 0 and 1 
+        #   if the new solution is accepted.
         if random.random() < probability:
-            self.schedule = new_model
-            self.penalties = new_value
+            self.model = new_model
+            self.penalties = new_penalties
+            return True
 
         # Update the temperature
         self.update_temperature()
+
+        return False

@@ -3,6 +3,7 @@ from libraries.classes.course import Course
 from libraries.classes.hall import Hall
 from libraries.helpers.load_data import load_courses, load_students, load_halls
 from typing import Optional, Union
+import numpy as np
 import copy
 import random
 
@@ -448,13 +449,35 @@ class Model:
                     # Update student penalty and total penalty
                     student_penalty += 1
                     penalty_points += 1
-                    self.student_penalties.update({id: [student_penalty, {activity}]})
+
+                    if id not in self.student_penalties.keys():
+                        # Add student to model
+                        self.student_penalties.update(
+                            {id: [student_penalty, {activity}]}
+                        )
+                    # If student already in model
+                    else:
+                        # Update student penalty and add activity index
+                        self.student_penalties[id][0] = student_penalty
+                        self.student_penalties[id][1].add(activity)
 
         return penalty_points
 
     def schedule_gaps_penalty(self) -> int:
-        """Calculate The function also keeps track of the model in
-        self.student_penalties."""
+        """Calculate penalties of each gap in a student schedule.
+         
+        Function also keeps track of the model in self.student_penalties."""
+        for id in self.students:
+            activities = self.student_activities(id)
+
+            student_schedule = {}
+
+            for activity in activities:
+                index_info = self.translate_index(activity)
+                student_schedule.update({index_info["day"]: index_info["timeslot"]})
+                
+
+        
         return 0
 
     def total_penalty(self) -> int:

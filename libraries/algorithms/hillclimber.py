@@ -9,8 +9,16 @@ class HillClimber:
     """
 
     def __init__(self, model: Model):
+        """Initialise the HillClimber algorithm.
+        
+        Args:
+            model (Model): A model with a filled in solution.
+        
+        Raises:
+            Exception: Provided solution is invalid.
+        """
         if model.is_solution() is False:
-            raise Exception("Please provide a complete solution.")
+            raise Exception("Provided solution is not valid.")
 
         self.model = model.copy()
         self.penalties = model.total_penalty()
@@ -37,19 +45,25 @@ class HillClimber:
         for _ in range(number_of_swaps):
             self.swap_slots(new_model)
 
-    def check_solution(self, new_model: Model) -> None:
+    def check_solution(self, new_model: Model) -> bool:
         """Check and accept better solutions than the current solution.
 
         Args:
             new_model (Model): A copy of the currently stored model with mutations.
+
+        Returns:
+            bool: True if new solution has been accepted, else False.
         """
         new_penalties = new_model.total_penalty()
         old_penalties = self.penalties
 
-        # We are looking for maps that cost less!
         if new_penalties < old_penalties:
+            # Store better performing models.
             self.model = new_model
             self.penalties = new_penalties
+            return True
+        else:
+            return False
 
     def run(
         self, iterations: int, verbose: bool = False, mutate_slots_number: int = 1
@@ -64,14 +78,14 @@ class HillClimber:
 
         for iteration in range(iterations):
             print(
-                f"Iteration {iteration}/{iterations}, current value: {self.penalties}",
+                f"Iteration {iteration}/{iterations}, current penalty score: {self.penalties}",
                 end="\r",
             ) if verbose else None
 
-            # Create a copy of the model to simulate the change
+            # Create a copy of the model to simulate a mutation.
             new_model = self.model.copy()
 
-            self.mutate_model(new_model, number_of_slots=mutate_slots_number)
+            self.mutate_model(new_model, number_of_swaps=mutate_slots_number)
 
-            # Accept it if it is better
+            # Accept the mutation if it is an improvement.
             self.check_solution(new_model)
