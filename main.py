@@ -46,15 +46,15 @@ if __name__ == "__main__":
     #     hillclimber.model.total_penalty(),
     # )
 
-    # # ______________________SIMULATED ANNEALING_____________________
+    # ______________________SIMULATED ANNEALING_____________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
     # simulated_annealing.run(iterations=2000, verbose=True)
 
     # print(
     #     "THE BEST SCHEDULE FOUND WHEN USING SIMULATED ANNEALING:\n",
-    #     simulated_annealing.schedule.solution,
+    #     simulated_annealing.model.solution,
     #     "\n POINTS: ",
-    #     simulated_annealing.schedule.total_penalty(),
+    #     simulated_annealing.model.total_penalty(),
     # )
 
     # ________________________GREEDY ALGORITHM________________________
