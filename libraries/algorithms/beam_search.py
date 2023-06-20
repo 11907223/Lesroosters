@@ -2,7 +2,7 @@ from libraries.classes.model import Model
 import random
 
 
-class DepthFirst:
+class BeamSearch:
     """
     A Depth First algorithm that builds a stack of models with a unique assignment of nodes for each instance.
     """
@@ -21,11 +21,13 @@ class DepthFirst:
         """
         return self.states.pop()
 
-    def get_possibilities(self, model: Model, index: int, n: int, heuristic="random"):
+    def get_possibilities(
+        self, model: Model, index: int, beam: int, heuristic="random"
+    ):
         possibilities = []
         if heuristic == "random":
-            if len(model.activity_tuples) >= n:
-                possibilities = random.choices(model.activity_tuples, k=n)
+            if len(model.activity_tuples) >= beam:
+                possibilities = random.choices(model.activity_tuples, k=beam)
             else:
                 possibilities = model.activity_tuples
 
@@ -36,14 +38,14 @@ class DepthFirst:
                 if model.get_activity_capacity(activity) < capacity:
                     possibilities.append(activity)
 
-        return possibilities[:n]
+        return possibilities[:beam]
 
-    def create_children(self, model: Model, index: int, n: int) -> bool:
+    def create_children(self, model: Model, index: int, beam: int) -> bool:
         """
         Creates all possible child-states and adds them to the list of states.
         """
         # Retrieve all valid possible activities for the index
-        values = self.get_possibilities(model, index, n, heuristic="capacity")
+        values = self.get_possibilities(model, index, beam, heuristic="capacity")
 
         if not values:
             return False
@@ -68,33 +70,35 @@ class DepthFirst:
         if new_value <= old_value:
             self.best_solution = new_model
             self.best_value = new_value
-            print(f"New best value: {self.best_value}")
 
-    def run(self, verbose: bool = False) -> None:
+    def run(self, beam=5, iterations=1, verbose: bool = False) -> None:
         """
         Runs the algorithm untill all possible states are visited.
         """
-        self.states.append(self.model.copy())
+        for i in range(iterations):
+            print("Best penalty: ", self.best_value)
+            self.states.append(self.model.copy())
 
-        step = 0
-        while self.states:
-            step += 1
-            print(
-                f"Step {step}, with {len(self.states)} states, current value: {self.best_value}"
-            ) if verbose else None
+            step = 0
+            while self.states:
+                step += 1
+                print(
+                    f"Step {step}, with {len(self.states)} states, current value: {self.best_value}"
+                ) if verbose else None
 
-            new_model = self.get_next_state()
+                new_model = self.get_next_state()
 
-            # Retrieve a random empty index from the model.
-            index = new_model.get_random_index(empty=True)
+                # Retrieve a random empty index from the model.
+                index = new_model.get_random_index(empty=True)
 
-            if not self.create_children(new_model, index, 5):
-                # Stop if we find a solution
-                self.check_solution(new_model)
-                break
+                if not self.create_children(new_model, index, beam):
+                    # Stop if we find a solution
+                    self.check_solution(new_model)
+                    print(f"Iteration {i} penalty: ", new_model.total_penalty())
+                    break
 
-            if self.best_value < 300:
-                break
+                # if self.best_value < 300:
+                #     break
 
-        # Update the input graph with the best result found.
-        self.model = self.best_solution
+            # Update the input graph with the best result found.
+            self.model = self.best_solution
