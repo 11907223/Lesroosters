@@ -1,7 +1,7 @@
 import libraries.helpers.load_data as ld
 from libraries.algorithms.randomise import Random, random_algorithm
 from libraries.classes.model import Model
-from libraries.algorithms.greedy import Greedy
+from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
@@ -32,9 +32,9 @@ if __name__ == "__main__":
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
-    beam_search = BeamSearch(empty_model)
-    beam_search = beam_search.run(2)
-    print(beam_search.solution)
+    # beam_search = BeamSearch(empty_model)
+    # beam_search = beam_search.run(2)
+    # print(beam_search.solution)
 
     # # ______________________HILLCLIMBER ALGORITHM_____________________
     # hillclimber = HillClimber(random_solution)
@@ -61,6 +61,11 @@ if __name__ == "__main__":
     # ________________________GREEDY ALGORITHM________________________
     # greedy_solution = Greedy(empty_model).run()
     # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, '\n POINTS: ', greedy_solution.total_penalty())
+
+     # ________________________RANDOMGREEDY ALGORITHM__________________
+    # random_greedy = RandomGreedy(empty_model).run()
+    # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution, '\n POINTS: ', random_greedy.total_penalty())
+
     # __________________________BASELINE______________________________________
 
     # with open("baseline.txt", "a+") as file:
