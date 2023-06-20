@@ -42,9 +42,9 @@ if __name__ == "__main__":
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-        hillclimber.schedule.solution,
+        hillclimber.model.solution,
         "\nPOINTS: ",
-        hillclimber.schedule.total_penalty(),
+        hillclimber.model.total_penalty(),
     )
 
     # ______________________SIMULATED ANNEALING_____________________
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # greedy_solution = Greedy(empty_model).run()
     # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, '\n POINTS: ', greedy_solution.total_penalty())
 
-     # ________________________RANDOMGREEDY ALGORITHM__________________
+    # ________________________RANDOMGREEDY ALGORITHM__________________
     # random_greedy = RandomGreedy(empty_model).run()
     # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution, '\n POINTS: ', random_greedy.total_penalty())
 

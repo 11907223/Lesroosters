@@ -1,68 +1,75 @@
-from libraries.algorithms.randomise import Random
-import random
-from typing import TYPE_CHECKING
-
 from libraries.classes.model import Model
 
 
 class HillClimber:
-    """
-    The HillClimber class that changes a random schedule slot in the model to a random valid value. Each improvement or
-    equivalent solution is kept for the next iteration.
+    """The HillClimber class swaps two randomly selected indices.
+
+    Each improvement is kept for the next iteration.
+    Improvements are based on a decrease in penalty points.
     """
 
     def __init__(self, model: Model):
         if model.is_solution() is False:
             raise Exception("Please provide a complete solution.")
 
-        self.schedule = model.copy()
+        self.model = model.copy()
         self.penalties = model.total_penalty()
 
     def swap_slots(self, new_model: Model) -> None:
+        """Swap two slots in the model at random.
+
+        Args:
+            new_model (Model): A copy of the currently stored model with mutations.
         """
-        Swap two slots in the schedule at random.
-        """
+        # Select two random indices to swap.
         index_1 = new_model.get_random_index()
         index_2 = new_model.get_random_index()
 
         new_model.swap_activities(index_1, index_2)
 
-    def mutate_model(self, new_model: Model, number_of_slots: int = 1) -> None:
+    def mutate_model(self, new_model: Model, number_of_swaps: int = 1) -> None:
+        """Swap a number of indices.
+
+        Args:
+            new_model (Model): A copy of the currently stored model with mutations.
+            number_of_slots (int): Amount of slots to be swapped.
         """
-        Changes the value of a number of nodes with a random valid value.
-        """
-        for _ in range(number_of_slots):
+        for _ in range(number_of_swaps):
             self.swap_slots(new_model)
 
     def check_solution(self, new_model: Model) -> None:
+        """Check and accept better solutions than the current solution.
+
+        Args:
+            new_model (Model): A copy of the currently stored model with mutations.
         """
-        Checks and accepts better solutions than the current solution.
-        """
-        new_value = new_model.total_penalty()
-        old_value = self.penalties
+        new_penalties = new_model.total_penalty()
+        old_penalties = self.penalties
 
         # We are looking for maps that cost less!
-        if new_value < old_value:
-            self.schedule = new_model
-            self.penalties = new_value
+        if new_penalties < old_penalties:
+            self.model = new_model
+            self.penalties = new_penalties
 
     def run(
         self, iterations: int, verbose: bool = False, mutate_slots_number: int = 1
     ) -> None:
-        """
-        Runs the hillclimber algorithm for a specific amount of iterations.
+        """Run the hillclimber algorithm for a specified number of iterations.
+
+        Args:
+            iterations (int): Number of iterations for the Hillclimber to 'climb'.
+            mutate_slots_number (int): Number of mutations to occur each iteration.
         """
         self.iterations = iterations
 
         for iteration in range(iterations):
-            # Nice trick to only print if variable is set to True
             print(
                 f"Iteration {iteration}/{iterations}, current value: {self.penalties}",
                 end="\r",
             ) if verbose else None
 
             # Create a copy of the model to simulate the change
-            new_model = self.schedule.copy()
+            new_model = self.model.copy()
 
             self.mutate_model(new_model, number_of_slots=mutate_slots_number)
 
