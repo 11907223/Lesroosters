@@ -368,95 +368,86 @@ class Model:
 
         if activity_capacity > hall_capacity:
             # Return penalty points for each student over capacity.
+            # Ensure that penalty points are not subtracted.
             return activity_capacity > hall_capacity
         # Return no penalty points.
         return 0
 
     def total_capacity_penalties(self) -> int:
-        """Check the capacity penalty per if the number of students of each activity exceeds
-        the hall capacity.For every student that doesn't fit 1 penalty
-        point is counted. the total capacity penalty is returned (int).
-        The function also keeps track of the model in self.index_penalties."""
+        """Check the capacity penalty per index.
 
+        For every student student in an activity that exceeds the hall capacity
+            1 penalty point is counted.
+        Additionally penalties are stored in  self.index_penalties.
+
+        Returns:
+            int: The sum of all capacity penalties.
+        """
         penalty_points = 0
 
-        # Iterate over all indices in model
         for index, activity in self.solution.items():
             index_penalty = self.capacity_penalty(index, activity)
             penalty_points += index_penalty
+            # Add penalty value to dictionary of penalties per index.
             self.index_penalties[index] += index_penalty
 
-        # print("capacity penalty:", penalty_points)
         return penalty_points
 
     def evening_penalty(self) -> int:
-        """Calculate penalties of activities in evening slot.
-        Fills in empty model with {index: penalty}.
-        returns total evening penalty."""
+        """Penalize activities in evening slots.
 
-        # Start with 0 penalty points, set evening penalty to 5
+        Adds the penalty points to the index_penalty stored.
+
+        Returns:
+            int: The sum of all evening penalties.
+        """
         penalty_points = 0
         evening_penalty = 5
 
-        # Iterate over indices and activities in model
-        for index, activity in self.solution.items():
-            # If index is mapped to activity
-            if activity[0]:
-                # Get info on index
-                info = self.translate_index(index)
-                # Check if activity is in evening slot
-                if info["timeslot"] == 4:
-                    # If so, add penalty points
+        for index in self.solution:
+            if self.check_index_is_empty(index) is False:
+                index_info = self.translate_index(index)
+                if index_info["timeslot"] == 4:
+                    # Penalize for being in last timeslot.
                     penalty_points += evening_penalty
+                    # Add penalty to stored dict of penalties.
                     self.index_penalties[index] += evening_penalty
 
-        # print("evening penalty:", penalty_points)
         return penalty_points
 
     def conflict_penalty(self) -> int:
         """Calculate the penalties of students with course conflicts.
+
         Fills in empty student activity model {activity: {student_id: penalty}}.
         returns total conflict penalty. The function also keeps track of the model in
-        self.student_penalties."""
+        self.student_penalties.
 
+        Returns:
+            int: Sum of all conflict penalties.
+        """
         penalty_points = 0
 
-        # Iterate over students
         for id in self.students:
-            # Variable for previous activities of student
-            prev_slots = []
-            # Total penalty points of student
+            occupied_timeslots = set()
             student_penalty = 0
-            # Get all activities from student
+            # Get all activities from student.
             activities = self.student_activities(id)
-            # Iterate over activites
+
             for activity in activities:
-                # Get info on activity
-                info = self.translate_index(activity)
-                # Save day-timeslot
-                temp = (info["timeslot"], info["day"])
-                # Check if day-timeslot was already used for other activity
-                if temp in prev_slots:
-                    # If so, update student penalty and total penalty
+                index_info = self.translate_index(activity)
+                # Save timeslot and day in a tuple.
+                timeslot_day_info: tuple[int, int] = (
+                    index_info["timeslot"],
+                    index_info["day"],
+                )
+
+                if timeslot_day_info not in occupied_timeslots:
+                    occupied_timeslots.add(timeslot_day_info)
+                else:
+                    # Update student penalty and total penalty
                     student_penalty += 1
                     penalty_points += 1
-                    # If student is not in student penalty model
-                    if id not in self.student_penalties.keys():
-                        # Add student to model
-                        self.student_penalties.update(
-                            {id: [student_penalty, {activity}]}
-                        )
-                    # If student already in model
-                    else:
-                        # Update student penalty and add activity index
-                        self.student_penalties[id][0] = student_penalty
-                        self.student_penalties[id][1].add(activity)
-                # If day-timeslot not used
-                else:
-                    # add to previous slot variable
-                    prev_slots.append(temp)
-
-        # print("conflict penalty: ", penalty_points)
+                    self.student_penalties.update({id: [student_penalty, {activity}]})
 
         return penalty_points
 
@@ -468,7 +459,9 @@ class Model:
     def total_penalty(self) -> int:
         """Calculate the total penalty of the schedule.
 
-        return: penalty (int)"""
+        Return:
+            int: Sum of all penalties.
+        """
         total = (
             self.total_capacity_penalties()
             + self.evening_penalty()
@@ -479,6 +472,7 @@ class Model:
         return total
 
     def copy(self) -> "Model":
+        """Return a copy of the model."""
         new_copy = copy.copy(self)
         new_copy.solution = copy.copy(self.solution)
         new_copy.participants = copy.deepcopy(self.participants)
@@ -486,6 +480,14 @@ class Model:
         return new_copy
 
     def student_has_valid_schedule(self, student: int) -> bool:
+        """Evaluate if all activities of a student have been assigned to an index in the model.
+
+        Args:
+            student (int): Id index of the student.
+
+        Returns:
+            bool: True if all activities of the student have been assigned, False otherwise.
+        """
         try:
             activities = self.student_activities(student)
             indices = [
@@ -500,10 +502,14 @@ class Model:
         return True
 
     def is_solution(self) -> bool:
+        """Evaluate if the solution is valid."""
+        # Evaluate if student with 5 courses has 
+        #   all activities scheduled in the solution.
         if self.student_has_valid_schedule(261) is False:
             return False
 
-        # compare with set
+        # Evaluate if the number of activities is 
+        #   equal or greater than the standard set of activities.
         n_activities = 0
         for course in self.courses.values():
             n_activities += len(course.activities())

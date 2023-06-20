@@ -20,15 +20,15 @@ if __name__ == "__main__":
     # print("empty index: ", random_model.get_random_index())
 
     # _________________________RANDOM ALGORITHM_______________________
-    # iterations = 1
-    # random_solution = random_algorithm(iterations, empty_model)
+    iterations = 1
+    random_solution = random_algorithm(iterations, empty_model)
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-    #     random_solution.solution,
-    #     "\nPOINTS: ",
-    #     random_solution.total_penalty(),
-    # )
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
+        random_solution.solution,
+        "\nPOINTS: ",
+        random_solution.total_penalty(),
+    )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
@@ -36,27 +36,27 @@ if __name__ == "__main__":
     # beam_search = beam_search.run(2)
     # print(beam_search.solution)
 
-    # # ______________________HILLCLIMBER ALGORITHM_____________________
-    # hillclimber = HillClimber(random_solution)
-    # hillclimber.run(iterations=2000, verbose=True)
+    # ______________________HILLCLIMBER ALGORITHM_____________________
+    hillclimber = HillClimber(random_solution)
+    hillclimber.run(iterations=2000, verbose=True)
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-    #     hillclimber.schedule.solution,
-    #     "\nPOINTS: ",
-    #     hillclimber.schedule.total_penalty(),
-    # )
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
+        hillclimber.schedule.solution,
+        "\nPOINTS: ",
+        hillclimber.schedule.total_penalty(),
+    )
 
-    # # ______________________SIMULATED ANNEALING_____________________
-    # simulated_annealing = SimulatedAnnealing(random_solution)
-    # simulated_annealing.run(iterations=2000, verbose=True)
+    # ______________________SIMULATED ANNEALING_____________________
+    simulated_annealing = SimulatedAnnealing(random_solution)
+    simulated_annealing.run(iterations=2000, verbose=True)
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING SIMULATED ANNEALING:\n",
-    #     simulated_annealing.schedule.solution,
-    #     "\n POINTS: ",
-    #     simulated_annealing.schedule.total_penalty(),
-    # )
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING SIMULATED ANNEALING:\n",
+        simulated_annealing.schedule.solution,
+        "\n POINTS: ",
+        simulated_annealing.schedule.total_penalty(),
+    )
 
     # ________________________GREEDY ALGORITHM________________________
     # greedy_solution = Greedy(empty_model).run()
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     # __________________________BASELINE______________________________________
 
     # with open("baseline.txt", "a+") as file:
-    #     for _i in range(100000):
+    #     for _ in range(100000):
     #         random_schedule = Random(schedule, courses)
     #         random_schedule = random_schedule.run()
     #         penalty = Penalty(random_schedule)
