@@ -40,6 +40,7 @@ class Model:
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
+        self.activity_tuples = list(self.participants.keys())
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
@@ -476,6 +477,9 @@ class Model:
         new_copy = copy.copy(self)
         new_copy.solution = copy.copy(self.solution)
         new_copy.participants = copy.deepcopy(self.participants)
+        new_copy.activity_tuples = [
+            copy.deepcopy(tuple) for tuple in self.activity_tuples
+        ]
 
         return new_copy
 

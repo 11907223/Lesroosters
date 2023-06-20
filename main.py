@@ -3,6 +3,7 @@ from libraries.algorithms.randomise import Random, random_algorithm
 from libraries.classes.model import Model
 from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
+from libraries.algorithms.depth_first import DepthFirst
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
 
@@ -30,6 +31,9 @@ if __name__ == "__main__":
         random_solution.total_penalty(),
     )
 
+    depth_first = DepthFirst(empty_model)
+    depth_first.run(verbose=True)
+    print(depth_first.model.solution)
     # ________________________BEAM SEARCH ALGORITHM________________________
 
     # beam_search = BeamSearch(empty_model)
