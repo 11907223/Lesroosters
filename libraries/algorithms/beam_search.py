@@ -15,6 +15,13 @@ class BeamSearch:
         self.best_solution = None
         self.best_value = float("inf")
 
+    def reset_model(self) -> None:
+        """Resets model for new iteration."""
+        # Reset variables
+        self.model = Model()
+        self.states = []
+        self.model.activity_tuples = list(self.model.participants.keys())
+
     def get_next_state(self) -> Model:
         """
         Method that gets the next state from the list of states.
@@ -87,10 +94,7 @@ class BeamSearch:
         Runs the algorithm untill all possible states are visited.
         """
         for i in range(iterations):
-            # Reset variables
-            self.model = Model()
-            self.states = []
-            self.model.activity_tuples = list(self.model.participants.keys())
+            self.reset_model()
             self.states.append(self.model.copy())
 
             step = 0
@@ -108,13 +112,15 @@ class BeamSearch:
                 if not self.create_children(new_model, index, beam, heuristic):
                     # Stop if we find a solution
                     self.check_solution(new_model)
-                    print(f"Iteration {i} penalty: ", new_model.total_penalty())
+                    # print(f"Iteration {i} penalty: ", new_model.total_penalty())
+
+                    # write penalty of solution to csv
+                    with open("results/beam_result.txt", "a+") as file:
+                        file.write(f"{new_model.total_penalty()}\n")
+
                     break
 
-                # if self.best_value < 300:
-                #     break
-
-            print("Best penalty: ", self.best_value)
+            # print("Best penalty: ", self.best_value)
 
         # Update the input graph with the best result found.
         self.model = self.best_solution
