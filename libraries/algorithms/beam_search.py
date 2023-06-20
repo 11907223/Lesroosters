@@ -22,7 +22,7 @@ class BeamSearch(Greedy):
         return self.states.pop()
 
     def get_empty_index(self) -> int:
-        return self.model.get_random_index(True)
+        return self.solution.get_random_index(True)
 
     def get_random_activity(self, n: int) -> list[tuple]:
         return random.choices(self.activity_tuples, k=n)
