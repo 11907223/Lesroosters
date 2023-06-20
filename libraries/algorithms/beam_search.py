@@ -21,8 +21,8 @@ class BeamSearch(Greedy):
         """
         return self.states.pop()
 
-    def get_empty_index(self) -> int:
-        return self.solution.get_random_index(empty=True)
+    def get_empty_index(self, model: Model) -> int:
+        return model.get_random_index(empty=True)
 
     def get_random_activity(self, n: int) -> list[tuple]:
         random_activities = []
@@ -61,10 +61,8 @@ class BeamSearch(Greedy):
         for activity in activities:
             optimal_index = self.get_optimal_index(activity, previous_penalty)[0]
             new_model = model.copy()
-            print(new_model.solution)
             new_model.add_activity(optimal_index, activity)
             print("ADDD ACTIVITY: ", optimal_index, activity)
-            print(new_model.solution)
             self.states.append(new_model)
 
         if len(activities) < n:
@@ -84,13 +82,16 @@ class BeamSearch(Greedy):
             # Get state from list
             new_model = self.get_next_state()
             # Find empty index in state
-            new_index = self.get_empty_index()
+            new_index = self.get_empty_index(new_model)
             # Create n best children for index
             children = self.create_children(n, new_model, new_index)
+            self.check_solution(new_model)
 
             # if done
             if not children:
                 # calculate score
                 self.check_solution(new_model)
+
+        self.solution = self.best_solution
 
         return self.solution
