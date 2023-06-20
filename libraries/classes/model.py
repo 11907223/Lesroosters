@@ -303,47 +303,47 @@ class Model:
         }
         return activity_and_indices
 
-    def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
-        """Return a list of activities with highest contributions to penalty points.
+    def get_highest_penalties(self, n: int) -> list[dict[int, tuple[str, str]]]:
+        """Form a list of activities with highest contributions to penalty points.
 
-        Returns a list of length n where each element represents an activity that
-        caused a high penalty, this element is also a list which contains a tuple with course name
-        and activity type, and the index. The first element (list[0])
-        is the activity with the highest penalty and the last element (list[n]) is the
-        activity with the lowest penalty.
+        The list of elements is ordered from activities causing most to least penalty points.
+        The activities are stored in a dict mapping from their index to the activity.
+
+        Args:
+            n (int): length of the list to return.
 
         Returns:
-            list[list[index: int, activity: tuple[str, str]]]
+            list[dict[int, tuple[str, str]]]: A list of {index: activity}
+                E.g. {0: ('Heuristieken': 'lecture 1')}.
         """
 
-        # Run total_penalty() to update self.index_penalties
+        # Update self.index_penalties.
         self.total_penalty()
 
+        # Find the highest penalties stored.
         highest_penalties = []
-        # Take the penalty model
         model = self.index_penalties
-        # Find highest penalties in de model
         highest_values = sorted(model.values(), reverse=True)[:n]
 
-        # Iterate over the highest values
         for high_value in highest_values:
-            # Iterate over model
             for index, value in model.items():
                 if value == high_value:
-                    # Add index and activity to list
                     activity = self.get_activity(index)
-                    highest_penalties.append([index, activity])
+                    highest_penalties.append({index: activity})
 
         return highest_penalties
 
     def get_highest_students(self, n) -> list[int]:
         """Search the model for students in activities with highest penalties.
+
         Returns a list of length n where each element is the student_index of a
         student that caused a high penalty. The first element (list[0])
         is the activty with the highest penalty and the last element (list[n]) is the
         activity with the lowest penalty.
 
-        returns: list[int]"""
+        Returns:
+            list[int]:
+        """
         self.total_penalty()
 
         highest_penalties = []
@@ -352,15 +352,24 @@ class Model:
         return print("LET OP !!!get_highest_students(self, n) werkt nog niet !!")
 
     def capacity_penalty(self, index: int, activity: tuple[str, str]) -> int:
-        # Get hall capacity for slot
+        """Return the capacity penalty for an activity over capacity.
+
+        Args:
+            index (int): Index of the activity in the model.
+            activity (tuple[str, str]): Activity to check,
+                an activity is a tuple of ('course name', 'activity').
+
+         Returns:
+            int: Penalty points for each student over capacity. 0 if there is no penalty.
+        """
+        # Get capacity for the activity and the location.
         hall_capacity = self.get_hall_capacity(index)
-        # Get activity capacity for slot
         activity_capacity = self.get_activity_capacity(activity)
 
         if activity_capacity > hall_capacity:
             # Return penalty points for each student over capacity.
             return activity_capacity > hall_capacity
-        # Return no added penalty points.
+        # Return no penalty points.
         return 0
 
     def total_capacity_penalties(self) -> int:
