@@ -304,14 +304,17 @@ class Model:
         return activity_and_indices
 
     def get_highest_penalties(self, n) -> list[list[Union[int, tuple[str, str]]]]:
-        """Search the schedule for activities with highest penalties.
+        """Return a list of activities with highest contributions to penalty points.
+
         Returns a list of length n where each element represents an activity that
         caused a high penalty, this element is also a list which contains a tuple with course name
         and activity type, and the index. The first element (list[0])
-        is the activty with the highest penalty and the last element (list[n]) is the
+        is the activity with the highest penalty and the last element (list[n]) is the
         activity with the lowest penalty.
 
-        returns: list[list[index: int, activity: tuple[str, str]]]"""
+        Returns:
+            list[list[index: int, activity: tuple[str, str]]]
+        """
 
         # Run total_penalty() to update self.index_penalties
         self.total_penalty()
@@ -481,7 +484,6 @@ class Model:
                 for activity in self.solution.values()
                 if activity in activities.values()
             ]
-            print(indices)
             dict(zip(indices, activities, strict=True))
         except ValueError:
             return False
