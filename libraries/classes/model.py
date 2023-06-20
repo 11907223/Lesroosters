@@ -373,7 +373,7 @@ class Model:
         return 0
 
     def total_capacity_penalties(self) -> int:
-        """Check if the number of students of each activity exceeds
+        """Check the capacity penalty per if the number of students of each activity exceeds
         the hall capacity.For every student that doesn't fit 1 penalty
         point is counted. the total capacity penalty is returned (int).
         The function also keeps track of the model in self.index_penalties."""
