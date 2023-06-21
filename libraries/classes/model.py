@@ -1,8 +1,9 @@
+from __future__ import annotations
 from libraries.classes.student import Student
 from libraries.classes.course import Course
 from libraries.classes.hall import Hall
 from libraries.helpers.load_data import load_courses, load_students, load_halls
-from typing import Optional, Union
+from typing import Optional
 from collections import defaultdict
 import numpy as np
 import copy
@@ -599,13 +600,14 @@ class Model:
                 activities.add((course.name, activity.category))
         if activities == set(self.student_activities(student).values()):
             return True
+        print(activities, self.student_activities(student))
         return False
 
     def is_solution(self) -> bool:
         """Evaluate if the solution is valid."""
         # Evaluate if student with 5 courses has
         #   all activities scheduled in the solution.
-        if self.student_has_valid_schedule(261) is False:
+        if self.valid_schedule_of_(0) is False:
             return False
 
         # Evaluate if the number of activities is
@@ -622,3 +624,23 @@ class Model:
             return True
         else:
             return False
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Model):
+            return self.total_penalty() == other.total_penalty()
+        return False
+    
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Model):
+            return not self.__eq__(other)
+        return False
+    
+    def __lt__(self, other: object) -> bool:
+        if isinstance(other, Model):
+            return self.total_capacity_penalties() > other.total_capacity_penalties()
+        return False
+    
+    def __gt__(self, other: object) -> bool:
+        if isinstance(other, Model):
+            return not self.__lt__(other)
+        return False

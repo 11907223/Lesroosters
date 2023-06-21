@@ -1,15 +1,15 @@
 from random import randrange
 from libraries.classes.model import Model
-
+from typing import Optional
 
 class Random:
     """
     Random generates a random schedule by randomly assigning activities to slots.
     """
 
-    def __init__(self, empty_model: Model):
-        self.empty_model = empty_model.copy()
-        self.model = self.empty_model
+    def __init__(self, initial_model: Model):
+        self.initial_model = initial_model.copy()
+        self.model = self.initial_model
         self.lowest_penalty = 100000 # Ensure initial value always overwritten.
 
     def insert_randomly(self, activity_tuple, new_model) -> None:
@@ -24,24 +24,30 @@ class Random:
 
         return None
 
-    def check_solution(self, new_model: Model) -> bool:
+    def check_solution(self, new_model: Model, old_model: Optional[Model]=None) -> bool:
         """
         Accept better solutions than the current solution.
 
         Args:
             new_model (Model): The randomly generated model.
+            old_model (Model): Optional old model to compare against.
 
         Returns:
             bool: True if new model has been accepted, else False.
         """
         new_penalty = new_model.total_penalty()
 
-        if new_penalty < self.lowest_penalty:
-            # save better model
+        if old_model is not None:
+            if new_model < old_model:
+                # Save best model between runs.
+                self.best_model = new_model
+                self.lowest_penalty = new_penalty
+                return True
+        elif new_model < self.model:
+            # Save best model between iterations.
             self.model = new_model
             self.lowest_penalty = new_penalty
             return True
-        
         return False
 
     def run(self, runs: int=1, verbose: bool = False) -> Model:
@@ -62,7 +68,7 @@ class Random:
             ) if verbose else None
 
             # copy empty model
-            new_model = self.empty_model.copy()
+            new_model = self.initial_model.copy()
 
             # create random schedule
             for activity in new_model.participants:

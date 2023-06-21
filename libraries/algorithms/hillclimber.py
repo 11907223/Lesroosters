@@ -1,6 +1,7 @@
 from libraries.classes.model import Model
 from libraries.algorithms.randomise import Random
 
+
 class HillClimber(Random):
     """The HillClimber class swaps two randomly selected indices.
 
@@ -8,20 +9,21 @@ class HillClimber(Random):
     Improvements are based on a decrease in penalty points.
     """
 
-    def __init__(self, model: Model):
+    def __init__(self, valid_model: Model):
         """Initialise the HillClimber algorithm.
 
         Args:
-            model (Model): A model with a filled in solution.
+            valid_model (Model): A model with a filled in solution.
 
         Raises:
             Exception: Provided solution is invalid.
         """
-        if model.is_solution() is False:
+        if valid_model.is_solution() is False:
             raise Exception("Provided solution is not valid.")
+        super().__init__(valid_model)
 
-        self.model = model.copy()
-        self.lowest_penalty = model.total_penalty()
+        self.starting_model = valid_model.copy()
+        self.lowest_penalty = valid_model.total_penalty()
 
     def swap_slots(self, new_model: Model) -> None:
         """Swap two slots in the model at random.
@@ -46,29 +48,42 @@ class HillClimber(Random):
             self.swap_slots(new_model)
 
     def run(
-        self, iterations: int, verbose: bool = False, mutate_slots_number: int = 1
+        self,
+        runs: int=1,
+        iterations: int=2000,
+        mutate_slots_number: int = 1,
+        verbose: bool = False,
     ) -> Model:
         """Run the hillclimber algorithm for a specified number of iterations.
 
         Args:
             iterations (int): Number of iterations for the Hillclimber to 'climb'.
+                Defaults to 2000 iterations.
+            runs (int): Number of runs for the HillClimber algorithm.
+                Defaults to 1 run.
             mutate_slots_number (int): Number of mutations to occur each iteration.
+                Defaults to 1 mutation per iteration.
             verbose (bool): Evaluate if run prints current iteration and penalty score.
+                Defaults to False.
         """
         self.iterations = iterations
 
-        for iteration in range(iterations):
-            print(
-                f"Iteration {iteration}/{iterations}, current penalty score: {self.lowest_penalty}    ",
-                end="\r",
-            ) if verbose else None
+        self.best_model = self.initial_model
+        for _ in range(runs):
+            self.model = self.initial_model
+            for iteration in range(iterations):
+                print(
+                    f"Iteration {iteration}/{iterations}, current penalty score: {self.lowest_penalty}    ",
+                    end="\r",
+                ) if verbose else None
 
-            # Create a copy of the model to simulate a mutation.
-            new_model = self.model.copy()
+                # Create a copy of the model to simulate a mutation.
+                new_model = self.model.copy()
 
-            self.mutate_model(new_model, number_of_swaps=mutate_slots_number)
+                self.mutate_model(new_model, number_of_swaps=mutate_slots_number)
 
-            # Accept the mutation if it is an improvement.
-            self.check_solution(new_model)
+                # Accept the mutation if it is an improvement.
+                self.check_solution(new_model)
+            self.check_solution(self.model, self.best_model)
 
-        return self.model
+        return self.best_model

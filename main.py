@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM________________________________________
     random_algorithm = Random(empty_model)
-    random_algorithm.run()
+    random_algorithm.run(runs=20, verbose=True)
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     # )
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
+    print(random_algorithm.model.solution)
     hillclimber = HillClimber(random_algorithm.model)
     print("\n STARTING HILLCLIMBER ALGORITHM")
     start_time = time.time()
@@ -68,13 +69,13 @@ if __name__ == "__main__":
         "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
         # hillclimber.model.solution,
         "\nTOTAL POINTS: ",
-        hillclimber.model.total_penalty(),
+        hillclimber.starting_model.total_penalty(),
         "\n evening points",
-        hillclimber.model.evening_penalty(),
+        hillclimber.starting_model.evening_penalty(),
         "\n conflict points:",
-        hillclimber.model.student_schedule_penalties(),
+        hillclimber.starting_model.student_schedule_penalties(),
         "\n capacity penalty",
-        hillclimber.model.total_capacity_penalties(),
+        hillclimber.starting_model.total_capacity_penalties(),
     )
 
     # ______________________SIMULATED ANNEALING________________________________________
