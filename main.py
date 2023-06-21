@@ -20,31 +20,38 @@ if __name__ == "__main__":
     # print("empty index: ", random_model.get_random_index())
 
     # _________________________RANDOM ALGORITHM_______________________
-    # iterations = 1
-    # random_solution = random_algorithm(iterations, empty_model)
+    iterations = 1
+    random_solution = random_algorithm(iterations, empty_model)
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-    #     random_solution.solution,
-    #     "\nPOINTS: ",
-    #     random_solution.total_penalty(),
-    # )
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
+        random_solution.solution,
+        "\nTOTAL POINTS: ",
+        random_solution.total_penalty(),
+        '\n evening points', random_solution.evening_penalty(),
+        '\n conflict points:', random_solution.conflict_penalty(),
+        '\n capacity penalty', random_solution.total_capacity_penalties() 
+    )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
-    beam_search = BeamSearch(empty_model)
-    beam_search.run(beam=5, iterations=1000, heuristic="capacity")
+    # beam_search = BeamSearch(empty_model)
+    # beam_search.run(beam=5, iterations=1000, heuristic="capacity")
 
     # ______________________HILLCLIMBER ALGORITHM_____________________
-    # hillclimber = HillClimber(random_solution)
-    # hillclimber.run(iterations=2000, verbose=True)
+    hillclimber = HillClimber(random_solution)
+    hillclimber.run(iterations=2000, verbose=True)
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-    #     hillclimber.model.solution,
-    #     "\nPOINTS: ",
-    #     hillclimber.model.total_penalty(),
-    # )
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
+        hillclimber.model.solution,
+        "\nPOINTS: ",
+        hillclimber.model.total_penalty(),
+        '\n evening points', hillclimber.model.evening_penalty(),
+        '\n conflict points:', hillclimber.model.conflict_penalty(),
+        '\n capacity penalty', hillclimber.model.total_capacity_penalties() 
+    )
+    
 
     # ______________________SIMULATED ANNEALING_____________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
