@@ -3,6 +3,7 @@ Flask app to visualize a university scheduling tool.
 """
 from libraries.algorithms.randomise import Random
 from libraries.algorithms.greedy import Greedy
+from libraries.algorithms.beam_search import BeamSearch
 from libraries.classes.model import Model
 from libraries.helpers.load_data import load_courses, load_students, load_halls
 from dotenv import load_dotenv
@@ -32,10 +33,18 @@ def index():
     timeslots = {0: "9", 1: "11", 2: "13", 3: "15", 4: "17"}
 
     # Initialize model and run random algorithm
-    model = Model(courses, students, halls)
+    model = Model()
+
+    # ------------------- RANDOM ---------------------
     # random_schedule = Random(model)
-    greedy_schedule = Greedy(model)
-    schedule_solution = greedy_schedule.run()
+    # schedule_solution = random_schedule.run()
+
+    # ------------------- GREEDY ---------------------
+    # greedy_schedule = Greedy(model)
+
+    # ------------------- BEAM SEARCH ---------------------
+    beam_schedule = BeamSearch(model)
+    schedule_solution = beam_schedule.run(beam=5, iterations=5, heuristic="capacity")
 
     # Create a dict of the solution
     schedule_dict = create_dict(schedule_solution, halls, weekdays, timeslots)

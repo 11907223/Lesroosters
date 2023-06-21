@@ -27,9 +27,12 @@ if __name__ == "__main__":
         random_algorithm.model.solution,
         "\nTOTAL POINTS: ",
         random_algorithm.model.total_penalty(),
-        '\n evening points', random_algorithm.model.evening_penalty(),
-        '\n conflict points:', random_algorithm.model.conflict_penalty(),
-        '\n capacity penalty', random_algorithm.model.total_capacity_penalties() 
+        "\n evening points",
+        random_algorithm.model.evening_penalty(),
+        "\n conflict points:",
+        random_algorithm.model.conflict_penalty(),
+        "\n capacity penalty",
+        random_algorithm.model.total_capacity_penalties(),
     )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
@@ -46,11 +49,13 @@ if __name__ == "__main__":
         hillclimber.model.solution,
         "\nPOINTS: ",
         hillclimber.model.total_penalty(),
-        '\n evening points', hillclimber.model.evening_penalty(),
-        '\n conflict points:', hillclimber.model.conflict_penalty(),
-        '\n capacity penalty', hillclimber.model.total_capacity_penalties() 
+        "\n evening points",
+        hillclimber.model.evening_penalty(),
+        "\n conflict points:",
+        hillclimber.model.conflict_penalty(),
+        "\n capacity penalty",
+        hillclimber.model.total_capacity_penalties(),
     )
-    
 
     # ______________________SIMULATED ANNEALING_____________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
