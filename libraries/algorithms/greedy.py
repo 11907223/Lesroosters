@@ -15,7 +15,7 @@ class Greedy:
         Returns the best spot for a given activity.
         """
         # loop over timeslots
-        lowest_penalty = 1000
+        lowest_penalty = 100000
         for index in self.empty_slots:
             added = self.model.add_activity(index, activity_tuple)
 
@@ -57,6 +57,7 @@ class Greedy:
 
             # update current penalty
             previous_penalty = lowest_penalty
+            print('penalty:', previous_penalty, end='\r')
 
         return self.model
 
