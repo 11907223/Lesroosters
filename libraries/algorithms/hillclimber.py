@@ -1,7 +1,7 @@
 from libraries.classes.model import Model
 
 
-class HillClimber:
+class HillClimber():
     """The HillClimber class swaps two randomly selected indices.
 
     Each improvement is kept for the next iteration.
@@ -67,7 +67,7 @@ class HillClimber:
 
     def run(
         self, iterations: int, verbose: bool = False, mutate_slots_number: int = 1
-    ) -> None:
+    ) -> Model:
         """Run the hillclimber algorithm for a specified number of iterations.
 
         Args:
@@ -78,7 +78,7 @@ class HillClimber:
 
         for iteration in range(iterations):
             print(
-                f"Iteration {iteration}/{iterations}, current penalty score: {self.penalties}",
+                f"Iteration {iteration}/{iterations}, current penalty score: {self.penalties}    ",
                 end="\r",
             ) if verbose else None
 
@@ -89,3 +89,5 @@ class HillClimber:
 
             # Accept the mutation if it is an improvement.
             self.check_solution(new_model)
+
+        return self.model
