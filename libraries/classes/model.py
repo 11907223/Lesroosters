@@ -222,7 +222,7 @@ class Model:
                 # If type matches Activity category
                 if type == object.category:
                     # Set capacity
-                    capacity = object.capacity
+                    capacity = len(self.participants[(course_name, type)])
 
             return int(capacity)
         else:
@@ -371,7 +371,7 @@ class Model:
         if activity_capacity > hall_capacity:
             # Return penalty points for each student over capacity.
             # Ensure that penalty points are not subtracted.
-            return activity_capacity > hall_capacity
+            return activity_capacity #> hall_capacity
         # Return no penalty points.
         return 0
 
