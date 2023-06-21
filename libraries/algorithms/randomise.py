@@ -10,7 +10,7 @@ class Random:
     def __init__(self, empty_model: Model):
         self.empty_model = empty_model.copy()
         self.model = self.empty_model
-        self.penalties = 99999999 # Ensure initial value always overwritten.
+        self.lowest_penalty = 100000 # Ensure initial value always overwritten.
 
     def insert_randomly(self, activity_tuple, new_model) -> None:
         """
@@ -25,47 +25,50 @@ class Random:
         return None
 
     def check_solution(self, new_model: Model) -> bool:
-        """Check and accept better solutions than the current solution.
+        """
+        Accept better solutions than the current solution.
 
         Args:
-            new_model (Model): A copy of the currently stored model with mutations.
+            new_model (Model): The randomly generated model.
 
         Returns:
-            bool: True if new solution has been accepted, else False.
+            bool: True if new model has been accepted, else False.
         """
-        new_penalties = new_model.total_penalty()
-        old_penalties = self.penalties
+        new_penalty = new_model.total_penalty()
 
-        if new_penalties < old_penalties:
-            # Store better performing models.
+        if new_penalty < self.lowest_penalty:
+            # save better model
             self.model = new_model
-            self.penalties = new_penalties
+            self.lowest_penalty = new_penalty
             return True
-        else:
-            return False
+        
+        return False
 
     def run(self, runs: int=1, verbose: bool = False) -> Model:
-        """Run the hillclimber algorithm for a specified number of iterations.
+        """Generate random schedule x times and return the best one.
 
         Args:
-            iterations (int): Number of iterations for the Hillclimber to 'climb'.
-            mutate_slots_number (int): Number of mutations to occur each iteration.
+            runs (int): Number of schedules to be generated.
+            verbose (bool): To display progress in terminal.
+
+        Returns:
+            Model: The best solution that has been found.
         """
         self.runs = runs
 
         for run in range(runs):
             print(
-                f"Run {run}/{runs}, current penalty score: {self.penalties}           ",
-                end="\r",
+                f"Run {run}/{runs}, current penalty score: {self.lowest_penalty}           ", end="\r",
             ) if verbose else None
 
-            # Create a copy of the model to simulate a mutation.
+            # copy empty model
             new_model = self.empty_model.copy()
 
+            # create random schedule
             for activity in new_model.participants:
                 self.insert_randomly(activity, new_model)
 
-            # Accept the mutation if it is an improvement.
+            # accept if improved
             self.check_solution(new_model)
 
         return self.model
