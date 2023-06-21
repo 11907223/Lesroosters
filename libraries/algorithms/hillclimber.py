@@ -1,7 +1,7 @@
 from libraries.classes.model import Model
+from libraries.algorithms.randomise import Random
 
-
-class HillClimber():
+class HillClimber(Random):
     """The HillClimber class swaps two randomly selected indices.
 
     Each improvement is kept for the next iteration.
@@ -10,7 +10,7 @@ class HillClimber():
 
     def __init__(self, model: Model):
         """Initialise the HillClimber algorithm.
-        
+
         Args:
             model (Model): A model with a filled in solution.
         
@@ -45,26 +45,6 @@ class HillClimber():
         for _ in range(number_of_swaps):
             self.swap_slots(new_model)
 
-    def check_solution(self, new_model: Model) -> bool:
-        """Check and accept better solutions than the current solution.
-
-        Args:
-            new_model (Model): A copy of the currently stored model with mutations.
-
-        Returns:
-            bool: True if new solution has been accepted, else False.
-        """
-        new_penalties = new_model.total_penalty()
-        old_penalties = self.penalties
-
-        if new_penalties < old_penalties:
-            # Store better performing models.
-            self.model = new_model
-            self.penalties = new_penalties
-            return True
-        else:
-            return False
-
     def run(
         self, iterations: int, verbose: bool = False, mutate_slots_number: int = 1
     ) -> Model:
@@ -73,6 +53,7 @@ class HillClimber():
         Args:
             iterations (int): Number of iterations for the Hillclimber to 'climb'.
             mutate_slots_number (int): Number of mutations to occur each iteration.
+            verbose (bool): Evaluate if run prints current iteration and penalty score.
         """
         self.iterations = iterations
 

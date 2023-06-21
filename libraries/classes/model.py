@@ -3,6 +3,7 @@ from libraries.classes.course import Course
 from libraries.classes.hall import Hall
 from libraries.helpers.load_data import load_courses, load_students, load_halls
 from typing import Optional, Union
+from collections import defaultdict
 import numpy as np
 import copy
 import random
@@ -40,7 +41,7 @@ class Model:
         self.solution: dict[int, activity_type] = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
-        self.student_penalties: dict[int, list[Union[int, set[int]]]] = {}
+        self.student_penalties: dict[int, list[Union[int, set[int]]]] = defaultdict(dict)
         self.activity_tuples = list(self.participants.keys())
 
         if auto_load_students is True:
@@ -417,56 +418,71 @@ class Model:
 
         return penalty_points
 
-    def conflict_penalty(self) -> int:
-        """Calculate the penalties of students with course conflicts.
+    # def conflict_penalty(self) -> int:
+    #     """Calculate the penalties of students with course conflicts.
 
-        Fills in empty student activity model {activity: {student_id: penalty}}.
-        returns total conflict penalty. The function also keeps track of the model in
-        self.student_penalties.
+    #     Fills in empty student activity model {activity: {student_id: penalty}}.
+    #     returns total conflict penalty. The function also keeps track of the model in
+    #     self.student_penalties.
 
-        Returns:
-            int: Sum of all conflict penalties.
-        """
-        penalty_points = 0
+    #     Returns:
+    #         int: Sum of all conflict penalties.
+    #     """
+    #     penalty_points = 0
 
-        for id in self.students:
-            occupied_timeslots = set()
-            student_penalty = 0
-            # Get all activities from student.
-            activities = self.student_activities(id)
+    #     for id in self.students:
+    #         occupied_timeslots = set()
+    #         student_penalty = 0
+    #         # Get all activities from student.
+    #         activities = self.student_activities(id)
 
-            for activity in activities:
-                index_info = self.translate_index(activity)
-                # Save timeslot and day in a tuple.
-                timeslot_day_info: tuple[int, int] = (
-                    index_info["timeslot"],
-                    index_info["day"],
-                )
+    #         for activity in activities:
+    #             index_info = self.translate_index(activity)
+    #             # Save timeslot and day in a tuple.
+    #             timeslot_day_info: tuple[int, int] = (
+    #                 index_info["timeslot"],
+    #                 index_info["day"],
+    #             )
 
-                if timeslot_day_info not in occupied_timeslots:
-                    occupied_timeslots.add(timeslot_day_info)
-                else:
-                    # Update student penalty and total penalty
-                    student_penalty += 1
-                    penalty_points += 1
+    #             if timeslot_day_info not in occupied_timeslots:
+    #                 occupied_timeslots.add(timeslot_day_info)
+    #             else:
+    #                 # Update student penalty and total penalty
+    #                 student_penalty += 1
+    #                 penalty_points += 1
 
-                    if id not in self.student_penalties.keys():
-                        # Add student to model
-                        self.student_penalties.update(
-                            {id: [student_penalty, {activity}]}
-                        )
-                    # If student already in model
-                    else:
-                        # Update student penalty and add activity index
-                        self.student_penalties[id][0] = student_penalty
-                        self.student_penalties[id][1].add(activity)
+    #                 if id not in self.student_penalties:
+    #                     # Add student to model
+    #                     self.student_penalties.update(
+    #                         {id: [student_penalty, {activity}]}
+    #                     )
+    #                 else:
+    #                     # Update student penalty and add activity index
+    #                     self.student_penalties[id][0] = student_penalty
+    #                     self.student_penalties[id][1].add(activity)
 
-        return penalty_points
+    #     return penalty_points
 
-    def schedule_gaps_penalty(self) -> int:
+    def student_course_conflict(self, daily_schedule: list[int]) -> int:
+        return len([element for element in daily_schedule if daily_schedule.count(element) > 1])
+
+    def remove_duplicates(self, schedule: list[int]) -> list[int]:
+        return list(set(schedule))
+
+    def student_gap_penalty(self, daily_schedule: list[int]) -> tuple[int, int]:
+        gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: 5}
+        penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+
+        return gap_penalty_map[sum(penalty_schedule)]
+
+    def student_schedule_penalties(self) -> int:
         """Calculate penalties of each gap in a student schedule.
 
-        Function also keeps track of the model in self.student_penalties."""
+        Function also keeps track of the model in self.student_penalties.
+        """
+        total_gap_penalties = 0
+        total_course_conflicts_penalties =0
+
         for id in self.students:
             activities = self.student_activities(id)
 
@@ -474,9 +490,25 @@ class Model:
 
             for activity in activities:
                 index_info = self.translate_index(activity)
-                student_schedule.update({index_info["day"]: index_info["timeslot"]})
+                student_schedule.setdefault(index_info["day"], []).append(
+                    index_info["timeslot"]
+                )
 
-        return 0
+            for day in student_schedule:
+                course_conflict_points = self.student_course_conflict(student_schedule[day])
+                gap_penalty_points = self.student_gap_penalty(student_schedule[day])
+                total_course_conflicts_penalties += course_conflict_points
+                total_gap_penalties += gap_penalty_points
+
+                self.student_penalties.update({id: {day: {'conflict penalties': course_conflict_points, 'gap penalties': gap_penalty_points}}})
+
+            # Add student to model.
+
+        return {'conflict penalties': total_course_conflicts_penalties, 'gap penalties': total_gap_penalties}
+
+    def sum_student_schedule_penalties(self):
+        penalties = self.student_schedule_penalties()
+        return penalties['conflict penalties'] + penalties['gap penalties']
 
     def total_penalty(self) -> int:
         """Calculate the total penalty of the schedule.
@@ -487,8 +519,8 @@ class Model:
         total = (
             self.total_capacity_penalties()
             + self.evening_penalty()
-            + self.conflict_penalty()
-            + self.schedule_gaps_penalty()
+            # + self.conflict_penalty()
+            + self.sum_student_schedule_penalties()
         )
 
         return total

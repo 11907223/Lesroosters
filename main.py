@@ -17,74 +17,65 @@ if __name__ == "__main__":
 
     # start_time = time.time()
 
-    # print("empty index: ", random_model.get_random_index())
-
     # _________________________RANDOM ALGORITHM_______________________
     random_algorithm = Random(empty_model)
-    print("STARTING RANDOM ALGORITHM \n")
-    start_time = time.time()
-    random_model = random_algorithm.run(runs=1000, verbose=True)
-    end_time = time.time()
+    random_algorithm.run()
+
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
         # random_algorithm.model.solution,
         "\nTOTAL POINTS: ",
-        random_model.total_penalty(),
+        random_algorithm.model.total_penalty(),
         "\n evening points",
-        random_model.evening_penalty(),
-        "\n conflict points:",
-        random_model.conflict_penalty(),
-        "\n capacity penalty: ",
-        random_model.total_capacity_penalties(),
-        "\n run time: ",
-        end_time - start_time,
+        random_algorithm.model.evening_penalty(),
+        "\n student penalties:",
+        random_algorithm.model.student_schedule_penalties(),
+        "\n capacity penalty",
+        random_algorithm.model.total_capacity_penalties(),
     )
+
+    print(random_algorithm.model.student_penalties)
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
-    beam_search = BeamSearch(empty_model)
-    print("STARTING BEAM SEARCH ALGORITHM \n")
-    start_time = time.time()
-    beam_search.run(beam=5, runs=100, heuristic="capacity", verbose=True)
-    end_time = time.time()
+    # beam_search = BeamSearch(empty_model)
+    # print("STARTING BEAM SEARCH ALGORITHM \n")
+    # start_time = time.time()
+    # beam_search.run(beam=5, runs=100, heuristic="capacity", verbose=True)
+    # end_time = time.time()
 
-    print(
-        "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
-        # beam_search.model.solution,
-        "\nTOTAL POINTS: ",
-        beam_search.model.total_penalty(),
-        "\n evening points",
-        beam_search.model.evening_penalty(),
-        "\n conflict points:",
-        beam_search.model.conflict_penalty(),
-        "\n capacity penalty",
-        beam_search.model.total_capacity_penalties(),
-        "\n run time: ",
-        end_time - start_time,
-    )
+    # print(
+    #     "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
+    #     # beam_search.model.solution,
+    #     "\nTOTAL POINTS: ",
+    #     beam_search.model.total_penalty(),
+    #     "\n evening points",
+    #     beam_search.model.evening_penalty(),
+    #     "\n conflict points:",
+    #     beam_search.model.conflict_penalty(),
+    #     "\n capacity penalty",
+    #     beam_search.model.total_capacity_penalties(),
+    #     "\n run time: ",
+    #     end_time - start_time,
+    # )
 
     # ______________________HILLCLIMBER ALGORITHM_____________________
-    hillclimber = HillClimber(random_algorithm.model)
-    print("STARTING HILLCLIMBER ALGORITHM \n")
-    start_time = time.time()
-    hillclimber.run(iterations=2000, verbose=True)
-    end_time = time.time()
+    # hillclimber = HillClimber(random_algorithm.model)
+    # hillclimber.run(iterations=2000, verbose=True)
 
-    print(
-        "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-        # hillclimber.model.solution,
-        "\nTOTAL POINTS: ",
-        hillclimber.model.total_penalty(),
-        "\n evening points",
-        hillclimber.model.evening_penalty(),
-        "\n conflict points:",
-        hillclimber.model.conflict_penalty(),
-        "\n capacity penalty",
-        hillclimber.model.total_capacity_penalties(),
-        "\n run time: ",
-        end_time - start_time,
-    )
+    # print(
+    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
+    #     hillclimber.model.solution,
+    #     "\nPOINTS: ",
+    #     hillclimber.model.total_penalty(),
+    #     "\n evening points",
+    #     hillclimber.model.evening_penalty(),
+    #     "\n conflict points:",
+    #     hillclimber.model.student_schedule_penalties(),
+    #     "\n capacity penalty",
+    #     hillclimber.model.total_capacity_penalties(),
+    # )
 
     # ______________________SIMULATED ANNEALING_____________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
