@@ -5,6 +5,7 @@ from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
+import time
 
 if __name__ == "__main__":
     courses = ld.load_courses()
@@ -21,7 +22,9 @@ if __name__ == "__main__":
     # _________________________RANDOM ALGORITHM_______________________
     random_algorithm = Random(empty_model)
     print("STARTING RANDOM ALGORITHM \n")
+    start_time = time.time()
     random_algorithm.run(runs=1000, verbose=True)
+    end_time = time.time()
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
@@ -32,15 +35,19 @@ if __name__ == "__main__":
         random_algorithm.model.evening_penalty(),
         "\n conflict points:",
         random_algorithm.model.conflict_penalty(),
-        "\n capacity penalty",
+        "\n capacity penalty: ",
         random_algorithm.model.total_capacity_penalties(),
+        "\n run time: ",
+        end_time - start_time,
     )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
     beam_search = BeamSearch(empty_model)
     print("STARTING BEAM SEARCH ALGORITHM \n")
-    beam_search.run(beam=5, runs=1000, heuristic="capacity")
+    start_time = time.time()
+    beam_search.run(beam=5, runs=100, heuristic="capacity", verbose=True)
+    end_time = time.time()
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
@@ -53,12 +60,16 @@ if __name__ == "__main__":
         beam_search.model.conflict_penalty(),
         "\n capacity penalty",
         beam_search.model.total_capacity_penalties(),
+        "\n run time: ",
+        end_time - start_time,
     )
 
     # ______________________HILLCLIMBER ALGORITHM_____________________
     hillclimber = HillClimber(random_algorithm.model)
     print("STARTING HILLCLIMBER ALGORITHM \n")
+    start_time = time.time()
     hillclimber.run(iterations=2000, verbose=True)
+    end_time = time.time()
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
@@ -71,6 +82,8 @@ if __name__ == "__main__":
         hillclimber.model.conflict_penalty(),
         "\n capacity penalty",
         hillclimber.model.total_capacity_penalties(),
+        "\n run time: ",
+        end_time - start_time,
     )
 
     # ______________________SIMULATED ANNEALING_____________________
