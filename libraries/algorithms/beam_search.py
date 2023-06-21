@@ -49,7 +49,7 @@ class BeamSearch:
 
             # Check if activity capacity matches hall capacity
             for activity in model.activity_tuples:
-                activity_capacity = model.get_activity_capacity(activity)
+                activity_capacity = model.get_student_count_in_(activity)
                 if activity_capacity < capacity:
                     possibilities.update({activity_capacity: activity})
                 else:
@@ -97,13 +97,11 @@ class BeamSearch:
             self.best_solution = new_model
             self.best_value = new_value
 
-    def run(
-        self, beam=5, iterations=1, heuristic="random", verbose: bool = False
-    ) -> None:
+    def run(self, beam=5, runs=1, heuristic="random", verbose: bool = False) -> None:
         """
         Runs the algorithm untill all possible states are visited.
         """
-        for i in range(iterations):
+        for i in range(runs):
             self.reset_model()
             self.states.append(self.model.copy())
 
@@ -111,7 +109,8 @@ class BeamSearch:
             while self.states:
                 step += 1
                 print(
-                    f"Step {step}, with {len(self.states)} states, current value: {self.best_value}"
+                    f"Run {i}/{runs}, current penalty score: {self.best_value}           ",
+                    end="\r",
                 ) if verbose else None
 
                 new_model = self.get_next_state()

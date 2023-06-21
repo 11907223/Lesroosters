@@ -44,7 +44,7 @@ def index():
 
     # ------------------- BEAM SEARCH ---------------------
     beam_schedule = BeamSearch(model)
-    schedule_solution = beam_schedule.run(beam=5, iterations=5, heuristic="capacity")
+    schedule_solution = beam_schedule.run(beam=5, runs=5, heuristic="capacity")
 
     # Create a dict of the solution
     schedule_dict = create_dict(schedule_solution, halls, weekdays, timeslots)

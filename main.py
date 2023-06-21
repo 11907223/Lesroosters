@@ -20,11 +20,12 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM_______________________
     random_algorithm = Random(empty_model)
+    print("STARTING RANDOM ALGORITHM \n")
     random_algorithm.run(runs=1000, verbose=True)
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-        random_algorithm.model.solution,
+        # random_algorithm.model.solution,
         "\nTOTAL POINTS: ",
         random_algorithm.model.total_penalty(),
         "\n evening points",
@@ -37,17 +38,32 @@ if __name__ == "__main__":
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
-    # beam_search = BeamSearch(empty_model)
-    # beam_search.run(beam=5, iterations=1000, heuristic="capacity")
+    beam_search = BeamSearch(empty_model)
+    print("STARTING BEAM SEARCH ALGORITHM \n")
+    beam_search.run(beam=5, runs=1000, heuristic="capacity")
+
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
+        # beam_search.model.solution,
+        "\nTOTAL POINTS: ",
+        beam_search.model.total_penalty(),
+        "\n evening points",
+        beam_search.model.evening_penalty(),
+        "\n conflict points:",
+        beam_search.model.conflict_penalty(),
+        "\n capacity penalty",
+        beam_search.model.total_capacity_penalties(),
+    )
 
     # ______________________HILLCLIMBER ALGORITHM_____________________
     hillclimber = HillClimber(random_algorithm.model)
+    print("STARTING HILLCLIMBER ALGORITHM \n")
     hillclimber.run(iterations=2000, verbose=True)
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-        hillclimber.model.solution,
-        "\nPOINTS: ",
+        # hillclimber.model.solution,
+        "\nTOTAL POINTS: ",
         hillclimber.model.total_penalty(),
         "\n evening points",
         hillclimber.model.evening_penalty(),
