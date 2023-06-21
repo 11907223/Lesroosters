@@ -20,7 +20,6 @@ class BeamSearch:
         # Reset variables
         self.model = Model()
         self.states = []
-        self.model.activity_tuples = list(self.model.participants.keys())
 
     def get_next_state(self) -> Model:
         """
@@ -34,25 +33,42 @@ class BeamSearch:
         """Gets n (int) possible activities that would match with the given index of a model.
         Possibilities could be picked with no heuristic (random) or according to capacity (heursitic="capacity").
         """
-        possibilities = []
 
-        if heuristic == "random":
-            if len(model.activity_tuples) >= n:
-                # Pick random activities
-                possibilities = random.choices(model.activity_tuples, k=n)
-            else:
-                # If list activities smaller than n, return full list
-                possibilities = model.activity_tuples
-
-        elif heuristic == "capacity":
+        if heuristic == "capacity":
+            possibilities = {}
+            no_possibilities = {}
             capacity = model.get_hall_capacity(index)
 
             # Check if activity capacity matches hall capacity
             for activity in model.activity_tuples:
-                if model.get_student_count_in_(activity) < capacity:
-                    possibilities.append(activity)
+                activity_capacity = model.get_student_count_in_(activity)
+                if activity_capacity < capacity:
+                    # If so, add activity to possibilities
+                    possibilities.update({activity_capacity: activity})
+                else:
+                    # If not, add activity to no possibilities
+                    no_possibilities.update({activity_capacity: activity})
 
-        return possibilities[:n]
+            # If there are possibilities
+            if possibilities:
+                # Sort possibilities in descending order and return first n elements
+                sorted_possibilities = dict(sorted(possibilities.items(), reverse=True))
+                list_possibilities = list(sorted_possibilities.values())
+                return list_possibilities[:n]
+
+            # Sort no possibilities in ascending order and return first n elements
+            sorted_possibilities = dict(sorted(no_possibilities.items()))
+            list_possibilities = list(sorted_possibilities.values())
+            return list_possibilities[:n]
+
+        # If no heursitic was passed as argument, pick random activities
+        if len(model.activity_tuples) >= n:
+            list_possibilities = random.choices(model.activity_tuples, k=n)
+        else:
+            # If list activities smaller than n, return full list
+            list_possibilities = model.activity_tuples
+
+        return list_possibilities
 
     def create_children(
         self, model: Model, index: int, beam: int, heuristic="random"
@@ -87,13 +103,11 @@ class BeamSearch:
             self.best_solution = new_model
             self.best_value = new_value
 
-    def run(
-        self, beam=5, iterations=1, heuristic="random", verbose: bool = False
-    ) -> None:
+    def run(self, beam=5, runs=1, heuristic="random", verbose: bool = False) -> None:
         """
         Runs the algorithm untill all possible states are visited.
         """
-        for i in range(iterations):
+        for i in range(runs):
             self.reset_model()
             self.states.append(self.model.copy())
 
@@ -101,7 +115,8 @@ class BeamSearch:
             while self.states:
                 step += 1
                 print(
-                    f"Step {step}, with {len(self.states)} states, current value: {self.best_value}"
+                    f"Run {i}/{runs}, current penalty score: {self.best_value}           ",
+                    end="\r",
                 ) if verbose else None
 
                 new_model = self.get_next_state()
@@ -124,3 +139,5 @@ class BeamSearch:
 
         # Update the input graph with the best result found.
         self.model = self.best_solution
+
+        return self.model
