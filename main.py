@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     # start_time = time.time()
 
-    # _________________________RANDOM ALGORITHM_______________________
+    # _________________________RANDOM ALGORITHM________________________________________
     random_algorithm = Random(empty_model)
     random_algorithm.run()
 
@@ -34,9 +34,7 @@ if __name__ == "__main__":
         random_algorithm.model.total_capacity_penalties(),
     )
 
-    print(random_algorithm.model.student_penalties)
-
-    # ________________________BEAM SEARCH ALGORITHM________________________
+    # ________________________BEAM SEARCH ALGORITHM____________________________________
 
     # beam_search = BeamSearch(empty_model)
     # print("STARTING BEAM SEARCH ALGORITHM \n")
@@ -59,27 +57,27 @@ if __name__ == "__main__":
     #     end_time - start_time,
     # )
 
-    # ______________________HILLCLIMBER ALGORITHM_____________________
-    # hillclimber = HillClimber(random_algorithm.model)
-    # print("\n STARTING HILLCLIMBER ALGORITHM")
-    # start_time = time.time()
-    # hillclimber.run(iterations=2000, verbose=True)
-    # end_time = time.time()
+    # ______________________HILLCLIMBER ALGORITHM______________________________________
+    hillclimber = HillClimber(random_algorithm.model)
+    print("\n STARTING HILLCLIMBER ALGORITHM")
+    start_time = time.time()
+    hillclimber.run(iterations=2000, verbose=True)
+    end_time = time.time()
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-    #     # hillclimber.model.solution,
-    #     "\nTOTAL POINTS: ",
-    #     hillclimber.model.total_penalty(),
-    #     "\n evening points",
-    #     hillclimber.model.evening_penalty(),
-    #     "\n conflict points:",
-    #     hillclimber.model.student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     hillclimber.model.total_capacity_penalties(),
-    # )
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
+        # hillclimber.model.solution,
+        "\nTOTAL POINTS: ",
+        hillclimber.model.total_penalty(),
+        "\n evening points",
+        hillclimber.model.evening_penalty(),
+        "\n conflict points:",
+        hillclimber.model.student_schedule_penalties(),
+        "\n capacity penalty",
+        hillclimber.model.total_capacity_penalties(),
+    )
 
-    # ______________________SIMULATED ANNEALING_____________________
+    # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
     # simulated_annealing.run(iterations=2000, verbose=True)
 
@@ -90,7 +88,7 @@ if __name__ == "__main__":
     #     simulated_annealing.model.total_penalty(),
     # )
 
-    # ________________________GREEDY ALGORITHM________________________
+    # ________________________GREEDY ALGORITHM_________________________________________
     # start_time = time.time()
     # greedy_solution = Greedy(empty_model).run()
     # runtime = time.time() - start_time
@@ -103,7 +101,7 @@ if __name__ == "__main__":
     # '\n runtime:', runtime
     # )
 
-    # ________________________RANDOMGREEDY ALGORITHM__________________
+    # ________________________RANDOMGREEDY ALGORITHM___________________________________
     # start_time = time.time()
     # random_greedy = RandomGreedy(empty_model).run(random_chance=0)
     # runtime = time.time() - start_time
@@ -115,7 +113,7 @@ if __name__ == "__main__":
     #     '\n runtime', runtime
     # )
 
-    # __________________________BASELINE______________________________________
+    # __________________________BASELINE_______________________________________________
 
     # with open("baseline.txt", "a+") as file:
     #     for _ in range(100000):

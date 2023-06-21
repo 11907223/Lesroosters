@@ -27,7 +27,9 @@ class Model:
             students are represented by their index number.
     """
 
-    def __init__(self, path: str = "data", auto_load_students: bool = True) -> None:
+    def __init__(
+        self, path: str = "data", auto_load_students: bool = True
+    ) -> None:
         """Initiatizes a model for a schedule.
 
         Args:
@@ -41,10 +43,10 @@ class Model:
         self.solution: dict[int, activity_type] = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
-        self.student_penalties: dict[int, list[Union[int, set[int]]]] = defaultdict(
-            dict
-        )
-        self.activity_tuples = list(self.participants.keys())
+        self.student_penalties: dict[
+            int, dict[int, dict[str, int]]
+        ] = defaultdict(dict)
+        self.unassigned_activities = list(self.participants.keys())
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
@@ -232,7 +234,9 @@ class Model:
             # Find the course object the activity belongs to
             course = self.courses[course_name]
             # Combine all course activities in one list
-            all_activities = course.lectures + course.practicals + course.tutorials
+            all_activities = (
+                course.lectures + course.practicals + course.tutorials
+            )
 
             # Iterate over all Activity objects
             for object in all_activities:
@@ -253,7 +257,9 @@ class Model:
             activity (tuple[str, str]): ('course name', 'lecture 1')
         """
         return {
-            index for index in self.solution if self.solution[index] == activity
+            index
+            for index in self.solution
+            if self.solution[index] == activity
         }.pop()
 
     def get_activity(self, index: int) -> activity_type:
@@ -278,9 +284,9 @@ class Model:
         Returns:
             bool: True if student not in activity yet, False otherwise.
         """
-        if student not in self.participants[activity] and self.student_in_course(
-            student, activity[0]
-        ):
+        if student not in self.participants[
+            activity
+        ] and self.student_in_course(student, activity[0]):
             self.participants[activity].add(student)
             return True
         else:
@@ -322,7 +328,9 @@ class Model:
         }
         return activity_and_indices
 
-    def get_highest_penalties(self, n: int) -> list[dict[int, tuple[str, str]]]:
+    def get_highest_penalties(
+        self, n: int
+    ) -> list[dict[int, tuple[str, str]]]:
         """Form a list of activities with highest contributions to penalty points.
 
         The list of elements is ordered from activities causing most to least penalty points.
@@ -368,7 +376,9 @@ class Model:
         highest_penalties = []
         # Take the student penalty model
 
-        return print("LET OP !!!get_highest_students(self, n) werkt nog niet !!")
+        return print(
+            "LET OP !!!get_highest_students(self, n) werkt nog niet !!"
+        )
 
     def capacity_penalty(self, index: int, activity: tuple[str, str]) -> int:
         """Return the capacity penalty for an activity over capacity.
@@ -481,19 +491,25 @@ class Model:
 
     def student_course_conflict(self, daily_schedule: list[int]) -> int:
         return len(
-            [element for element in daily_schedule if daily_schedule.count(element) > 1]
+            [
+                element
+                for element in daily_schedule
+                if daily_schedule.count(element) > 1
+            ]
         )
 
     def remove_duplicates(self, schedule: list[int]) -> list[int]:
         return list(set(schedule))
 
-    def student_gap_penalty(self, daily_schedule: list[int]) -> tuple[int, int]:
+    def student_gap_penalty(self, daily_schedule: list[int]) -> int:
         gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: 5}
-        penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+        penalty_schedule = (
+            np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+        )
 
         return gap_penalty_map[sum(penalty_schedule)]
 
-    def student_schedule_penalties(self) -> int:
+    def student_schedule_penalties(self) -> dict[str, int]:
         """Calculate penalties of each gap in a student schedule.
 
         Function also keeps track of the model in self.student_penalties.
@@ -504,7 +520,7 @@ class Model:
         for id in self.students:
             activities = self.student_activities(id)
 
-            student_schedule = {}
+            student_schedule: dict[int, list[int]] = {}
 
             for activity in activities:
                 index_info = self.translate_index(activity)
@@ -516,7 +532,9 @@ class Model:
                 course_conflict_points = self.student_course_conflict(
                     student_schedule[day]
                 )
-                gap_penalty_points = self.student_gap_penalty(student_schedule[day])
+                gap_penalty_points = self.student_gap_penalty(
+                    student_schedule[day]
+                )
                 total_course_conflicts_penalties += course_conflict_points
                 total_gap_penalties += gap_penalty_points
 
@@ -530,8 +548,6 @@ class Model:
                         }
                     }
                 )
-
-            # Add student to model.
 
         return {
             "conflict penalties": total_course_conflicts_penalties,
@@ -551,7 +567,6 @@ class Model:
         total = (
             self.total_capacity_penalties()
             + self.evening_penalty()
-            # + self.conflict_penalty()
             + self.sum_student_schedule_penalties()
         )
 
@@ -568,7 +583,7 @@ class Model:
 
         return new_copy
 
-    def student_has_valid_schedule(self, student: int) -> bool:
+    def valid_schedule_of_(self, student: int) -> bool:
         """Evaluate if all activities of a student have been assigned to an index in the model.
 
         Args:
@@ -577,18 +592,14 @@ class Model:
         Returns:
             bool: True if all activities of the student have been assigned, False otherwise.
         """
-        try:
-            activities = self.student_activities(student)
-            indices = [
-                activity
-                for activity in self.solution.values()
-                if activity in activities.values()
-            ]
-            dict(zip(indices, activities, strict=True))
-        except ValueError:
-            return False
-
-        return True
+        person = self.students[student]
+        activities = set()
+        for course in person.courses.values():
+            for activity in course.activities():
+                activities.add((course.name, activity.category))
+        if activities == set(self.student_activities(student).values()):
+            return True
+        return False
 
     def is_solution(self) -> bool:
         """Evaluate if the solution is valid."""

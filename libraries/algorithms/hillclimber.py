@@ -13,7 +13,7 @@ class HillClimber(Random):
 
         Args:
             model (Model): A model with a filled in solution.
-        
+
         Raises:
             Exception: Provided solution is invalid.
         """
@@ -21,7 +21,7 @@ class HillClimber(Random):
             raise Exception("Provided solution is not valid.")
 
         self.model = model.copy()
-        self.penalties = model.total_penalty()
+        self.lowest_penalty = model.total_penalty()
 
     def swap_slots(self, new_model: Model) -> None:
         """Swap two slots in the model at random.
@@ -40,7 +40,7 @@ class HillClimber(Random):
 
         Args:
             new_model (Model): A copy of the currently stored model with mutations.
-            number_of_slots (int): Amount of slots to be swapped.
+            number_of_swaps (int): Amount of slots to be swapped.
         """
         for _ in range(number_of_swaps):
             self.swap_slots(new_model)
@@ -59,7 +59,7 @@ class HillClimber(Random):
 
         for iteration in range(iterations):
             print(
-                f"Iteration {iteration}/{iterations}, current penalty score: {self.penalties}    ",
+                f"Iteration {iteration}/{iterations}, current penalty score: {self.lowest_penalty}    ",
                 end="\r",
             ) if verbose else None
 
