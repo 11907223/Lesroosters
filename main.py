@@ -21,37 +21,24 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM_______________________
     random_algorithm = Random(empty_model)
-<<<<<<< HEAD
-    random_model = random_algorithm.run(runs=1000, verbose=True)
-
-    print(
-        "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-        random_model.solution,
-        "\nTOTAL POINTS: ",
-        random_model.total_penalty(),
-        '\n evening points', random_model.evening_penalty(),
-        '\n conflict points:', random_model.conflict_penalty(),
-        '\n capacity penalty', random_model.total_capacity_penalties() 
-=======
     print("STARTING RANDOM ALGORITHM \n")
     start_time = time.time()
-    random_algorithm.run(runs=1000, verbose=True)
+    random_model = random_algorithm.run(runs=1000, verbose=True)
     end_time = time.time()
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
         # random_algorithm.model.solution,
         "\nTOTAL POINTS: ",
-        random_algorithm.model.total_penalty(),
+        random_model.total_penalty(),
         "\n evening points",
-        random_algorithm.model.evening_penalty(),
+        random_model.evening_penalty(),
         "\n conflict points:",
-        random_algorithm.model.conflict_penalty(),
+        random_model.conflict_penalty(),
         "\n capacity penalty: ",
-        random_algorithm.model.total_capacity_penalties(),
+        random_model.total_capacity_penalties(),
         "\n run time: ",
         end_time - start_time,
->>>>>>> 6fd38cd72835853e5ad1e92b81ec821251ac3819
     )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
