@@ -98,21 +98,28 @@ if __name__ == "__main__":
     # )
 
     # ________________________GREEDY ALGORITHM________________________
+    # start_time = time.time()
     # greedy_solution = Greedy(empty_model).run()
+    # runtime = time.time() - start_time
+
     # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, 
     # '\n POINTS: ', greedy_solution.total_penalty(),
     # '\n evening points', greedy_solution.evening_penalty(),
     # '\n conflict points:', greedy_solution.conflict_penalty(),
-    # '\n capacity penalty', greedy_solution.total_capacity_penalties() 
+    # '\n capacity penalty', greedy_solution.total_capacity_penalties(),
+    # '\n runtime:', runtime  
     # )
 
     # ________________________RANDOMGREEDY ALGORITHM__________________
+    # start_time = time.time()
     # random_greedy = RandomGreedy(empty_model).run(random_chance=0)
+    # runtime = time.time() - start_time
     # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution, 
     #     '\n POINTS: ', random_greedy.total_penalty(),
     #     '\n evening points', random_greedy.evening_penalty(),
     #     '\n conflict points:', random_greedy.conflict_penalty(),
-    #     '\n capacity penalty', random_greedy.total_capacity_penalties() 
+    #     '\n capacity penalty', random_greedy.total_capacity_penalties(),
+    #     '\n runtime', runtime
     # )
 
     # __________________________BASELINE______________________________________
