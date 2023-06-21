@@ -49,7 +49,7 @@ class BeamSearch:
 
             # Check if activity capacity matches hall capacity
             for activity in model.activity_tuples:
-                if model.get_activity_capacity(activity) < capacity:
+                if model.get_student_count_in_(activity) < capacity:
                     possibilities.append(activity)
 
         return possibilities[:n]

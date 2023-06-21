@@ -200,7 +200,7 @@ class Model:
         # Return hall capacity by from list
         return self.halls[hall_index].capacity
 
-    def get_activity_capacity(self, activity: tuple[str, str]) -> int:
+    def get_student_count_in_(self, activity: tuple[str, str]) -> int:
         """Return the capacity of an activity.
 
         If activity is None, return zero.
@@ -366,12 +366,12 @@ class Model:
         """
         # Get capacity for the activity and the location.
         hall_capacity = self.get_hall_capacity(index)
-        activity_capacity = self.get_activity_capacity(activity)
+        activity_capacity = self.get_student_count_in_(activity)
 
         if activity_capacity > hall_capacity:
             # Return penalty points for each student over capacity.
             # Ensure that penalty points are not subtracted.
-            return activity_capacity #> hall_capacity
+            return activity_capacity  # > hall_capacity
         # Return no penalty points.
         return 0
 
@@ -465,7 +465,7 @@ class Model:
 
     def schedule_gaps_penalty(self) -> int:
         """Calculate penalties of each gap in a student schedule.
-         
+
         Function also keeps track of the model in self.student_penalties."""
         for id in self.students:
             activities = self.student_activities(id)
@@ -475,9 +475,7 @@ class Model:
             for activity in activities:
                 index_info = self.translate_index(activity)
                 student_schedule.update({index_info["day"]: index_info["timeslot"]})
-                
 
-        
         return 0
 
     def total_penalty(self) -> int:
@@ -530,12 +528,12 @@ class Model:
 
     def is_solution(self) -> bool:
         """Evaluate if the solution is valid."""
-        # Evaluate if student with 5 courses has 
+        # Evaluate if student with 5 courses has
         #   all activities scheduled in the solution.
         if self.student_has_valid_schedule(261) is False:
             return False
 
-        # Evaluate if the number of activities is 
+        # Evaluate if the number of activities is
         #   equal or greater than the standard set of activities.
         n_activities = 0
         for course in self.courses.values():
