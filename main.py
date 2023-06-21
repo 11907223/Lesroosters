@@ -21,7 +21,6 @@ if __name__ == "__main__":
     random_algorithm = Random(empty_model)
     random_algorithm.run()
 
-
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
         # random_algorithm.model.solution,
@@ -62,12 +61,15 @@ if __name__ == "__main__":
 
     # ______________________HILLCLIMBER ALGORITHM_____________________
     # hillclimber = HillClimber(random_algorithm.model)
+    # print("\n STARTING HILLCLIMBER ALGORITHM")
+    # start_time = time.time()
     # hillclimber.run(iterations=2000, verbose=True)
+    # end_time = time.time()
 
     # print(
     #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-    #     hillclimber.model.solution,
-    #     "\nPOINTS: ",
+    #     # hillclimber.model.solution,
+    #     "\nTOTAL POINTS: ",
     #     hillclimber.model.total_penalty(),
     #     "\n evening points",
     #     hillclimber.model.evening_penalty(),
@@ -93,19 +95,19 @@ if __name__ == "__main__":
     # greedy_solution = Greedy(empty_model).run()
     # runtime = time.time() - start_time
 
-    # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, 
+    # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution,
     # '\n POINTS: ', greedy_solution.total_penalty(),
     # '\n evening points', greedy_solution.evening_penalty(),
     # '\n conflict points:', greedy_solution.conflict_penalty(),
     # '\n capacity penalty', greedy_solution.total_capacity_penalties(),
-    # '\n runtime:', runtime  
+    # '\n runtime:', runtime
     # )
 
     # ________________________RANDOMGREEDY ALGORITHM__________________
     # start_time = time.time()
     # random_greedy = RandomGreedy(empty_model).run(random_chance=0)
     # runtime = time.time() - start_time
-    # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution, 
+    # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution,
     #     '\n POINTS: ', random_greedy.total_penalty(),
     #     '\n evening points', random_greedy.evening_penalty(),
     #     '\n conflict points:', random_greedy.conflict_penalty(),

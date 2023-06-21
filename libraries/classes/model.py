@@ -41,7 +41,9 @@ class Model:
         self.solution: dict[int, activity_type] = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
-        self.student_penalties: dict[int, list[Union[int, set[int]]]] = defaultdict(dict)
+        self.student_penalties: dict[int, list[Union[int, set[int]]]] = defaultdict(
+            dict
+        )
         self.activity_tuples = list(self.participants.keys())
 
         if auto_load_students is True:
@@ -116,6 +118,20 @@ class Model:
                 return index
             if self.check_index_is_empty(index) and empty is True:
                 return index
+
+    def get_high_capacity_index(self) -> int:
+        """Return empty index in the schedule with highest capacity."""
+        capacity = 0
+        highest_index = 0
+
+        for index in self.solution:
+            info = self.translate_index(index)
+            temp_capacity = self.halls[info["hall"]].capacity
+            if self.check_index_is_empty(index) and temp_capacity > capacity:
+                capacity = temp_capacity
+                highest_index = index
+
+        return highest_index
 
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
@@ -464,7 +480,9 @@ class Model:
     #     return penalty_points
 
     def student_course_conflict(self, daily_schedule: list[int]) -> int:
-        return len([element for element in daily_schedule if daily_schedule.count(element) > 1])
+        return len(
+            [element for element in daily_schedule if daily_schedule.count(element) > 1]
+        )
 
     def remove_duplicates(self, schedule: list[int]) -> list[int]:
         return list(set(schedule))
@@ -481,7 +499,7 @@ class Model:
         Function also keeps track of the model in self.student_penalties.
         """
         total_gap_penalties = 0
-        total_course_conflicts_penalties =0
+        total_course_conflicts_penalties = 0
 
         for id in self.students:
             activities = self.student_activities(id)
@@ -495,20 +513,34 @@ class Model:
                 )
 
             for day in student_schedule:
-                course_conflict_points = self.student_course_conflict(student_schedule[day])
+                course_conflict_points = self.student_course_conflict(
+                    student_schedule[day]
+                )
                 gap_penalty_points = self.student_gap_penalty(student_schedule[day])
                 total_course_conflicts_penalties += course_conflict_points
                 total_gap_penalties += gap_penalty_points
 
-                self.student_penalties.update({id: {day: {'conflict penalties': course_conflict_points, 'gap penalties': gap_penalty_points}}})
+                self.student_penalties.update(
+                    {
+                        id: {
+                            day: {
+                                "conflict penalties": course_conflict_points,
+                                "gap penalties": gap_penalty_points,
+                            }
+                        }
+                    }
+                )
 
             # Add student to model.
 
-        return {'conflict penalties': total_course_conflicts_penalties, 'gap penalties': total_gap_penalties}
+        return {
+            "conflict penalties": total_course_conflicts_penalties,
+            "gap penalties": total_gap_penalties,
+        }
 
     def sum_student_schedule_penalties(self):
         penalties = self.student_schedule_penalties()
-        return penalties['conflict penalties'] + penalties['gap penalties']
+        return penalties["conflict penalties"] + penalties["gap penalties"]
 
     def total_penalty(self) -> int:
         """Calculate the total penalty of the schedule.
@@ -530,8 +562,8 @@ class Model:
         new_copy = copy.copy(self)
         new_copy.solution = copy.copy(self.solution)
         new_copy.participants = copy.deepcopy(self.participants)
-        new_copy.activity_tuples = [
-            copy.deepcopy(tuple) for tuple in self.activity_tuples
+        new_copy.unassigned_activities = [
+            copy.deepcopy(tuple) for tuple in self.unassigned_activities
         ]
 
         return new_copy

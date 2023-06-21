@@ -27,6 +27,36 @@ class BeamSearch:
         """
         return self.states.pop()
 
+    def get_capacity_possibilities(self, model: Model, index: int, n: int):
+        """Gets n (int) possible activities that would match with the given index of a model.
+        Possibilities are picked according to capacity.
+        """
+        possibilities = {}
+        no_possibilities = {}
+        capacity = model.get_hall_capacity(index)
+
+        # Check if activity capacity matches hall capacity
+        for activity in model.unassigned_activities:
+            activity_capacity = model.get_student_count_in_(activity)
+            if activity_capacity < capacity:
+                # If so, add activity to possibilities
+                possibilities.update({activity_capacity: activity})
+            else:
+                # If not, add activity to no possibilities
+                no_possibilities.update({activity_capacity: activity})
+
+        # If there are possibilities
+        if possibilities:
+            # Sort possibilities in descending order and return first n elements
+            sorted_possibilities = dict(sorted(possibilities.items(), reverse=True))
+            list_possibilities = list(sorted_possibilities.values())
+            return list_possibilities[:n]
+
+        # Sort no possibilities in ascending order and return first n elements
+        sorted_possibilities = dict(sorted(no_possibilities.items()))
+        list_possibilities = list(sorted_possibilities.values())
+        return list_possibilities[:n]
+
     def get_possibilities(
         self, model: Model, index: int, n: int, heuristic="random"
     ) -> list[tuple[str, str]]:
@@ -35,38 +65,15 @@ class BeamSearch:
         """
 
         if heuristic == "capacity":
-            possibilities = {}
-            no_possibilities = {}
-            capacity = model.get_hall_capacity(index)
-
-            # Check if activity capacity matches hall capacity
-            for activity in model.activity_tuples:
-                activity_capacity = model.get_student_count_in_(activity)
-                if activity_capacity < capacity:
-                    # If so, add activity to possibilities
-                    possibilities.update({activity_capacity: activity})
-                else:
-                    # If not, add activity to no possibilities
-                    no_possibilities.update({activity_capacity: activity})
-
-            # If there are possibilities
-            if possibilities:
-                # Sort possibilities in descending order and return first n elements
-                sorted_possibilities = dict(sorted(possibilities.items(), reverse=True))
-                list_possibilities = list(sorted_possibilities.values())
-                return list_possibilities[:n]
-
-            # Sort no possibilities in ascending order and return first n elements
-            sorted_possibilities = dict(sorted(no_possibilities.items()))
-            list_possibilities = list(sorted_possibilities.values())
-            return list_possibilities[:n]
+            list_possibilities = self.get_capacity_possibilities(model, index, n)
+            return list_possibilities
 
         # If no heursitic was passed as argument, pick random activities
-        if len(model.activity_tuples) >= n:
-            list_possibilities = random.choices(model.activity_tuples, k=n)
+        if len(model.unassigned_activities) >= n:
+            list_possibilities = random.choices(model.unassigned_activities, k=n)
         else:
             # If list activities smaller than n, return full list
-            list_possibilities = model.activity_tuples
+            list_possibilities = model.unassigned_activities
 
         return list_possibilities
 
@@ -86,7 +93,7 @@ class BeamSearch:
         for activity in values:
             new_model = model.copy()
             new_model.add_activity(index, activity)
-            new_model.activity_tuples.remove(activity)
+            new_model.unassigned_activities.remove(activity)
             self.states.append(new_model)
 
         return True
@@ -122,7 +129,10 @@ class BeamSearch:
                 new_model = self.get_next_state()
 
                 # Retrieve a random empty index from the model.
-                index = new_model.get_random_index(empty=True)
+                if step % 2:
+                    index = new_model.get_high_capacity_index()
+                else:
+                    index = new_model.get_random_index(empty=True)
 
                 if not self.create_children(new_model, index, beam, heuristic):
                     # Stop if we find a solution
