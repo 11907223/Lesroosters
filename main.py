@@ -20,16 +20,16 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM_______________________
     random_algorithm = Random(empty_model)
-    random_algorithm.run(runs=1000, verbose=True)
+    random_model = random_algorithm.run(runs=1000, verbose=True)
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-        random_algorithm.model.solution,
+        random_model.solution,
         "\nTOTAL POINTS: ",
-        random_algorithm.model.total_penalty(),
-        '\n evening points', random_algorithm.model.evening_penalty(),
-        '\n conflict points:', random_algorithm.model.conflict_penalty(),
-        '\n capacity penalty', random_algorithm.model.total_capacity_penalties() 
+        random_model.total_penalty(),
+        '\n evening points', random_model.evening_penalty(),
+        '\n conflict points:', random_model.conflict_penalty(),
+        '\n capacity penalty', random_model.total_capacity_penalties() 
     )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
@@ -38,18 +38,18 @@ if __name__ == "__main__":
     # beam_search.run(beam=5, iterations=1000, heuristic="capacity")
 
     # ______________________HILLCLIMBER ALGORITHM_____________________
-    hillclimber = HillClimber(random_algorithm.model)
-    hillclimber.run(iterations=2000, verbose=True)
+    # hillclimber = HillClimber(random_algorithm.model)
+    # hillclimber.run(iterations=2000, verbose=True)
 
-    print(
-        "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-        hillclimber.model.solution,
-        "\nPOINTS: ",
-        hillclimber.model.total_penalty(),
-        '\n evening points', hillclimber.model.evening_penalty(),
-        '\n conflict points:', hillclimber.model.conflict_penalty(),
-        '\n capacity penalty', hillclimber.model.total_capacity_penalties() 
-    )
+    # print(
+    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
+    #     hillclimber.model.solution,
+    #     "\nPOINTS: ",
+    #     hillclimber.model.total_penalty(),
+    #     '\n evening points', hillclimber.model.evening_penalty(),
+    #     '\n conflict points:', hillclimber.model.conflict_penalty(),
+    #     '\n capacity penalty', hillclimber.model.total_capacity_penalties() 
+    # )
     
 
     # ______________________SIMULATED ANNEALING_____________________
@@ -65,11 +65,21 @@ if __name__ == "__main__":
 
     # ________________________GREEDY ALGORITHM________________________
     # greedy_solution = Greedy(empty_model).run()
-    # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, '\n POINTS: ', greedy_solution.total_penalty())
+    # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution, 
+    # '\n POINTS: ', greedy_solution.total_penalty(),
+    # '\n evening points', greedy_solution.evening_penalty(),
+    # '\n conflict points:', greedy_solution.conflict_penalty(),
+    # '\n capacity penalty', greedy_solution.total_capacity_penalties() 
+    # )
 
     # ________________________RANDOMGREEDY ALGORITHM__________________
-    # random_greedy = RandomGreedy(empty_model).run()
-    # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution, '\n POINTS: ', random_greedy.total_penalty())
+    # random_greedy = RandomGreedy(empty_model).run(random_chance=0)
+    # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution, 
+    #     '\n POINTS: ', random_greedy.total_penalty(),
+    #     '\n evening points', random_greedy.evening_penalty(),
+    #     '\n conflict points:', random_greedy.conflict_penalty(),
+    #     '\n capacity penalty', random_greedy.total_capacity_penalties() 
+    # )
 
     # __________________________BASELINE______________________________________
 
