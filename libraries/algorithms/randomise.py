@@ -35,7 +35,7 @@ def random_algorithm(iterations, empty_model: Model) -> Model:
     """
     Generates a random solution x times and return the best one.
     """
-    lowest_penalty = 1000
+    lowest_penalty = 100000
     for _ in range(iterations):
 
         # generate random schedule
