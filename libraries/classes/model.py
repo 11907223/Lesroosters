@@ -39,7 +39,7 @@ class Model:
         self.courses: dict[str, Course] = load_courses(path)
         self.students: dict[int, Student] = load_students(self.courses, path)
         self.halls: dict[int, Hall] = load_halls(path)
-        self.solution: dict[int, activity_type] = self.init_model((None, None))
+        self.solution = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
@@ -52,7 +52,7 @@ class Model:
             # Add members to activities in self.participants.
             self.add_all_students()
 
-    def init_model(self, dict_value) -> dict[int, int | tuple[str, str]]:
+    def init_model(self, dict_value: int | tuple[Optional[str], Optional[str]]) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
         """Initiate a string representation of a schedule.
 
         Returns:
@@ -389,9 +389,9 @@ class Model:
 
         if activity_capacity > hall_capacity:
             # Return penalty points for each student over capacity.
-            # Ensure that penalty points are not subtracted.
-            return activity_capacity  # > hall_capacity
+            return activity_capacity - hall_capacity
         # Return no penalty points.
+        #   Ensure that penalty points are not subtracted.
         return 0
 
     def total_capacity_penalties(self) -> int:
@@ -410,7 +410,7 @@ class Model:
             index_penalty = self.capacity_penalty(index, activity)
             penalty_points += index_penalty
             # Add penalty value to dictionary of penalties per index.
-            self.index_penalties[index] += index_penalty
+            self.index_penalties[index] = index_penalty
 
         return penalty_points
 

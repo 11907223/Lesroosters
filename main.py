@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM________________________________________
     random_algorithm = Random(empty_model)
-    random_algorithm.run(runs=20, verbose=True)
+    random_algorithm.run(runs=1, verbose=True)
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
@@ -34,6 +34,7 @@ if __name__ == "__main__":
         random_algorithm.model.total_capacity_penalties(),
     )
 
+    print(random_algorithm.model.index_penalties)
     # ________________________BEAM SEARCH ALGORITHM____________________________________
 
     # beam_search = BeamSearch(empty_model)
