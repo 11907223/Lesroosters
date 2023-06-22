@@ -44,6 +44,9 @@ class Model:
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
         self.unassigned_activities = list(self.participants.keys())
+        # Initiate an empty model with the worst score to ensure it always evaluates
+        #   As worse vs. other models.
+        self.penalty_points = 99999 
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
@@ -497,6 +500,8 @@ class Model:
     def total_penalty(self) -> int:
         """Calculate the total penalty of the schedule.
 
+        Also updates stored value of penalty_points.
+
         Return:
             int: Sum of all penalties.
         """
@@ -505,6 +510,8 @@ class Model:
             + self.evening_penalty()
             + self.sum_student_schedule_penalties()
         )
+
+        self.penalty_points = total
 
         return total
 
