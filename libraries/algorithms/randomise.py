@@ -2,6 +2,7 @@ from random import randrange
 from libraries.classes.model import Model
 from typing import Optional
 
+
 class Random:
     """
     Random generates a random schedule by randomly assigning activities to slots.
@@ -10,7 +11,6 @@ class Random:
     def __init__(self, initial_model: Model):
         self.initial_model = initial_model.copy()
         self.model = self.initial_model
-        self.lowest_penalty = 100000 # Ensure initial value always overwritten.
 
     def insert_randomly(self, activity_tuple, new_model) -> None:
         """
@@ -24,7 +24,9 @@ class Random:
 
         return None
 
-    def check_solution(self, new_model: Model, old_model: Optional[Model]=None) -> bool:
+    def check_solution(
+        self, new_model: Model, old_model: Optional[Model] = None
+    ) -> bool:
         """
         Accept better solutions than the current solution.
 
@@ -35,23 +37,18 @@ class Random:
         Returns:
             bool: True if new model has been accepted, else False.
         """
-        new_penalty = new_model.total_penalty()
-        print(new_penalty, self.lowest_penalty)
-        # print(new_model, self.model.total_penalty())
         if old_model is not None:
             if new_model < old_model:
                 # Save best model between runs.
                 self.best_model = new_model
-                self.lowest_penalty = new_penalty
                 return True
-        elif new_penalty < self.lowest_penalty:
+        elif new_model < self.model:
             # Save best model between iterations.
             self.model = new_model
-            self.lowest_penalty = new_penalty
             return True
         return False
 
-    def run(self, runs: int=1, verbose: bool = False) -> Model:
+    def run(self, runs: int = 1, verbose: bool = False) -> Model:
         """Generate random schedule x times and return the best one.
 
         Args:
@@ -65,7 +62,8 @@ class Random:
 
         for run in range(runs):
             print(
-                f"Run {run}/{runs}, current penalty score: {self.lowest_penalty}           ", end="\r",
+                f"Run {run}/{runs}, current penalty score: {self.model.penalty_points}       ",
+                end="\r",
             ) if verbose else None
 
             # copy empty model
@@ -75,7 +73,9 @@ class Random:
             for activity in new_model.participants:
                 self.insert_randomly(activity, new_model)
 
-            # accept if improved
+            new_model.update_penalty_points()
+
+            # Accept new model if improved.
             self.check_solution(new_model)
 
         return self.model

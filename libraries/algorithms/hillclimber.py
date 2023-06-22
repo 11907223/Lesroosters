@@ -50,8 +50,8 @@ class HillClimber(Random):
 
     def run(
         self,
-        runs: int=1,
-        iterations: int=2000,
+        runs: int = 1,
+        iterations: int = 2000,
         mutate_slots_number: int = 1,
         verbose: bool = False,
     ) -> Model:
@@ -70,11 +70,11 @@ class HillClimber(Random):
         self.iterations = iterations
 
         self.best_model = self.initial_model
-        for _ in range(runs):
+        for run in range(runs):
             self.model = self.initial_model
             for iteration in range(iterations):
                 print(
-                    f"Iteration {iteration}/{iterations}, current penalty score: {self.lowest_penalty}    ",
+                    f"Run: {run}/{runs}, Iteration {iteration}/{iterations}, current penalty score: {self.model.penalty_points}, best found score: {self.best_model.penalty_points}   ",
                     end="\r",
                 ) if verbose else None
 
@@ -82,7 +82,7 @@ class HillClimber(Random):
                 new_model = self.model.copy()
 
                 self.mutate_model(new_model, number_of_swaps=mutate_slots_number)
-
+                new_model.update_penalty_points()
                 # Accept the mutation if it is an improvement.
                 self.check_solution(new_model)
             self.check_solution(self.model, self.best_model)

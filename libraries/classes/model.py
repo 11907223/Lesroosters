@@ -46,7 +46,7 @@ class Model:
         self.unassigned_activities = list(self.participants.keys())
         # Initiate an empty model with the worst score to ensure it always evaluates
         #   As worse vs. other models.
-        self.penalty_points = 99999 
+        self.penalty_points: int | float = float('inf')
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
@@ -497,6 +497,9 @@ class Model:
         penalties = self.student_schedule_penalties()
         return penalties["conflict penalties"] + penalties["gap penalties"]
 
+    def update_penalty_points(self):
+        self.penalty_points = self.total_penalty()
+
     def total_penalty(self) -> int:
         """Calculate the total penalty of the schedule.
 
@@ -569,7 +572,7 @@ class Model:
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Model):
-            return self.total_penalty() == other.total_penalty()
+            return self.penalty_points == other.penalty_points
         return False
 
     def __ne__(self, other: object) -> bool:
@@ -579,7 +582,7 @@ class Model:
 
     def __lt__(self, other: object) -> bool:
         if isinstance(other, Model):
-            return self.total_capacity_penalties() < other.total_capacity_penalties()
+            return self.penalty_points < other.penalty_points
         return False
 
     def __gt__(self, other: object) -> bool:

@@ -56,11 +56,10 @@ if __name__ == "__main__":
     # )
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
-    print(random_algorithm.model.solution)
     hillclimber = HillClimber(random_algorithm.model)
     print("\n STARTING HILLCLIMBER ALGORITHM")
     start_time = time.time()
-    hillclimber.run(runs=10, iterations=500, verbose=True)
+    hillclimber.run(runs=10, iterations=2000, verbose=True)
     end_time = time.time()
 
     print(
