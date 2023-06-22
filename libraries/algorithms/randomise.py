@@ -36,14 +36,15 @@ class Random:
             bool: True if new model has been accepted, else False.
         """
         new_penalty = new_model.total_penalty()
-
+        print(new_penalty, self.lowest_penalty)
+        # print(new_model, self.model.total_penalty())
         if old_model is not None:
             if new_model < old_model:
                 # Save best model between runs.
                 self.best_model = new_model
                 self.lowest_penalty = new_penalty
                 return True
-        elif new_model < self.model:
+        elif new_penalty < self.lowest_penalty:
             # Save best model between iterations.
             self.model = new_model
             self.lowest_penalty = new_penalty

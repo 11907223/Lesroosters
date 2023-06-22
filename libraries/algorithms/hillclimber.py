@@ -24,6 +24,7 @@ class HillClimber(Random):
 
         self.starting_model = valid_model.copy()
         self.lowest_penalty = valid_model.total_penalty()
+        self.best_score = self.lowest_penalty
 
     def swap_slots(self, new_model: Model) -> None:
         """Swap two slots in the model at random.

@@ -62,20 +62,20 @@ if __name__ == "__main__":
     hillclimber = HillClimber(random_algorithm.model)
     print("\n STARTING HILLCLIMBER ALGORITHM")
     start_time = time.time()
-    hillclimber.run(iterations=2000, verbose=True)
+    hillclimber.run(runs=10, iterations=500, verbose=True)
     end_time = time.time()
 
     print(
         "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
         # hillclimber.model.solution,
         "\nTOTAL POINTS: ",
-        hillclimber.starting_model.total_penalty(),
+        hillclimber.best_model.total_penalty(),
         "\n evening points",
-        hillclimber.starting_model.evening_penalty(),
+        hillclimber.best_model.evening_penalty(),
         "\n conflict points:",
-        hillclimber.starting_model.student_schedule_penalties(),
+        hillclimber.best_model.student_schedule_penalties(),
         "\n capacity penalty",
-        hillclimber.starting_model.total_capacity_penalties(),
+        hillclimber.best_model.total_capacity_penalties(),
     )
 
     # ______________________SIMULATED ANNEALING________________________________________
