@@ -70,7 +70,6 @@ def init_activities(course_obj: Course, course: pd.Series):
         )
         for i in range(n_practicals)}
     }
-
     # Add tutorials.
     tutorials = {
         "tutorials": {Activity(
@@ -109,7 +108,7 @@ def load_students(courses, path: str = "data"):
             courses=subjects,
         )
 
-        update_course_rooster(courses, students[index])
+        update_course(courses, students[index])
     return students
 
 
@@ -121,7 +120,7 @@ def load_subjects(courses, student):
     }
 
 
-def update_course_rooster(courses: "dict[str, Course]", student: Student):
+def update_course(courses: "dict[str, Course]", student: Student):
     for course in student.courses.keys():
         courses[course].add_student(student)
 
