@@ -60,24 +60,24 @@ if __name__ == "__main__":
     )
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
-    hillclimber = HillClimber(random_algorithm.model)
-    print("\n STARTING HILLCLIMBER ALGORITHM")
-    start_time = time.time()
-    hillclimber.run(iterations=2000, verbose=True)
-    end_time = time.time()
+    # hillclimber = HillClimber(random_algorithm.model)
+    # print("\n STARTING HILLCLIMBER ALGORITHM")
+    # start_time = time.time()
+    # hillclimber.run(iterations=2000, verbose=True)
+    # end_time = time.time()
 
-    print(
-        "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-        # hillclimber.model.solution,
-        "\nTOTAL POINTS: ",
-        hillclimber.model.total_penalty(),
-        "\n evening points",
-        hillclimber.model.evening_penalty(),
-        "\n conflict points:",
-        hillclimber.model.student_schedule_penalties(),
-        "\n capacity penalty",
-        hillclimber.model.total_capacity_penalties(),
-    )
+    # print(
+    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
+    #     # hillclimber.model.solution,
+    #     "\nTOTAL POINTS: ",
+    #     hillclimber.model.total_penalty(),
+    #     "\n evening points",
+    #     hillclimber.model.evening_penalty(),
+    #     "\n conflict points:",
+    #     hillclimber.model.student_schedule_penalties(),
+    #     "\n capacity penalty",
+    #     hillclimber.model.total_capacity_penalties(),
+    # )
 
     # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
@@ -117,13 +117,16 @@ if __name__ == "__main__":
 
     # __________________________BASELINE_______________________________________________
 
-    # with open("baseline.txt", "a+") as file:
-    #     for _ in range(100000):
-    #         random_schedule = Random(schedule, courses)
-    #         random_schedule = random_schedule.run()
-    #         penalty = Penalty(random_schedule)
-    #         file.write(f"{penalty.total()}\n")
-
+    with open("baseline.txt", "a+") as file:
+        penalty = []
+        for i in range(10000):
+            for j in range(100):
+                random_schedule = Random(empty_model)
+                penalty.append(random_schedule.run().total_penalty())
+            print(f"Current run: {i*j+j + i + 1}")
+            # print("\n".join([str(score) for score in penalty]))
+            text = '\n'.join([str(score) for score in penalty])
+            file.write(f"\n{text}")
     # total_runtime = time.time() - start_time
 
     # print(time.strftime("%H:%M:%S", time.gmtime(total_runtime)))
