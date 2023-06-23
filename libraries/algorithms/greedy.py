@@ -7,8 +7,8 @@ class Greedy:
     """
 
     def __init__(self, empty_model: Model, heuristic="shuffle") -> None:
-        self.model = empty_model.copy()
-        self.activities = list(self.model.participants.keys())
+        self.model       = empty_model.copy()
+        self.activities  = list(self.model.participants.keys())
         self.empty_slots = list(self.model.solution.keys())
         if heuristic == "shuffle":
             self.shuffle_activities()
@@ -88,9 +88,8 @@ class RandomGreedy(Greedy):
         current_penalty = 0
         for activity in self.activities:
             
-            # make random or greedy choice
-            number = random.random()
-            if number < random_chance:
+            # make random or greedy choice 
+            if random.random() < random_chance:
                 current_penalty = self.insert_randomly(activity)
             else:
                 current_penalty = self.insert_greedily(activity, current_penalty)
