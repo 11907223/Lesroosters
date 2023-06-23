@@ -32,25 +32,21 @@ class Greedy:
         # loop over timeslots
         lowest_penalty = 100000
         for index in self.empty_slots:
-            added = self.model.add_activity(index, activity)
 
-            if added is True:
-                new_penalty = self.model.total_penalty()
+            self.model.add_activity(index, activity)
+            new_penalty = self.model.total_penalty()
 
-                # if penalty unchanged, optimal index is found
-                if new_penalty == current_penalty:
-                    optimal_index  = index
-                    lowest_penalty = new_penalty
-                    self.model.remove_activity(index=index)
-                    
-                    return optimal_index, lowest_penalty
-
-                # if penalty lower than best, save index and penalty
-                elif new_penalty < lowest_penalty:
-                    lowest_penalty = new_penalty
-                    optimal_index  = index
-
+            # if penalty unchanged, optimal index is found
+            if new_penalty == current_penalty:
                 self.model.remove_activity(index=index)
+                return index, current_penalty
+
+            # if penalty lower than best, save index and penalty
+            elif new_penalty < lowest_penalty:
+                optimal_index  = index
+                lowest_penalty = new_penalty
+
+            self.model.remove_activity(index=index)
 
         return optimal_index, lowest_penalty
 
