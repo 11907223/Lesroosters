@@ -1,5 +1,9 @@
 from libraries.classes.model import Model
 import random
+import heapq
+import uuid
+
+random.seed(0)
 
 
 class BeamSearch:
@@ -10,7 +14,7 @@ class BeamSearch:
     def __init__(self, model: Model):
         self.model = model.copy()
 
-        self.states = []
+        self.queue = []
 
         self.best_solution = None
         self.best_value = float("inf")
@@ -19,13 +23,14 @@ class BeamSearch:
         """Resets model for new iteration."""
         # Reset variables
         self.model = Model()
-        self.states = []
+        self.queue = []
 
     def get_next_state(self) -> Model:
         """
         Method that gets the next state from the list of states.
         """
-        return self.states.pop()
+
+        return heapq.heappop(self.queue)
 
     def get_capacity_possibilities(self, model: Model, index: int, n: int):
         """Gets n (int) possible activities that would match with the given index of a model.
@@ -77,6 +82,12 @@ class BeamSearch:
 
         return list_possibilities
 
+    def evaluate_priority(self, model: Model) -> int:
+        penalty = model.total_penalty()
+        unassigned = len(model.unassigned_activities)
+
+        return penalty + unassigned
+
     def create_children(
         self, model: Model, index: int, beam: int, heuristic="random"
     ) -> bool:
@@ -94,7 +105,9 @@ class BeamSearch:
             new_model = model.copy()
             new_model.add_activity(index, activity)
             new_model.unassigned_activities.remove(activity)
-            self.states.append(new_model)
+            priority = self.evaluate_priority(new_model)
+            unique_id = uuid.uuid4()
+            heapq.heappush(self.queue, (priority, unique_id, new_model))
 
         return True
 
@@ -116,13 +129,13 @@ class BeamSearch:
         """
         for i in range(runs):
             self.reset_model()
-            self.states.append(self.model.copy())
+            self.queue.append(self.model.copy())
 
             step = 0
-            while self.states:
+            while self.queue:
                 step += 1
                 print(
-                    f"Run {i}/{runs}, current penalty score: {self.best_value}           ",
+                    f"Run {i}/{runs}, step {step}, current penalty score: {self.best_value}           ",
                     end="\r",
                 ) if verbose else None
 
@@ -134,7 +147,7 @@ class BeamSearch:
                 else:
                     index = new_model.get_random_index(empty=True)
 
-                if not self.create_children(new_model, index, beam, heuristic):
+                if self.create_children(new_model, index, beam, heuristic) is False:
                     # Stop if we find a solution
                     self.check_solution(new_model)
                     # print(f"Iteration {i} penalty: ", new_model.total_penalty())

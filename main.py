@@ -61,20 +61,30 @@ if __name__ == "__main__":
     # hillclimber.run(runs=10, iterations=2000, verbose=True)
     # end_time = time.time()
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
-    #     # beam_search.model.solution,
-    #     "\nTOTAL POINTS: ",
-    #     hillclimber.best_model.total_penalty(),
-    #     "\n evening points",
-    #     hillclimber.best_model.evening_penalty(),
-    #     "\n conflict points:",
-    #     hillclimber.best_model.student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     hillclimber.best_model.total_capacity_penalties(),
-    # )
+    # ________________________BEAM SEARCH ALGORITHM________________________
 
-    # ______________________HILLCLIMBER ALGORITHM______________________________________
+    beam_search = BeamSearch(empty_model)
+    print("STARTING BEAM SEARCH ALGORITHM \n")
+    start_time = time.time()
+    beam_search.run(beam=2, runs=1, heuristic="capacity", verbose=True)
+    end_time = time.time()
+
+    print(
+        "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
+        # beam_search.model.solution,
+        "\nTOTAL POINTS: ",
+        beam_search.model.total_penalty(),
+        "\n evening points",
+        beam_search.model.evening_penalty(),
+        "\n student points:",
+        beam_search.model.sum_student_schedule_penalties(),
+        "\n capacity penalty",
+        beam_search.model.total_capacity_penalties(),
+        "\n run time: ",
+        end_time - start_time,
+    )
+
+    # # ______________________HILLCLIMBER ALGORITHM______________________________________
     # hillclimber = HillClimber(random_algorithm.model)
     # print("\n STARTING HILLCLIMBER ALGORITHM")
     # start_time = time.time()
