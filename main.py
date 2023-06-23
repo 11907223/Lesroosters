@@ -18,8 +18,8 @@ if __name__ == "__main__":
     # start_time = time.time()
 
     # _________________________RANDOM ALGORITHM________________________________________
-    # random_algorithm = Random(empty_model)
-    # random_algorithm.run(runs=1, verbose=True)
+    random_algorithm = Random(empty_model)
+    random_algorithm.run(runs=20, verbose=True)
 
     # print(
     #     "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
@@ -55,11 +55,11 @@ if __name__ == "__main__":
     # )
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
-    # hillclimber = HillClimber(random_algorithm.model)
-    # print("\n STARTING HILLCLIMBER ALGORITHM")
-    # start_time = time.time()
-    # hillclimber.run(runs=10, iterations=2000, verbose=True)
-    # end_time = time.time()
+    hillclimber = HillClimber(random_algorithm.model)
+    print("\n STARTING HILLCLIMBER ALGORITHM")
+    start_time = time.time()
+    hillclimber.run(runs=1000, verbose=True, convergence=300)
+    end_time = time.time()
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 

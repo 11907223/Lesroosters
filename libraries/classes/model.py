@@ -8,6 +8,7 @@ from collections import defaultdict
 import numpy as np
 import copy
 import random
+import sys
 
 activity_type = tuple[str, str]
 
@@ -28,7 +29,7 @@ class Model:
             students are represented by their index number.
     """
 
-    def __init__(self, path: str="data", auto_load_students: bool=True) -> None:
+    def __init__(self, path: str = "data", auto_load_students: bool = True) -> None:
         """Initiatizes a model for a schedule.
 
         Args:
@@ -44,15 +45,19 @@ class Model:
         self.index_penalties: dict[int, int] = self.init_model(0)
         self.student_penalties: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
         self.unassigned_activities = list(self.participants.keys())
-        # Initiate an empty model with the worst score to ensure it always evaluates
-        #   As worse vs. other models.
-        self.penalty_points: int | float = float('inf')
+        # Initiate an empty model with an improbably high score to ensure it always evaluates
+        #   worse vs. other models. As an empty model contains no data,
+        #   it can score no negative points and therefore would compare as better than
+        #   a generated model.
+        self.penalty_points: int = sys.maxsize
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
             self.add_all_students()
 
-    def init_model(self, dict_value: int | tuple[Optional[str], Optional[str]]) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
+    def init_model(
+        self, dict_value: int | tuple[Optional[str], Optional[str]]
+    ) -> dict[int, int | tuple[Optional[str], Optional[str]]]:
         """Initiate a string representation of a schedule.
 
         Returns:
@@ -105,7 +110,9 @@ class Model:
             for student in self.students:
                 self.add_student(int(student), activity_tuple)
 
-    def get_random_index(self, empty: bool = False) -> int:
+    def get_random_index(
+        self, empty: bool = False, weights: Optional(list[int]) = None
+    ) -> int:
         """Return random empty index in the schedule.
 
         Args:
@@ -114,7 +121,7 @@ class Model:
         """
         while True:
             # Acquire index independent of content in index.
-            index = random.choice(list(self.solution.keys()))
+            index = random.choices(list(self.solution.keys()), weights)[0]
             if empty is False:
                 # Return first found index if slot content is irrelevant.
                 return index
@@ -138,6 +145,9 @@ class Model:
     def check_index_is_empty(self, index: int) -> bool:
         """Return a boolean indicating if index slot contains a course-activity pair."""
         return self.solution[index][0] is None
+
+    def get_all_index_penalties(self) -> dict[int, int]:
+        return self.index_penalties
 
     def swap_activities(self, index_1, index_2) -> None:
         """Swap activities stored at two indices.
@@ -324,7 +334,9 @@ class Model:
         }
         return activity_and_indices
 
-    def get_highest_penalties(self, n: int) -> list[dict[int, tuple[str, str]]]:
+    def get_penalty_extremes(
+        self, n: int, highest: bool = True
+    ) -> list[dict[int, tuple[str, str]]]:
         """Form a list of activities with highest contributions to penalty points.
 
         The list of elements is ordered from activities causing most to least penalty points.
@@ -332,6 +344,7 @@ class Model:
 
         Args:
             n (int): length of the list to return.
+            highest (bool): Evaluate if best or worst scorers are returned.
 
         Returns:
             list[dict[int, tuple[str, str]]]: A list of {index: activity}
@@ -344,7 +357,7 @@ class Model:
         # Find the highest penalties stored.
         highest_penalties = []
         model = self.index_penalties
-        highest_values = sorted(model.values(), reverse=True)[:n]
+        highest_values = sorted(model.values(), reverse=highest)[:n]
 
         for high_value in highest_values:
             for index, value in model.items():
@@ -445,7 +458,7 @@ class Model:
         return list(set(schedule))
 
     def student_gap_penalty(self, daily_schedule: list[int]) -> int:
-        gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: 5}
+        gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: 50}
         penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
 
         return gap_penalty_map[sum(penalty_schedule)]
@@ -517,6 +530,20 @@ class Model:
         self.penalty_points = total
 
         return total
+
+    def modify_penalty_of_(self, index: int, score: int) -> None:
+        self.index_penalties[index] = score
+
+    def normalize_weights(self) -> dict[int, int]:
+        highest = self.get_penalty_extremes(n=1, highest=True)
+        lowest = self.get_penalty_extremes(n=1, highest=False)
+
+        normalized_scores: list[int] = []
+        for score in self.index_penalties.values():
+            normalized_score = (score - lowest) / (highest - lowest)
+            normalized_scores.append(normalized_score)
+
+        return normalized_scores
 
     def copy(self) -> "Model":
         """Return a copy of the model."""

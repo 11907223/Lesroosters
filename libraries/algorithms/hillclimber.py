@@ -1,5 +1,7 @@
 from libraries.classes.model import Model
 from libraries.algorithms.randomise import Random
+import sys
+import numpy as np
 
 
 class HillClimber(Random):
@@ -7,6 +9,10 @@ class HillClimber(Random):
 
     Each improvement is kept for the next iteration.
     Improvements are based on a decrease in penalty points.
+
+    If only a single run is performed, the algorithm is equivalent to a stochastic
+        HillClimber. If multiple runs are performed,
+        this is a Random-Restart stochastic HillClimber.
     """
 
     def __init__(self, valid_model: Model):
@@ -25,6 +31,20 @@ class HillClimber(Random):
         self.starting_model = valid_model.copy()
         self.lowest_penalty = valid_model.total_penalty()
         self.best_score = self.lowest_penalty
+
+    def fill_middle_slots(self, modifier: int = 1.2):
+        for index, score in self.model.get_all_index_penalties().items():
+            if 1 <= self.model.translate_index(index) <= 2:
+                # Assign a higher value to the middle slots for swapping.
+                score = (score + 1) * modifier
+                # Ensure modifier also applying on slots with no penalty score.
+                self.model.modify_penalty_of_(index, score)
+
+        push_map = np.array(self.model.normalize_weights())
+        pull_map = 1 - push_map
+
+        
+        
 
     def swap_slots(self, new_model: Model) -> None:
         """Swap two slots in the model at random.
@@ -54,6 +74,8 @@ class HillClimber(Random):
         iterations: int = 2000,
         mutate_slots_number: int = 1,
         verbose: bool = False,
+        convergence: int = 0,
+        heuristics: list[str]=[]
     ) -> Model:
         """Run the hillclimber algorithm for a specified number of iterations.
 
@@ -66,15 +88,21 @@ class HillClimber(Random):
                 Defaults to 1 mutation per iteration.
             verbose (bool): Evaluate if run prints current iteration and penalty score.
                 Defaults to False.
+            convergence (bool): Evaluate if iterations are based on convergence.
+                Defaults to 0. On convergence value 0, iterations are used.
         """
+        iterations = sys.maxsize if convergence > 0 else iterations
         self.iterations = iterations
 
         self.best_model = self.initial_model
         for run in range(runs):
             self.model = self.initial_model
+
+            convergence_counter = 0
             for iteration in range(iterations):
+                iter = "∞" if iterations == sys.maxsize else iterations
                 print(
-                    f"Run: {run}/{runs}, Iteration {iteration}/{iterations}, current penalty score: {self.model.penalty_points}, best found score: {self.best_model.penalty_points}   ",
+                    f"Run: {run}/{runs}, Iteration {iteration}/{iter}, Convergence counter: {convergence_counter}, current penalty score: {self.model.penalty_points}, best found score: {self.best_model.penalty_points}     ",
                     end="\r",
                 ) if verbose else None
 
@@ -84,7 +112,13 @@ class HillClimber(Random):
                 self.mutate_model(new_model, number_of_swaps=mutate_slots_number)
                 new_model.update_penalty_points()
                 # Accept the mutation if it is an improvement.
-                self.check_solution(new_model)
+                if self.check_solution(new_model) is True:
+                    convergence_counter = 0
+                elif convergence_counter > convergence:
+                    # Assume convergence has occured.
+                    break
+                convergence_counter += 1
+
             self.check_solution(self.model, self.best_model)
 
         return self.best_model
