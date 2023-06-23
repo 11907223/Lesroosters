@@ -65,6 +65,13 @@ class Greedy:
     def insert_greedily(self, activity: tuple[str, str], current_penalty):
         """
         Inserts activity greedily.
+
+        Args:
+            activity (tuple): activity to be inserted.
+            current_penalty (int): total penalty before insertion.
+        
+        Returns:
+            (int) total penalty after insertion.
         """
         index, penalty = self.get_optimal_index(activity, current_penalty)
         self.model.add_activity(index, activity)
@@ -99,7 +106,7 @@ class RandomGreedy(Greedy):
             activity (tuple): activity to be inserted.
         
         Returns:
-            total penalty after insertion.
+            (int) total penalty after insertion.
         """
         index = self.model.get_random_index(empty=True)
         self.model.add_activity(index, activity)
