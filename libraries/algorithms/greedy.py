@@ -11,10 +11,8 @@ class Greedy:
         Initialize Greedy.
         
         Args:
-            model (Model): empty model to be filled.
-            activities (list[tuple]): activities to be inserted.
-            empty_slots (list[int]): list of slots where activities may be inserted.
-            heuristic (str): shuffles activities.
+            empty_model (Model): empty model to be filled.
+            heuristic (str): to optionally shuffle activities.
         """
         self.model       = empty_model.copy()
         self.activities  = list(self.model.participants.keys())
