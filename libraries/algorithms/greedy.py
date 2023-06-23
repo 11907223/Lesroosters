@@ -22,7 +22,7 @@ class Greedy:
 
     def shuffle_activities(self):
         """
-        Shuffles list of activities to be looped over.
+        Shuffles list of activities to loop over.
         """
         self.activities = random.sample(self.activities, len(self.activities))
 
