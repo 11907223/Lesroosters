@@ -112,7 +112,7 @@ class RandomGreedy(Greedy):
         self.model.add_activity(index, activity)
         return self.model.total_penalty()
     
-    def run(self, random_chance=0.2):
+    def run(self, random_chance):
         """
         Runs random-greedy algorithm once.
 
