@@ -38,7 +38,7 @@ class Greedy:
 
         Returns:
             optimal_index (int): best index found.
-            lowest_penalty (int): the penalty after insertion of activity at optimal_index.
+            lowest_penalty (int): total penalty after inserting activity at optimal_index.
         """      
 
         # loop over timeslots
@@ -97,6 +97,9 @@ class RandomGreedy(Greedy):
 
         Args:
             activity (tuple): activity to be inserted.
+        
+        Returns:
+            total penalty after insertion.
         """
         index = self.model.get_random_index(empty=True)
         self.model.add_activity(index, activity)
