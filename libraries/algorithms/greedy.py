@@ -7,6 +7,15 @@ class Greedy:
     """
 
     def __init__(self, empty_model: Model, heuristic="shuffle") -> None:
+        """
+        Initialize Greedy.
+        
+        Args:
+            model (Model): empty model to be filled.
+            activities (list[tuple]): activities to be inserted.
+            empty_slots (list[int]): list of slots where activities may be inserted.
+            heuristic (str): shuffles activities.
+        """
         self.model       = empty_model.copy()
         self.activities  = list(self.model.participants.keys())
         self.empty_slots = list(self.model.solution.keys())
@@ -14,6 +23,9 @@ class Greedy:
             self.shuffle_activities()
 
     def shuffle_activities(self):
+        """
+        Shuffles list of activities to be looped over.
+        """
         self.activities = random.sample(self.activities, len(self.activities))
 
     def get_optimal_index(self, activity: tuple[str, str], current_penalty: int):
@@ -21,12 +33,12 @@ class Greedy:
         Finds the best index for a given activity based on penalty points.
 
         Args:
-            activity (tuple) : activity to find the optimal index for.
-            current_penalty (int) : penalty points of the current model.
+            activity (tuple): activity to find the optimal index for.
+            current_penalty (int): penalty points of the current model.
 
         Returns:
-            optimal_index (int) : best index found.
-            lowest_penalty (int) : the penalty after insertion of activity at optimal_index.
+            optimal_index (int): best index found.
+            lowest_penalty (int): the penalty after insertion of activity at optimal_index.
         """      
 
         # loop over timeslots
@@ -60,12 +72,15 @@ class Greedy:
         return penalty
 
     def update_empty_slots(self, index):
+        """
+        Args:
+            index (int): slot that has been filled.
+        """
         self.empty_slots.remove(index)
 
     def run(self) -> Model:
         current_penalty = 0
         for activity in self.activities:
-
             current_penalty = self.insert_greedily(activity, current_penalty)
             print('penalty:', current_penalty, end='\r')
 
@@ -79,12 +94,24 @@ class RandomGreedy(Greedy):
     def insert_randomly(self, activity: tuple[str, str]):
         """
         Inserts activity at random index.
+
+        Args:
+            activity (tuple): activity to be inserted.
         """
         index = self.model.get_random_index(empty=True)
         self.model.add_activity(index, activity)
         return self.model.total_penalty()
     
     def run(self, random_chance=0.2):
+        """
+        Runs random-greedy algorithm once.
+
+        Args:
+            random_chance (float): probability of a random insertion.
+
+        Returns:
+            model (Model): the generated solution. 
+        """
         current_penalty = 0
         for activity in self.activities:
             
