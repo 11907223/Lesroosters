@@ -1,23 +1,24 @@
 from libraries.classes.model import Model
 import random
+import numpy as np
 
 class Greedy:
     """
     Greedy class constructively generates a schedule by locally taking optimal decisions.
     """
 
-    def __init__(self, empty_model: Model, heuristic="shuffle") -> None:
+    def __init__(self, empty_model: Model, shuffle=True) -> None:
         """
         Initialize Greedy.
 
         Args:
             empty_model (Model): empty model to be filled.
-            heuristic (str): to optionally shuffle activities.
+            shuffle (bool): to optionally shuffle activities.
         """
         self.model       = empty_model.copy()
         self.activities  = list(self.model.participants.keys())
         self.empty_slots = list(self.model.solution.keys())
-        if heuristic == "shuffle":
+        if shuffle:
             self.shuffle_activities()
 
     def shuffle_activities(self):
@@ -104,7 +105,7 @@ class RandomGreedy(Greedy):
         
     def insert_randomly(self, activity: tuple[str, str]):
         """
-        Inserts activity at random index.
+        Inserts activity at random index while considering room size.
 
         Args:
             activity (tuple): activity to be inserted.
@@ -112,11 +113,40 @@ class RandomGreedy(Greedy):
         Returns:
             (int) total penalty after insertion.
         """
-        index = self.model.get_random_index(empty=True)
-        self.model.add_activity(index, activity)
+        # index = self.model.get_random_index(empty=True)
+        overflow = True
+        while overflow:
+            index = self.model.get_random_index(empty=True)
+            overflow = self.capacity_overflow(index, activity)
+        added = self.model.add_activity(index, activity)
+        self.update_empty_slots(index)
+        print(activity, added)
         return self.model.total_penalty()
     
-    def run(self, random_chance):
+    def capacity_overflow(self, index, activity, max_difference=5):
+        """
+        Ensures random insertion considers hall size.
+        """
+        if self.model.capacity_penalty(index, activity) > max_difference:
+            return True
+        return False
+
+    def calc_random_chance(self, i, start=0.7, alpha=0.064):
+        """
+        Gives the probability of a random insertion based on a exponential. 
+
+        Args:
+            i (int)       : amount of activities inserted. 0 <= i <= 72.
+            start (float) : random_chance at i = 0 
+            alpha (float) : exponential factor, decides the drop-off speed.
+
+        Returns:
+            (float): probability of a random insertion (high at the
+                     beginning of the run, lower towards the end).
+        """
+        return start * np.exp(-alpha * i)
+
+    def run(self):
         """
         Runs random-greedy algorithm once.
 
@@ -127,14 +157,14 @@ class RandomGreedy(Greedy):
             model (Model): the generated solution. 
         """
         current_penalty = 0
-        for activity in self.activities:
+        for i, activity in enumerate(self.activities):
             
             # make random or greedy choice 
-            if random.random() < random_chance:
+            if random.random() < self.calc_random_chance(i):
                 current_penalty = self.insert_randomly(activity)
             else:
                 current_penalty = self.insert_greedily(activity, current_penalty)
             
-            print('penalty:', current_penalty, end='\r')
-
+            print(f'penalty: {current_penalty} capacity penalty: {self.model.total_capacity_penalties()} gap penalty: {self.model.student_schedule_penalties()["gap penalties"]}  planned: {self.count_planned_activities()}')#, end='\r')
+        
         return self.model
