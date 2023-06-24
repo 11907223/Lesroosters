@@ -29,38 +29,83 @@ class HillClimber(Random):
             raise Exception("Provided solution is not valid.")
         super().__init__(valid_model)
 
-    def normalize_weights(self, new_model: Model) -> list[float]:
-        highest_index_key = int(list(new_model.get_penalty_extremes(n=1, highest=True).keys())[0])
-        lowest_index_key = int(list(new_model.get_penalty_extremes(n=1, highest=False).keys())[0])
-
-        highest_penalty = new_model.get_penalty_at_(highest_index_key)
-        lowest_penalty = new_model.get_penalty_at_(lowest_index_key)
+    def normalize_weights(self, weight_map: np.array) -> np.array:
+        highest_penalty = max(weight_map)
+        lowest_penalty = min(weight_map)
 
         normalized_scores: list[float] = []
-        for score in new_model.get_all_index_penalties().values():
-            normalized_score = (score - lowest_penalty) / (highest_penalty - lowest_penalty)
+        for score in weight_map:
+            normalized_score = (score - lowest_penalty) / (
+                highest_penalty - lowest_penalty
+            )
             normalized_scores.append(normalized_score)
 
-        return normalized_scores
+        return np.array(normalized_scores)
 
-    def increase_model_centre_weight(self, new_model, modifier: float=2):
+    def increase_centre_weight(
+        self, new_model, modifier: float = 2
+    ) -> np.array:
+        new_scores: list[float] = []
         for index, score in new_model.get_all_index_penalties().items():
-            if 1 <= new_model.translate_index(index)['timeslot'] <= 2:
+            if 1 <= new_model.translate_index(index)["timeslot"] <= 2:
+                # Assign a higher value to the middle slots for swapping.
+                new_weights = (score + 1) * modifier
+                # Ensure modifier also applying on slots with no penalty score.
+                new_scores.append(new_weights)
+            else:
+                new_scores.append(score)
+
+        return np.array(new_scores)
+
+    def increase_weight_of_days(
+        self, new_model: Model, day: int, modifier: float = 2
+    ):
+        new_weights: list[float] = []
+
+        for index, score in new_model.get_all_index_penalties().items():
+            if new_model.translate_index(index)["day"] == day:
                 # Assign a higher value to the middle slots for swapping.
                 new_score = (score + 1) * modifier
                 # Ensure modifier also applying on slots with no penalty score.
-                new_model.modify_index_penalty(index, new_score)
+                new_weights.append(new_score)
+            else:
+                new_weights.append(score)
 
-    def heuristic_balance(self, new_model: Model, modifier: float=2, centre_placement: bool=False) -> tuple[list[float], list[float]]:
+        return np.array(new_weights)
+
+    def heuristic_balancing(
+        self,
+        new_model: Model,
+        modifier: float = 2,
+        centre_placement: bool = False,
+        day_balancing: bool = False,
+    ) -> tuple[list[float], list[float]]:
+        new_scores: np.array = np.array(list(new_model.get_all_index_penalties().values()))
         if centre_placement is True:
-            self.increase_model_centre_weight(new_model, modifier)
+            new_scores = self.increase_centre_weight(new_model, modifier)
+        if day_balancing is True:
+            worst_days = new_model.get_worst_days()
+            conflict_day_map = new_scores + self.increase_weight_of_days(
+                new_model, worst_days["conflict day"], modifier
+            )
+            gap_day_map = new_scores + self.increase_weight_of_days(
+                new_model, worst_days["gap day"], modifier
+            )
+            push_map = self.normalize_weights(conflict_day_map)
+            pull_map = self.normalize_weights(gap_day_map)
+            return push_map, pull_map
 
-        push_map = self.normalize_weights(new_model)
+        push_map = self.normalize_weights(new_scores)
         pull_map: list[float] = list(1 - np.array(push_map))
 
         return push_map, pull_map
 
-    def swap_slots(self, new_model: Model, push_map: Optional[list[float]]=None, pull_map: Optional[list[float]]=None) -> None:
+    def swap_slots(
+        self,
+        new_model: Model,
+        push_map: Optional[list[float]] = None,
+        pull_map: Optional[list[float]] = None,
+    ) -> None:
         """Swap two slots in the model at random.
 
         Args:
@@ -72,7 +117,12 @@ class HillClimber(Random):
 
         new_model.swap_activities(index_1, index_2)
 
-    def mutate_model(self, new_model: Model, number_of_swaps: int = 1, heuristics: Optional[list[str]]=None) -> None:
+    def mutate_model(
+        self,
+        new_model: Model,
+        number_of_swaps: int = 1,
+        heuristics: Optional[list[str]] = None,
+    ) -> None:
         """Swap a number of indices.
 
         Args:
@@ -80,33 +130,40 @@ class HillClimber(Random):
             number_of_swaps (int): Amount of slots to be swapped.
             heuristics (list[str]): Optional list of heuristics to be used. Heuristics can be combined.
                 Options are:
-                    'balance': Use weighted swapping to trade indices with a 
+                    'balance': Use weighted swapping to trade indices with a
                     high penalty score to an index with a lower penalty score,
-                    'middle' : Use weighted swapping to trade indices with 
+                    'middle' : Use weighted swapping to trade indices with
                         high penalty scores towards the centre of the schedule (timeslot 11 & 1),
-                    'days' : Use weighted swapping to trade days containing 
+                    'days' : Use weighted swapping to trade days containing
                         high gap penalties with days containing high conflict hour penalties.
         """
         push_map = None
         pull_map = None
         if heuristics is not None:
-                if "middle" in heuristics:
-                    push_map, pull_map = self.heuristic_balance(new_model, centre_placement=True)
-                elif "balance" in heuristics:
-                    push_map, pull_map = self.heuristic_balance(new_model)
-                if 'day' in heuristics:
-                    print(new_model.get_worst_day("gap penalties"))
+            if "middle" in heuristics:
+                push_map, pull_map = self.heuristic_balancing(
+                    new_model, centre_placement=True
+                )
+            if "day" in heuristics:
+                conflict_map, gap_map = self.heuristic_balancing(
+                    new_model, day_balancing=True
+                )
+                push_map += conflict_map
+                pull_map += gap_map
+            elif "balance" in heuristics:
+                push_map, pull_map = self.heuristic_balancing(new_model)
 
         for _ in range(number_of_swaps):
             self.swap_slots(new_model, push_map=push_map, pull_map=pull_map)
 
     def run(
         self,
-        iterations: int=2000,
-        mutate_slots_number: int=1,
-        verbose: bool=False,
-        convergence: int=sys.maxsize,
-        heuristics: Optional[list[str]]=None,
+        iterations: int = 2000,
+        mutate_slots_number: int = 1,
+        verbose: bool = False,
+        convergence: int = sys.maxsize,
+        heuristics: Optional[list[str]] = None,
+        modifier: int=2
     ) -> Model:
         """Run the hillclimber algorithm for a specified number of iterations.
 
@@ -115,7 +172,7 @@ class HillClimber(Random):
                 Defaults to 2000 iterations.
             runs (int): Number of runs for the HillClimber algorithm.
                 Defaults to 1 run. If this value is changed, a shotgun hillclimber
-                will be executed instead. 
+                will be executed instead.
                 This generates a new random model for each new run.
             mutate_slots_number (int): Number of mutations to occur each iteration.
                 Defaults to 1 mutation per iteration.
@@ -125,12 +182,13 @@ class HillClimber(Random):
                 If no value is given, convergence is not evaluated.
             heuristics (list[str]): Optional list of heuristics to be used. Heuristics can be combined.
                 Options are:
-                    'balance': Use weighted swapping to trade indices with a 
+                    'balance': Use weighted swapping to trade indices with a
                     high penalty score to an index with a lower penalty score,
-                    'middle' : Use weighted swapping to trade indices with 
+                    'middle' : Use weighted swapping to trade indices with
                         high penalty scores towards the centre of the schedule (timeslot 11 & 1),
-                    'days' : Use weighted swapping to trade days containing 
+                    'days' : Use weighted swapping to trade days containing
                         high gap penalties with days containing high conflict hour penalties.
+            modifier (int): Effect a heuristic has on the heat map. Defaults to a multiplier of 2.
         """
         iteration_count: str | int = iterations
         if convergence != sys.maxsize:

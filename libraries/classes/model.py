@@ -29,7 +29,9 @@ class Model:
             students are represented by their index number.
     """
 
-    def __init__(self, path: str = "data", auto_load_students: bool = True) -> None:
+    def __init__(
+        self, path: str = "data", auto_load_students: bool = True
+    ) -> None:
         """Initiatizes a model for a schedule.
 
         Args:
@@ -43,7 +45,9 @@ class Model:
         self.solution = self.init_model((None, None))
         self.participants = self.init_student_model()
         self.index_penalties: dict[int, int] = self.init_model(0)
-        self.student_penalties: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
+        self.student_penalties: dict[
+            int, dict[int, dict[str, int]]
+        ] = defaultdict(dict)
         self.unassigned_activities = list(self.participants.keys())
         # Initiate an empty model with an improbably high score to ensure it always evaluates
         #   worse vs. other models. As an empty model contains no data,
@@ -244,7 +248,9 @@ class Model:
             # Find the course object the activity belongs to
             course = self.courses[course_name]
             # Combine all course activities in one list
-            all_activities = course.lectures + course.practicals + course.tutorials
+            all_activities = (
+                course.lectures + course.practicals + course.tutorials
+            )
 
             # Iterate over all Activity objects
             for object in all_activities:
@@ -265,7 +271,9 @@ class Model:
             activity (tuple[str, str]): ('course name', 'lecture 1')
         """
         return {
-            index for index in self.solution if self.solution[index] == activity
+            index
+            for index in self.solution
+            if self.solution[index] == activity
         }.pop()
 
     def get_activity(self, index: int) -> activity_type:
@@ -290,9 +298,9 @@ class Model:
         Returns:
             bool: True if student not in activity yet, False otherwise.
         """
-        if student not in self.participants[activity] and self.student_in_course(
-            student, activity[0]
-        ):
+        if student not in self.participants[
+            activity
+        ] and self.student_in_course(student, activity[0]):
             self.participants[activity].add(student)
             return True
         else:
@@ -334,8 +342,8 @@ class Model:
         }
         return activity_and_indices
 
-    def get_penalties_per_day(self, type='str'):
-        penalty_per_day: dict[int, dict[str, int]] = {i:0 for i in range(5)}
+    def get_penalties_per_day(self, type="str"):
+        penalty_per_day: dict[int, dict[str, int]] = {i: 0 for i in range(5)}
         for student_penalty in self.student_penalties.values():
             for day, penalties in student_penalty.items():
                 for penalty_type, penalty_value in penalties.items():
@@ -344,9 +352,14 @@ class Model:
 
         return penalty_per_day
 
-    def get_worst_day(self, type='str'):
-        penalties_per_day = self.get_penalties_per_day(type)
-        return max(penalties_per_day, penalties_per_day.get)
+    def get_worst_days(self):
+        gap_per_day = self.get_penalties_per_day('gap penalties')
+        conflict_per_day =  self.get_penalties_per_day('conflict penalties')
+
+        worst_gap_day = max(gap_per_day, key=gap_per_day.get)
+        worst_conflict_day = max(conflict_per_day, key=conflict_per_day.get)
+
+        return {'gap day': worst_gap_day, 'conflict day': worst_conflict_day}
 
     def get_penalty_extremes(
         self, n: int, highest: bool = True
@@ -397,7 +410,9 @@ class Model:
         highest_penalties = []
         # Take the student penalty model
 
-        return print("LET OP !!!get_highest_students(self, n) werkt nog niet !!")
+        return print(
+            "LET OP !!!get_highest_students(self, n) werkt nog niet !!"
+        )
 
     def capacity_penalty(self, index: int, activity: tuple[str, str]) -> int:
         """Return the capacity penalty for an activity over capacity.
@@ -465,7 +480,11 @@ class Model:
 
     def student_course_conflict(self, daily_schedule: list[int]) -> int:
         return len(
-            [element for element in daily_schedule if daily_schedule.count(element) > 1]
+            [
+                element
+                for element in daily_schedule
+                if daily_schedule.count(element) > 1
+            ]
         )
 
     def remove_duplicates(self, schedule: list[int]) -> list[int]:
@@ -473,7 +492,9 @@ class Model:
 
     def student_gap_penalty(self, daily_schedule: list[int]) -> int:
         gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: 50}
-        penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+        penalty_schedule = (
+            np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+        )
 
         return gap_penalty_map[sum(penalty_schedule)]
 
@@ -500,7 +521,9 @@ class Model:
                 course_conflict_points = self.student_course_conflict(
                     student_schedule[day]
                 )
-                gap_penalty_points = self.student_gap_penalty(student_schedule[day])
+                gap_penalty_points = self.student_gap_penalty(
+                    student_schedule[day]
+                )
                 total_course_conflicts_penalties += course_conflict_points
                 total_gap_penalties += gap_penalty_points
 
@@ -548,7 +571,7 @@ class Model:
 
         return total
 
-    def get_penalty_at_(self, index:int):
+    def get_penalty_at_(self, index: int):
         return self.index_penalties[index]
 
     def copy(self) -> "Model":
@@ -623,13 +646,13 @@ class Model:
             return not self.__lt__(other)
         return False
 
-    def __ge__(self, other:object) -> bool:
+    def __ge__(self, other: object) -> bool:
         if isinstance(other, Model):
             if self.__gt__(other) or self.__eq__(other):
                 return True
         return False
 
-    def __le__(self, other:object) -> bool:
+    def __le__(self, other: object) -> bool:
         if isinstance(other, Model):
             if self.__lt__(other) or self.__eq__(other):
                 return True

@@ -97,15 +97,6 @@ if __name__ == "__main__":
     #     end_time - start_time,
     # )
 
-    # # ______________________HILLCLIMBER ALGORITHM______________________________________
-    # hillclimber = HillClimber(random_algorithm.model)
-    # print("\n STARTING HILLCLIMBER ALGORITHM")
-    # start_time = time.time()
-    # hillclimber.run(iterations=2000, verbose=True)
-    # end_time = time.time()
-
-
-
     # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_solution)
     # simulated_annealing.run(iterations=2000, verbose=True)
