@@ -9,7 +9,7 @@ class Greedy:
     def __init__(self, empty_model: Model, heuristic="shuffle") -> None:
         """
         Initialize Greedy.
-        
+
         Args:
             empty_model (Model): empty model to be filled.
             heuristic (str): to optionally shuffle activities.
@@ -67,7 +67,7 @@ class Greedy:
         Args:
             activity (tuple): activity to be inserted.
             current_penalty (int): total penalty before insertion.
-        
+
         Returns:
             (int) total penalty after insertion.
         """
@@ -108,7 +108,7 @@ class RandomGreedy(Greedy):
 
         Args:
             activity (tuple): activity to be inserted.
-        
+
         Returns:
             (int) total penalty after insertion.
         """
