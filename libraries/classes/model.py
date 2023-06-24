@@ -336,7 +336,7 @@ class Model:
 
     def get_penalty_extremes(
         self, n: int, highest: bool = True
-    ) -> list[dict[int, tuple[str, str]]]:
+    ) -> dict[int, tuple[str, str]]:
         """Form a list of activities with highest contributions to penalty points.
 
         The list of elements is ordered from activities causing most to least penalty points.
@@ -347,7 +347,7 @@ class Model:
             highest (bool): Evaluate if best or worst scorers are returned.
 
         Returns:
-            list[dict[int, tuple[str, str]]]: A list of {index: activity}
+            dict[int, tuple[str, str]]]: A dictionary of {index: activity}
                 E.g. {0: ('Heuristieken': 'lecture 1')}.
         """
 
@@ -355,7 +355,7 @@ class Model:
         self.total_penalty()
 
         # Find the highest penalties stored.
-        highest_penalties = []
+        highest_penalties = {}
         model = self.index_penalties
         highest_values = sorted(model.values(), reverse=highest)[:n]
 
@@ -363,7 +363,7 @@ class Model:
             for index, value in model.items():
                 if value == high_value:
                     activity = self.get_activity(index)
-                    highest_penalties.append({index: activity})
+                    highest_penalties.update({index: activity})
 
         return highest_penalties
 
@@ -513,6 +513,9 @@ class Model:
     def update_penalty_points(self):
         self.penalty_points = self.total_penalty()
 
+    def modify_index_penalty(self, index: int, new_penalty: int):
+        self.index_penalties[index] = new_penalty
+
     def total_penalty(self) -> int:
         """Calculate the total penalty of the schedule.
 
@@ -531,19 +534,8 @@ class Model:
 
         return total
 
-    def modify_penalty_of_(self, index: int, score: int) -> None:
-        self.index_penalties[index] = score
-
-    def normalize_weights(self) -> dict[int, int]:
-        highest = self.get_penalty_extremes(n=1, highest=True)
-        lowest = self.get_penalty_extremes(n=1, highest=False)
-
-        normalized_scores: list[int] = []
-        for score in self.index_penalties.values():
-            normalized_score = (score - lowest) / (highest - lowest)
-            normalized_scores.append(normalized_score)
-
-        return normalized_scores
+    def get_penalty_at_(self, index:int):
+        return self.index_penalties[index]
 
     def copy(self) -> "Model":
         """Return a copy of the model."""
