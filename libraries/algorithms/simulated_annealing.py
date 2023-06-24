@@ -15,14 +15,6 @@ class SimulatedAnnealing(HillClimber):
     this is a child of the HillClimber algorithm.
     """
 
-    # NOTE: grootste courses
-    # split total penalty
-    # vervelende tijdstippen
-    # rekening houden met eerst grote lokalen vullen met grote groepen
-    # 5 grote courses, 11-3 inplannen
-    # gewilde lokalen, gewilde tijdstippen
-    # identificeer knelpunten, focus daarop
-
     def __init__(self, model: Model, temperature: int | float = 1):
         """Initialise the Simulated Annealing algorithm class.
 
@@ -41,9 +33,7 @@ class SimulatedAnnealing(HillClimber):
         self.T0 = temperature
         self.T = temperature
 
-    def update_temperature(
-        self, type: str = "linear", alpha: float = 0.99
-    ) -> None:
+    def update_temperature(self, type: str = "linear", alpha: float = 0.99) -> None:
         """Update the temperature based on a cooling scheme.
 
         Temperature will approach zero as the

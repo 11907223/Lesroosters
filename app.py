@@ -44,7 +44,9 @@ def index():
 
     # ------------------- BEAM SEARCH ---------------------
     beam_schedule = BeamSearch(model)
-    schedule_solution = beam_schedule.run(beam=5, runs=5, heuristic="capacity")
+    schedule_solution = beam_schedule.run(
+        beam=1, runs=1, heuristic="capacity", verbose=True
+    )
 
     # Create a dict of the solution
     schedule_dict = create_dict(schedule_solution, halls, weekdays, timeslots)
@@ -72,6 +74,8 @@ def create_dict(model: Model, halls: dict, weekdays: dict, timeslot: dict) -> di
         time: {day: [] for day in weekdays.values()} for time in timeslot.values()
     }
 
+    count = 0
+
     # Fill the empty schedule dict with information from the class
     for index, activity in model.solution.items():
         info = model.translate_index(index)
@@ -80,7 +84,9 @@ def create_dict(model: Model, halls: dict, weekdays: dict, timeslot: dict) -> di
         hall = halls[info["hall"]]
         if activity[0]:
             schedule_dict[time][day].append([activity[0], activity[1], hall])
+            count += 1
 
+    print("VAKKEN INGEROOSTERD ", count)
     return schedule_dict
 
 
