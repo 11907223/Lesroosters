@@ -334,6 +334,20 @@ class Model:
         }
         return activity_and_indices
 
+    def get_penalties_per_day(self, type='str'):
+        penalty_per_day: dict[int, dict[str, int]] = {i:0 for i in range(5)}
+        for student_penalty in self.student_penalties.values():
+            for day, penalties in student_penalty.items():
+                for penalty_type, penalty_value in penalties.items():
+                    if penalty_type == type:
+                        penalty_per_day[day] += penalty_value
+
+        return penalty_per_day
+
+    def get_worst_day(self, type='str'):
+        penalties_per_day = self.get_penalties_per_day(type)
+        return max(penalties_per_day, penalties_per_day.get)
+
     def get_penalty_extremes(
         self, n: int, highest: bool = True
     ) -> dict[int, tuple[str, str]]:
@@ -511,7 +525,7 @@ class Model:
         return penalties["conflict penalties"] + penalties["gap penalties"]
 
     def update_penalty_points(self):
-        self.penalty_points = self.total_penalty()
+        return self.total_penalty()
 
     def modify_index_penalty(self, index: int, new_penalty: int):
         self.index_penalties[index] = new_penalty
@@ -608,3 +622,15 @@ class Model:
         if isinstance(other, Model):
             return not self.__lt__(other)
         return False
+
+    def __ge__(self, other:object) -> bool:
+        if isinstance(other, Model):
+            if self.__gt__(other) or self.__eq__(other):
+                return True
+        return False
+
+    def __le__(self, other:object) -> bool:
+        if isinstance(other, Model):
+            if self.__lt__(other) or self.__eq__(other):
+                return True
+            return False

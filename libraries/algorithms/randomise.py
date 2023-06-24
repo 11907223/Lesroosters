@@ -3,6 +3,7 @@ from libraries.classes.model import Model
 from typing import Optional
 import sys
 
+
 class Random:
     """
     Random generates a random schedule by randomly assigning activities to slots.
@@ -24,9 +25,7 @@ class Random:
 
         return None
 
-    def check_solution(
-        self, new_model: Model, old_model: Optional[Model] = None
-    ) -> bool:
+    def check_solution(self, new_model: Model) -> bool:
         """
         Accept better solutions than the current solution.
 
@@ -37,12 +36,7 @@ class Random:
         Returns:
             bool: True if new model has been accepted, else False.
         """
-        if old_model is not None:
-            if new_model < old_model:
-                # Save best model between runs.
-                self.best_model = new_model
-                return True
-        elif new_model < self.model:
+        if new_model < self.model:
             # Save best model between iterations.
             self.model = new_model
             return True
@@ -61,7 +55,11 @@ class Random:
         self.runs = runs
 
         for run in range(runs):
-            penalty_score = "∞" if self.model.penalty_points == sys.maxsize else self.model.penalty_points
+            penalty_score = (
+                "∞"
+                if self.model.penalty_points == sys.maxsize
+                else self.model.penalty_points
+            )
             print(
                 f"Run {run}/{runs}, current penalty score: {penalty_score}      ",
                 end="\r",

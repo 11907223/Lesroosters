@@ -29,7 +29,7 @@ def load_courses(path: str = "data"):
     df_courses = pd.read_csv(f"{path}/vakken.csv", dtype=d_type)
 
     courses = {}
-    for _index, course in df_courses.iterrows():
+    for _, course in df_courses.iterrows():
         courses[course["Vak"]] = Course(course_name=course["Vak"])
         for activities in init_activities(courses[course["Vak"]], course):
             for activity_name, activity_set in activities.items():
