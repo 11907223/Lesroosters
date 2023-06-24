@@ -84,6 +84,12 @@ class Greedy:
         self.empty_slots.remove(index)
 
     def run(self) -> Model:
+        """
+        Runs greedy algorithm once.
+
+        Returns:
+            model (Model): the generated solution. 
+        """
         current_penalty = 0
         for activity in self.activities:
             current_penalty = self.insert_greedily(activity, current_penalty)
@@ -92,7 +98,7 @@ class Greedy:
         return self.model
 
 class RandomGreedy(Greedy):
-    """"
+    """
     Combines random and greedy choices to contructively generate a schedule.
     """
         
