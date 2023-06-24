@@ -138,13 +138,13 @@ class RandomGreedy(Greedy):
         Args:
             i (int)       : amount of activities inserted. 0 <= i <= 72.
             start (float) : random_chance at i = 0 
-            alpha (float) : exponent of the exponential function.
+            alpha (float) : exponential factor, decides the drop-off speed.
 
         Returns:
             (float): probability of a random insertion (high at the
                      beginning of the run, lower towards the end).
         """
-        return start * np.exp(-alpha*i)
+        return start * np.exp(-alpha * i)
 
     def run(self):
         """
@@ -168,10 +168,3 @@ class RandomGreedy(Greedy):
             print(f'penalty: {current_penalty} capacity penalty: {self.model.total_capacity_penalties()} gap penalty: {self.model.student_schedule_penalties()["gap penalties"]}  planned: {self.count_planned_activities()}')#, end='\r')
         
         return self.model
-
-    def count_planned_activities(self):
-        i = 0
-        for act in self.model.solution.values():
-            if act[0] is not None:
-                i += 1
-        return i
