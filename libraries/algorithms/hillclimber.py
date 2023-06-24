@@ -200,7 +200,9 @@ class HillClimber(Random):
         convergence_counter = 0
         for iteration in range(iterations):
             print(
-                f"Iteration {iteration}/{iteration_count}, Convergence counter: {convergence_counter}, current penalty score: {self.model.penalty_points}    ",
+                f"Iteration {iteration}/{iteration_count}",
+                f"Convergence counter: {convergence_counter}",
+                f"current penalty score: {self.model.penalty_points}    ",
                 end="\r",
             ) if verbose else None
 

@@ -626,6 +626,16 @@ class Model:
         else:
             return False
 
+    def __add__(self, other: object) -> int:
+        if isinstance(other, Model):
+            return self.penalty_points + other.penalty_points
+        return TypeError, f"Addition not possible between Model and {type(other)}."
+
+    def __sub__(self, other: object) -> int:
+        if isinstance(other, Model):
+            return self.penalty_points - other.penalty_points
+        return TypeError, f"Subtraction not possible between Model and {type(other)}." 
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Model):
             return self.penalty_points == other.penalty_points
