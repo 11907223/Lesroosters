@@ -75,21 +75,21 @@ if __name__ == "__main__":
     # )
 
     # ______________________SIMULATED ANNEALING________________________________________
-    simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
-    simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
+    # simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
+    # simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
 
-    print(
-        "THE BEST SCHEDULE FOUND WHEN USING SIMULATED ANNEALING:\n",
-        # simulated_annealing.model.solution,
-        "\n POINTS: ",
-        simulated_annealing.model.total_penalty(),
-        "\n evening points",
-        simulated_annealing.model.evening_penalty(),
-        "\n student penalty points:",
-        simulated_annealing.model.student_schedule_penalties(),
-        "\n capacity penalty",
-        simulated_annealing.model.total_capacity_penalties(),
-    )
+    # print(
+    #     "THE BEST SCHEDULE FOUND WHEN USING SIMULATED ANNEALING:\n",
+    #     # simulated_annealing.model.solution,
+    #     "\n POINTS: ",
+    #     simulated_annealing.model.total_penalty(),
+    #     "\n evening points",
+    #     simulated_annealing.model.evening_penalty(),
+    #     "\n student penalty points:",
+    #     simulated_annealing.model.student_schedule_penalties(),
+    #     "\n capacity penalty",
+    #     simulated_annealing.model.total_capacity_penalties(),
+    # )
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     # ________________________RANDOMGREEDY ALGORITHM___________________________________
     # start_time = time.time()
-    # random_greedy = RandomGreedy(empty_model).run(random_chance=0.05)
+    # random_greedy = RandomGreedy(empty_model).run()
     # runtime = time.time() - start_time
     # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution,
     #     '\n POINTS: ', random_greedy.total_penalty(),
