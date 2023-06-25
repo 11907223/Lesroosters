@@ -150,7 +150,7 @@ class Model:
         """Return a boolean indicating if index slot contains a course-activity pair."""
         return self.solution[index][0] is None
 
-    def get_all_index_penalties(self) -> dict[int, int]:
+    def get_index_penalty_dict(self) -> dict[int, int]:
         return self.index_penalties
 
     def swap_activities(self, index_1, index_2) -> None:
@@ -353,13 +353,13 @@ class Model:
         return penalty_per_day
 
     def get_worst_days(self):
-        gap_per_day = self.get_penalties_per_day('gap penalties')
-        conflict_per_day =  self.get_penalties_per_day('conflict penalties')
+        gap_per_day = self.get_penalties_per_day("gap penalties")
+        conflict_per_day = self.get_penalties_per_day("conflict penalties")
 
         worst_gap_day = max(gap_per_day, key=gap_per_day.get)
         worst_conflict_day = max(conflict_per_day, key=conflict_per_day.get)
 
-        return {'gap day': worst_gap_day, 'conflict day': worst_conflict_day}
+        return {"gap day": worst_gap_day, "conflict day": worst_conflict_day}
 
     def get_penalty_extremes(
         self, n: int, highest: bool = True
@@ -666,12 +666,18 @@ class Model:
     def __add__(self, other: object) -> int:
         if isinstance(other, Model):
             return self.penalty_points + other.penalty_points
-        return TypeError, f"Addition not possible between Model and {type(other)}."
+        return (
+            TypeError,
+            f"Addition not possible between Model and {type(other)}.",
+        )
 
     def __sub__(self, other: object) -> int:
         if isinstance(other, Model):
             return self.penalty_points - other.penalty_points
-        return TypeError, f"Subtraction not possible between Model and {type(other)}." 
+        return (
+            TypeError,
+            f"Subtraction not possible between Model and {type(other)}.",
+        )
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Model):
