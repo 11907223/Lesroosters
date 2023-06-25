@@ -7,25 +7,25 @@ class Greedy:
     Greedy class constructively generates a schedule by locally taking optimal decisions.
     """
 
-    def __init__(self, empty_model: Model, shuffle=True) -> None:
+    def __init__(self, empty_model: Model, shuffle=False, sort=False, sort_overlap=True) -> None:
         """
         Initialize Greedy.
 
         Args:
             empty_model (Model): empty model to be filled.
             shuffle (bool): to optionally shuffle activities.
+            sort (bool): to optionally sort activities by size.
+            sort_overlap (bool) : to optionally sort activities by amount of overlap with other activities.
         """
         self.model       = empty_model.copy()
-        self.activities  = list(self.model.participants.keys())
         self.empty_slots = list(self.model.solution.keys())
         if shuffle:
-            self.shuffle_activities()
-
-    def shuffle_activities(self):
-        """
-        Shuffles list of activities to loop over.
-        """
-        self.activities = random.sample(self.activities, len(self.activities))
+            self.model.shuffle_activities()
+        elif sort:
+            self.model.sort_activities_size(descending=True)
+        elif sort_overlap:
+            self.model.sort_activities_overlap()
+        
 
     def get_optimal_index(self, activity: tuple[str, str], current_penalty: int):
         """
@@ -92,7 +92,7 @@ class Greedy:
             model (Model): the generated solution. 
         """
         current_penalty = 0
-        for activity in self.activities:
+        for activity in self.model.unassigned_activities:
             current_penalty = self.insert_greedily(activity, current_penalty)
             print('penalty:', current_penalty, end='\r')
 
@@ -157,7 +157,8 @@ class RandomGreedy(Greedy):
             model (Model): the generated solution. 
         """
         current_penalty = 0
-        for i, activity in enumerate(self.activities):
+        random.seed(1)
+        for i, activity in enumerate(self.model.unassigned_activities):
             
             # make random or greedy choice 
             if random.random() < self.calc_random_chance(i):
@@ -165,6 +166,6 @@ class RandomGreedy(Greedy):
             else:
                 current_penalty = self.insert_greedily(activity, current_penalty)
             
-            print(f'penalty: {current_penalty} capacity penalty: {self.model.total_capacity_penalties()} gap penalty: {self.model.student_schedule_penalties()["gap penalties"]}  planned: {self.count_planned_activities()}')#, end='\r')
+            print(f'penalty: {current_penalty} capacity penalty: {self.model.total_capacity_penalties()} gap penalty: {self.model.student_schedule_penalties()["gap penalties"]}  at activity: {i}')#, end='\r')
         
         return self.model
