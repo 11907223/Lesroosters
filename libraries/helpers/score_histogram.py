@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as ss 
 
 def plot_histogram(data_file='../../baseline.txt', output_path='../../images/', output_name='score_distribution_random_schedules', save=True):
     
@@ -14,14 +15,22 @@ def plot_histogram(data_file='../../baseline.txt', output_path='../../images/', 
     
     plt.figure(figsize=(15, 10))
     
-    plt.hist(random_scores, bins=50)
+    result = plt.hist(random_scores, bins=70, color='royalblue')[0:len(random_scores)-1000]
 
     plt.ylabel('Number of random schedules', fontsize=16)
     plt.xlabel('Score', fontsize=16)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
     plt.title("Score distribution of randomly generated schedules", fontsize=18)
-    plt.show()
 
+    # gaussian    
+    mean     = np.mean(random_scores)
+    variance = np.var(random_scores)
+    sigma    = np.sqrt(variance)
+    x  = np.linspace(min(random_scores), max(random_scores), 100)
+    dx = result[1][1] - result[1][0]
+    scale = len(random_scores)*dx
+    plt.plot(x, ss.norm.pdf(x, mean, sigma)*scale, 'r-', linewidth=3)
+    
     if save:
         plt.savefig(f'{output_path}{output_name}.png', bbox_inches='tight')
