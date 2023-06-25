@@ -1,6 +1,7 @@
 import libraries.helpers.load_data as ld
 from libraries.algorithms.randomise import Random
 from libraries.classes.model import Model
+from libraries.helpers.print_results import print_results
 from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
@@ -13,133 +14,70 @@ if __name__ == "__main__":
     halls = ld.load_halls()
 
     empty_model = Model()
-    # print(s.get_highest_students(3))
-
-    # start_time = time.time()
 
     # _________________________RANDOM ALGORITHM________________________________________
     random_algorithm = Random(empty_model)
+    
+    start_time = time.time()
     random_algorithm.run(runs=20, verbose=True)
+    runtime = start_time - time.time()
+    
+    print_results('random', random_algorithm.model, runtime)
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-    #     # random_algorithm.model.solution,
-    #     "\nTOTAL POINTS: ",
-    #     random_algorithm.model.total_penalty(),
-    #     "\n evening points",
-    #     random_algorithm.model.evening_penalty(),
-    #     "\n student penalties:",
-    #     random_algorithm.model.student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     random_algorithm.model.total_capacity_penalties(),
-    # )
     # ________________________BEAM SEARCH ALGORITHM____________________________________
 
     # beam_search = BeamSearch(empty_model)
     # print("STARTING BEAM SEARCH ALGORITHM \n")
+
     # start_time = time.time()
     # beam_search.run(beam=5, runs=100, heuristic="capacity", verbose=True)
-    # end_time = time.time()
+    # runtime = start_time - time.time()
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING RANDOM:\n",
-    #     # random_algorithm.model.solution,
-    #     "\nTOTAL POINTS: ",
-    #     random_algorithm.model.total_penalty(),
-    #     "\n evening points",
-    #     random_algorithm.model.evening_penalty(),
-    #     "\n student penalties:",
-    #     random_algorithm.model.student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     random_algorithm.model.total_capacity_penalties(),
-    # )
+    # print_results('beam search', beam_search.model, runtime)
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
     # hillclimber = HillClimber(random_algorithm.model)
     # print("\n STARTING HILLCLIMBER ALGORITHM")
+
     # start_time = time.time()
     # hillclimber.run(verbose=True, heuristics=['middle', 'day'])
-    # end_time = time.time()
+    # runtime = start_time - time.time()
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING HILLCLIMBER:\n",
-    #     # hillclimber.model.solution,
-    #     "\nTOTAL POINTS: ",
-    #     hillclimber.model.total_penalty(),
-    #     "\n evening points",
-    #     hillclimber.model.evening_penalty(),
-    #     "\n student penalty points:",
-    #     hillclimber.model.student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     hillclimber.model.total_capacity_penalties(),
-    # )
+    # print_results('hillclimber', hillclimber.model, runtime)
 
     # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
+    
+    # start_time = time.time()
     # simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
+    # runtime = start_time - time.time()
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING SIMULATED ANNEALING:\n",
-    #     # simulated_annealing.model.solution,
-    #     "\n POINTS: ",
-    #     simulated_annealing.model.total_penalty(),
-    #     "\n evening points",
-    #     simulated_annealing.model.evening_penalty(),
-    #     "\n student penalty points:",
-    #     simulated_annealing.model.student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     simulated_annealing.model.total_capacity_penalties(),
-    # )
+    # print_results('simulated annealing', simulated_annealing.model, runtime)
 
     # ________________________BEAM SEARCH ALGORITHM________________________
 
     # beam_search = BeamSearch(empty_model)
     # print("STARTING BEAM SEARCH ALGORITHM \n")
+
     # start_time = time.time()
     # beam_search.run(beam=2, runs=1, heuristic="capacity", verbose=True)
-    # end_time = time.time()
+    # runtime = start_time - time.time()
 
-    # print(
-    #     "THE BEST SCHEDULE FOUND WHEN USING BEAMSEARCH:\n",
-    #     # beam_search.model.solution,
-    #     "\nTOTAL POINTS: ",
-    #     beam_search.model.total_penalty(),
-    #     "\n evening points",
-    #     beam_search.model.evening_penalty(),
-    #     "\n student points:",
-    #     beam_search.model.sum_student_schedule_penalties(),
-    #     "\n capacity penalty",
-    #     beam_search.model.total_capacity_penalties(),
-    #     "\n run time: ",
-    #     end_time - start_time,
-    # )
-
-
+    # print_results('beam search', beam_search.model, runtime)
 
     # ________________________GREEDY ALGORITHM_________________________________________
     # start_time = time.time()
     # greedy_solution = Greedy(empty_model).run()
     # runtime = time.time() - start_time
 
-    # print('THE BEST SCHEDULE FOUND WHEN USING GREEDY:\n', greedy_solution.solution,
-    # '\n POINTS: ', greedy_solution.total_penalty(),
-    # '\n evening points', greedy_solution.evening_penalty(),
-    # '\n conflict points:', greedy_solution.student_schedule_penalties(),
-    # '\n capacity penalty', greedy_solution.total_capacity_penalties(),
-    # '\n runtime:', runtime
-    # )
+    # print_results('greedy', greedy_solution, runtime)
 
     # ________________________RANDOMGREEDY ALGORITHM___________________________________
     # start_time = time.time()
     # random_greedy = RandomGreedy(empty_model).run()
     # runtime = time.time() - start_time
-    # print('THE BEST SCHEDULE FOUND WHEN USING RANDOMGREEDY:\n', random_greedy.solution,
-    #     '\n POINTS: ', random_greedy.total_penalty(),
-    #     '\n evening points', random_greedy.evening_penalty(),
-    #     '\n conflict points:', random_greedy.student_schedule_penalties(),
-    #     '\n capacity penalty', random_greedy.total_capacity_penalties(),
-    #     '\n runtime', runtime
-    # )
+
+    # print_results('randomgreedy', random_greedy, runtime)
 
     # __________________________BASELINE_______________________________________________
 
