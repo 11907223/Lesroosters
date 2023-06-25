@@ -574,6 +574,20 @@ class Model:
     def get_penalty_at_(self, index: int):
         return self.index_penalties[index]
 
+    def sort_activities_size(self):
+        """
+        Sort the activities on nr. of participants, from most to least participants.
+        """
+        self.unassigned_activities = sorted(self.participants, key=lambda key: len(self.participants[key]), reverse=True)
+        return True
+
+    def shuffle_activities(self):
+        """
+        Randomly shuffle the activities.
+        """
+        self.unassigned_activities = random.sample(self.unassigned_activities, len(self.unassigned_activities))
+        return True
+
     def copy(self) -> "Model":
         """Return a copy of the model."""
         new_copy = copy.copy(self)
