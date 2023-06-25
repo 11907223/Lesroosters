@@ -70,18 +70,15 @@ class SimulatedAnnealing(HillClimber):
         Returns:
             bool: True if new solution has been accepted, else False.
         """
-        new_penalties = new_model.total_penalty()
-        old_penalties = self.lowest_penalty
 
         # Calculate the probability of accepting this new solution
-        delta = new_penalties - old_penalties
+        delta = new_model - self.model
         probability = math.exp(-delta / self.T)
 
         # Evaluate against a random number between 0 and 1
         #   if the new solution is accepted.
         if random.random() < probability:
             self.model = new_model
-            self.penalties = new_penalties
             return True
 
         # Update the temperature
