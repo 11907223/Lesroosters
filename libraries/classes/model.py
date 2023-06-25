@@ -574,13 +574,36 @@ class Model:
     def get_penalty_at_(self, index: int):
         return self.index_penalties[index]
 
-    def sort_activities_size(self):
+    def sort_activities_size(self, descending=True):
         """
         Sort the activities on nr. of participants, from most to least participants.
         """
-        self.unassigned_activities = sorted(self.participants, key=lambda key: len(self.participants[key]), reverse=True)
+        self.unassigned_activities = sorted(self.participants, key=lambda key: len(self.participants[key]), reverse=descending)
         return True
 
+    def sort_activities_overlap(self, students=True):
+        """
+        Sort the activities on amount of overlapping activities, from most to least overlap.
+
+        Args:
+            students (bool): if True sort by amount of overlap based on #students, 
+                             if False sorts on number of overlapping activities.
+        """
+        overlap_count = dict.fromkeys((activity for activity in self.participants), 0)
+        
+        for activity1 in self.participants:
+            for activity2 in self.participants:
+
+                # ensures different courses
+                if activity1[0] != activity2[0]:
+                    overlap = len(self.participants[activity1].intersection(self.participants[activity2]))
+                    if students:
+                        overlap_count[activity1] += overlap
+                    elif overlap != 0:
+                        overlap_count[activity1] += 1
+        self.unassigned_activities = sorted(overlap_count, key=lambda act: overlap_count[act], reverse=True)
+        return True
+    
     def shuffle_activities(self):
         """
         Randomly shuffle the activities.
