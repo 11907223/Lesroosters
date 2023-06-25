@@ -15,7 +15,7 @@ class SimulatedAnnealing(HillClimber):
     this is a child of the HillClimber algorithm.
     """
 
-    def __init__(self, model: Model, temperature: int | float = 1):
+    def __init__(self, model: Model, temperature: int | float = 10):
         """Initialise the Simulated Annealing algorithm class.
 
         Args:
@@ -85,3 +85,6 @@ class SimulatedAnnealing(HillClimber):
         self.update_temperature()
 
         return False
+
+    def __repr__(self) -> str:
+        return "Simulated Annealing Algorithm"
