@@ -10,6 +10,8 @@ import random
 import time
 import random
 
+random.seed(0)
+
 if __name__ == "__main__":
     courses = ld.load_courses()
     students = ld.load_students(courses)
@@ -32,8 +34,8 @@ if __name__ == "__main__":
     print("STARTING BEAM SEARCH ALGORITHM \n")
 
     start_time = time.time()
-    beam_search.run(beam=1, runs=10, heuristic="capacity", verbose=True)
-    runtime = start_time - time.time()
+    beam_search.run(beam=1, runs=1, heuristic="totalpenalty", verbose=True)
+    runtime = time.time() - start_time
 
     print_results("beam search", beam_search.initial_model, runtime)
 
@@ -71,13 +73,13 @@ if __name__ == "__main__":
     # print_results('randomgreedy', random_greedy, runtime)
 
     # __________________________BASELINE_______________________________________________
-    random.seed(0)
-    with open("baseline.txt", "a+") as file:
-        for i in range(10000):
-            penalty = []
-            for j in range(100):
-                random_schedule = Random(empty_model)
-                penalty.append(random_schedule.run().calc_total_penalty())
-                print(f"Current run: {i * 100 + j + 1}", end="\r")
-            text = "\n".join([str(score) for score in penalty])
-            file.write(f"\n{text}")
+    # random.seed(0)
+    # with open("baseline.txt", "a+") as file:
+    #     for i in range(10000):
+    #         penalty = []
+    #         for j in range(100):
+    #             random_schedule = Random(empty_model)
+    #             penalty.append(random_schedule.run().calc_total_penalty())
+    #             print(f"Current run: {i * 100 + j + 1}", end="\r")
+    #         text = "\n".join([str(score) for score in penalty])
+    #         file.write(f"\n{text}")
