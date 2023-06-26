@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # hillclimber.run(verbose=True, heuristics=['middle', 'day'])
     # runtime = time.time() - start_time
 
-    # print_results(hillclimber, runtime)
+    # print_results('hillclimber', hillclimber.best_model, runtime)
 
     # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
     # runtime = time.time() - start_time
 
-    # print_results('simulated annealing', simulated_annealing.model, runtime)
+    # print_results('simulated annealing', simulated_annealing.best_model, runtime)
 
     # ________________________GREEDY ALGORITHM_________________________________________
     # start_time = time.time()
