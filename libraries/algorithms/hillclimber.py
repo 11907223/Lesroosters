@@ -275,27 +275,21 @@ class HillClimber(Random):
     def run(
         self,
         iterations: int = 2000,
-        mutate_slots_number: int = 1,
-        verbose: bool = False,
         convergence: int = sys.maxsize,
+        mutate_slots_number: int = 1,
         heuristics: Optional[list[str]] = None,
         modifier: float = 1.2,
+        verbose: bool = False,
     ) -> Model:
         """Run the hillclimber algorithm for a specified number of iterations.
 
         Args:
             iterations (int): Number of iterations for the Hillclimber to 'climb'.
                 Defaults to 2000 iterations.
-            runs (int): Number of runs for the HillClimber algorithm.
-                Defaults to 1 run. If this value is changed, a shotgun hillclimber
-                will be executed instead.
-                This generates a new random model for each new run.
-            mutate_slots_number (int): Number of mutations to occur each iteration.
-                Defaults to 1 mutation per iteration.
-            verbose (bool): Evaluate if run prints current iteration and penalty score.
-                Defaults to False.
             convergence (bool): Evaluate if iterations are based on convergence.
                 If no value is given, convergence is not evaluated.
+            mutate_slots_number (int): Number of mutations to occur each iteration.
+                Defaults to 1 mutation per iteration.
             heuristics (list[str]): Optional list of heuristics to be used. Heuristics can be combined.
                 Options are:
                     'balance': Use weighted swapping to trade indices with a
@@ -307,6 +301,8 @@ class HillClimber(Random):
                     'steepest': Evaluate if algorithm has to only take each steepest climb.
                         Will result in deterministic algorithm behaviour.
             modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.2.
+            verbose (bool): Evaluate if run prints current iteration and penalty score.
+                Defaults to False.
         """
         iteration_count: str | int = iterations
         if convergence != sys.maxsize:
@@ -320,9 +316,9 @@ class HillClimber(Random):
         convergence_counter = 0
         for iteration in range(iterations):
             print(
-                f"Iteration {iteration}/{iteration_count}",
-                f"Convergence counter: {convergence_counter}",
-                f"current penalty score: {self.best_model.penalty_points}    ",
+                f"Iteration {iteration}/{iteration_count} "
+                f"Convergence counter: {convergence_counter} ",
+                f"Current penalty score: {self.best_model.penalty_points}    ",
                 end="\r",
             ) if verbose else None
 
@@ -343,7 +339,7 @@ class HillClimber(Random):
                 break
             convergence_counter += 1
 
-        with open(f"`result/{self}.csv", "a+", newline="") as file:
+        with open(f"results/{self}.csv", "a+", newline="") as file:
             csv.writer(file).writerow(scores)
 
         return self.best_model

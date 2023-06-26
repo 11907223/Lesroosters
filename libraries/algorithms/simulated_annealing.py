@@ -1,5 +1,7 @@
 import random
 import math
+import sys
+from typing import Optional
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.classes.model import Model
 
@@ -58,7 +60,9 @@ class SimulatedAnnealing(HillClimber):
         else:
             raise Exception("Type not found or invalid.")
 
-    def check_solution(self, new_model: Model) -> bool:
+    def check_solution(
+        self, new_model: Model, type: str = "linear", alpha: float = 0.99
+    ) -> bool:
         """Check and accept better solutions than the current solution.
 
         Also sometimes accepts solutions that are worse, depending on the current
@@ -72,19 +76,42 @@ class SimulatedAnnealing(HillClimber):
         """
 
         # Calculate the probability of accepting this new solution
-        delta = new_model - self.model
+        delta = new_model - self.best_model
         probability = math.exp(-delta / self.T)
 
         # Evaluate against a random number between 0 and 1
         #   if the new solution is accepted.
         if random.random() < probability:
-            self.model = new_model
+            self.best_model = new_model
             return True
 
         # Update the temperature
-        self.update_temperature()
+        self.update_temperature(type, alpha)
 
         return False
+
+    def run(self,
+        runs: int = 20,
+        iterations: int = 2000,
+        temperature: int = 10,
+        mutate_slots_number: int = 1,
+        convergence: int = sys.maxsize,
+        heuristics: Optional[list[str]] = None,
+        modifier: int = 1.2,
+        verbose: bool = False,
+        type: str = "linear",
+        alpha: float = 0.99,
+    ):
+        super().run(
+            iterations,
+            convergence,
+            mutate_slots_number,
+            heuristics,
+            modifier,
+            verbose,
+        )
+
+        return self.best_model
 
     def __repr__(self) -> str:
         return "Simulated Annealing Algorithm"

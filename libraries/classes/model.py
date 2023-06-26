@@ -663,7 +663,6 @@ class Model:
                 activities.add((course.name, activity.category))
         if activities == set(self.get_student_schedule(student).values()):
             return True
-        print(activities, self.get_student_schedule(student))
         return False
 
     def is_solution(self) -> bool:

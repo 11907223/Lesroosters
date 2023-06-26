@@ -36,7 +36,7 @@ To run all algorithms
 ## Folder Structure
 
 - `lesroosters/`: Contains all the necessary code and data for this research project.
-    - `main.py`: Main program to run to find research results.
+    - `main.py`: Main script to run to find research results.
     - `libraries/`: Contains all the code to run main.py.
         - `algorithms/`: Contains all the algorithm classes.
         - `classes/`: Contains all the static classes that represent data.
