@@ -1,6 +1,5 @@
 from random import randrange
 from libraries.classes.model import Model
-import sys
 
 
 class Random:
@@ -55,13 +54,8 @@ class Random:
         self.runs = runs
 
         for run in range(runs):
-            penalty_score = (
-                "∞"
-                if self.best_model.penalty_points == sys.maxsize
-                else self.best_model.penalty_points
-            )
             print(
-                f"Run {run}/{runs}, current penalty score: {penalty_score}      ",
+                f"Run {run}/{runs}, current penalty score: {self.best_model.penalty_points}      ",
                 end="\r",
             ) if verbose else None
 

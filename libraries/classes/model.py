@@ -8,7 +8,6 @@ from collections import defaultdict
 import numpy as np
 import copy
 import random
-import sys
 
 activity_type = tuple[str, str]
 
@@ -41,15 +40,16 @@ class Model:
         self.students: dict[int, Student] = load_students(self.courses, path)
         self.halls: dict[int, Hall] = load_halls(path)
         self.solution = self.init_model((None, None))
-        self.activity_enrollments = self.init_student_model()
+        self.activity_enrollments: dict[tuple[str, str], set[int]] = self.init_student_model()
         self.penalty_per_index: dict[int, int] = self.init_model(0)
-        self.student_penalties: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
+        self.penalties_per_student: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
         self.unassigned_activities = list(self.activity_enrollments.keys())
+
         # Initiate an empty model with an improbably high score to ensure it always evaluates
         #   worse vs. other models. As an empty model contains no data,
         #   it can score no negative points and therefore would compare as better than
         #   a generated model.
-        self.penalty_points: int = sys.maxsize
+        self.penalty_points: int | float = float('inf')
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
@@ -321,7 +321,7 @@ class Model:
     def get_penalties_per_day(self, type="str") -> dict[int, dict[str, int]]:
         """Return a dictionary of conflict and gap penalty of each day."""
         penalty_per_day: dict[int, dict[str, int]] = {i: 0 for i in range(5)}
-        for student_penalty in self.student_penalties.values():
+        for student_penalty in self.penalties_per_student.values():
             for day, penalties in student_penalty.items():
                 for penalty_type, penalty_value in penalties.items():
                     if penalty_type == type:
@@ -481,7 +481,7 @@ class Model:
                 total_course_conflicts_penalties += course_conflict_points
                 total_gap_penalties += gap_penalty_points
 
-                self.student_penalties.update(
+                self.penalties_per_student.update(
                     {
                         id: {
                             day: {
