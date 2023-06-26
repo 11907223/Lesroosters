@@ -1,6 +1,7 @@
 from libraries.classes.model import Model
 
-def print_results(algorithm_name : str, model : Model, runtime):
+
+def print_results(algorithm_name: str, model: Model, runtime):
     """
     Prints results of a model generated with an algorithm.
     """

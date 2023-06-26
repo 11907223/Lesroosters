@@ -35,7 +35,7 @@ if __name__ == "__main__":
     beam_search.run(beam=1, runs=10, heuristic="capacity", verbose=True)
     runtime = start_time - time.time()
 
-    print_results("beam search", beam_search.model, runtime)
+    print_results("beam search", beam_search.initial_model, runtime)
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
     # hillclimber = HillClimber(random_algorithm.best_model)

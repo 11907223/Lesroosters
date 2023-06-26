@@ -1,11 +1,12 @@
 from libraries.classes.model import Model
+from libraries.algorithms.randomise import Random
 import random
 import heapq
 
 random.seed(0)
 
 
-class BeamSearch:
+class BeamSearch(Random):
     """The BeamSearch class represents a constructive Breadth Frist - Beam Search algorithm.
 
     In this class, a state is a schedule.
@@ -14,6 +15,8 @@ class BeamSearch:
     Each step, n child states are created.
     Child states can be made according to several heuristics:
     Random, based on capacity or based on total penalty.
+
+    This is a child of the Random() algorithm due to overlapping checking function and inits.
     """
 
     def __init__(self, model: Model):
@@ -22,16 +25,13 @@ class BeamSearch:
         Args:
             model (Model): An empty model.
         """
-        self.model = model.copy()
+        super().__init__(model)
 
         self.queue: list[tuple[int, Model]] = []
 
-        self.best_solution = None
-        self.best_value = float("inf")
-
     def reset_model(self) -> None:
         """Resets the model and queue of the BeamSearch class."""
-        self.model = Model()
+        self.initial_model = Model()
         self.queue = []
 
     def get_next_state(self) -> Model:
@@ -142,7 +142,7 @@ class BeamSearch:
         Returns:
             priority (int): A priority scroe for the model.
         """
-        penalty = model.total_penalty()
+        penalty = model.calc_total_penalty()
         unassigned = len(model.unassigned_activities)
 
         return penalty + (unassigned * 5)
@@ -187,12 +187,12 @@ class BeamSearch:
         Args:
             model (Model): The model that should be checked.
         """
-        new_value = model.total_penalty()
+        new_value = model.calc_total_penalty()
         old_value = self.best_value
 
         # Minimalization of penalty score
         if new_value <= old_value:
-            self.best_solution = model
+            self.best_model = model
             self.best_value = new_value
 
     def run(self, beam=2, runs=1, heuristic="random", verbose: bool = False) -> Model:
@@ -210,14 +210,14 @@ class BeamSearch:
         """
         for i in range(runs):
             self.reset_model()
-            priority = self.calc_priority(self.model)
-            heapq.heappush(self.queue, (priority, self.model.copy()))
+            priority = self.calc_priority(self.initial_model)
+            heapq.heappush(self.queue, (priority, self.initial_model.copy()))
 
             step = 0
             while self.queue:
                 step += 1
                 print(
-                    f"Run {i}/{runs}, step {step}, current penalty score: {self.best_value}           ",
+                    f"Run {i}/{runs}, step {step}, current penalty score: {self.best_model.penalty_points}           ",
                     end="\r",
                 ) if verbose else None
 
@@ -240,6 +240,6 @@ class BeamSearch:
                     break
 
         # Update the input graph with the best result found.
-        self.model = self.best_solution
+        self.initial_model = self.best_model
 
-        return self.model
+        return self.initial_model
