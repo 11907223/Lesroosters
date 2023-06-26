@@ -1,6 +1,7 @@
 from libraries.classes.model import Model
 import random
 import numpy as np
+import sys
 
 class Greedy:
     """
@@ -41,7 +42,7 @@ class Greedy:
         """      
 
         # loop over timeslots
-        lowest_penalty = 100000
+        lowest_penalty = sys.maxsize
         for index in self.empty_slots:
 
             self.model.add_activity(index, activity)
@@ -125,7 +126,15 @@ class RandomGreedy(Greedy):
     
     def capacity_overflow(self, index, activity, max_difference=5):
         """
-        Ensures random insertion considers hall size.
+        Checks if insertion causes an unreasonable capacity penalty.
+
+        Args:
+            index (int)         : where activity would be inserted.
+            activity (tuple)    : activity to insert in room.
+            max_difference (int): max difference allowed between #students in activity and room capacity.
+
+        Returns:
+            (bool): True if activity exceeds room capacity too much, False if not.
         """
         if self.model.capacity_penalty(index, activity) > max_difference:
             return True
