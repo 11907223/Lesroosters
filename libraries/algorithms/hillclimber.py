@@ -343,7 +343,7 @@ class HillClimber(Random):
                 break
             convergence_counter += 1
 
-        with open(f"`data/{self}.csv", "a+", newline="") as file:
+        with open(f"`result/{self}.csv", "a+", newline="") as file:
             csv.writer(file).writerow(scores)
 
         return self.best_model
