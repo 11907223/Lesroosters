@@ -7,6 +7,7 @@ from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
 import time
+import random
 
 if __name__ == "__main__":
     courses = ld.load_courses()
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     
     start_time = time.time()
     random_algorithm.run(runs=20, verbose=True)
-    runtime = start_time - time.time()
+    runtime = time.time() - start_time
     
     print_results('random', random_algorithm.model, runtime)
 
@@ -31,7 +32,7 @@ if __name__ == "__main__":
 
     # start_time = time.time()
     # beam_search.run(beam=5, runs=100, heuristic="capacity", verbose=True)
-    # runtime = start_time - time.time()
+    # runtime = time.time() - start_time
 
     # print_results('beam search', beam_search.model, runtime)
 
@@ -41,7 +42,7 @@ if __name__ == "__main__":
 
     # start_time = time.time()
     # hillclimber.run(verbose=True, heuristics=['middle', 'day'])
-    # runtime = start_time - time.time()
+    # runtime = time.time() - start_time
 
     # print_results('hillclimber', hillclimber.model, runtime)
 
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     
     # start_time = time.time()
     # simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
-    # runtime = start_time - time.time()
+    # runtime = time.time() - start_time
 
     # print_results('simulated annealing', simulated_annealing.model, runtime)
 
@@ -61,7 +62,7 @@ if __name__ == "__main__":
 
     # start_time = time.time()
     # beam_search.run(beam=2, runs=1, heuristic="capacity", verbose=True)
-    # runtime = start_time - time.time()
+    # runtime = time.time() - start_time
 
     # print_results('beam search', beam_search.model, runtime)
 
