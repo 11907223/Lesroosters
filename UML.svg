@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="471px" preserveAspectRatio="none" style="width:968px;height:471px;" version="1.1" viewBox="0 0 968 471" width="968px" zoomAndPan="magnify"><defs/><g><!--MD5=[baa2ecd00d74afb0d8de1b5208cc46a6]
+entity l--><svg x="17" y="17"><defs><filter height="300%" id="fl2tmmfeo32am" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[c881b25adf3665c6568c9693d41a70f3]
+class Activity--><rect fill="#FEFECE" filter="url(#fl2tmmfeo32am)" height="112.0234" id="Activity" style="stroke: #A80036; stroke-width: 1.5;" width="475" x="55.5" y="8"/><ellipse cx="267.25" cy="24" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M270.2188,29.6406 Q269.6406,29.9375 269,30.0781 Q268.3594,30.2344 267.6563,30.2344 Q265.1563,30.2344 263.8281,28.5938 Q262.5156,26.9375 262.5156,23.8125 Q262.5156,20.6875 263.8281,19.0313 Q265.1563,17.375 267.6563,17.375 Q268.3594,17.375 269,17.5313 Q269.6563,17.6875 270.2188,17.9844 L270.2188,20.7031 Q269.5938,20.125 269,19.8594 Q268.4063,19.5781 267.7813,19.5781 Q266.4375,19.5781 265.75,20.6563 Q265.0625,21.7188 265.0625,23.8125 Q265.0625,25.9063 265.75,26.9844 Q266.4375,28.0469 267.7813,28.0469 Q268.4063,28.0469 269,27.7813 Q269.5938,27.5 270.2188,26.9219 L270.2188,29.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="43" x="287.75" y="28.1543">Activity</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="56.5" x2="529.5" y1="40" y2="40"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="338" x="61.5" y="54.2104">course: Course = The course which the activity belongs to.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="463" x="61.5" y="67.0151">category: str = The category of the activity. Options: lecture, tutorial or practical.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="72" x="61.5" y="79.8198">capacity: int.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="158" x="61.5" y="92.6245">students: dict[str, Student].</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="56.5" x2="529.5" y1="99.2188" y2="99.2188"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="259" x="61.5" y="113.4292">add_student(student) -&gt; Inplace modification.</text><!--MD5=[4066b0363c5a91ff3b6e03e0428953a9]
+class Course--><rect fill="#FEFECE" filter="url(#fl2tmmfeo32am)" height="176.0469" id="Course" style="stroke: #A80036; stroke-width: 1.5;" width="272" x="6" y="180"/><ellipse cx="115.75" cy="196" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M118.7188,201.6406 Q118.1406,201.9375 117.5,202.0781 Q116.8594,202.2344 116.1563,202.2344 Q113.6563,202.2344 112.3281,200.5938 Q111.0156,198.9375 111.0156,195.8125 Q111.0156,192.6875 112.3281,191.0313 Q113.6563,189.375 116.1563,189.375 Q116.8594,189.375 117.5,189.5313 Q118.1563,189.6875 118.7188,189.9844 L118.7188,192.7031 Q118.0938,192.125 117.5,191.8594 Q116.9063,191.5781 116.2813,191.5781 Q114.9375,191.5781 114.25,192.6563 Q113.5625,193.7188 113.5625,195.8125 Q113.5625,197.9063 114.25,198.9844 Q114.9375,200.0469 116.2813,200.0469 Q116.9063,200.0469 117.5,199.7813 Q118.0938,199.5 118.7188,198.9219 L118.7188,201.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="44" x="136.25" y="200.1543">Course</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="277" y1="212" y2="212"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="60" x="12" y="226.2104">name: str.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="122" x="12" y="239.0151">lectures: list[Activity].</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="123" x="12" y="251.8198">tutorials: list[Activity].</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="131" x="12" y="264.6245">practicals: list[Activity].</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="155" x="12" y="277.4292">max_tutorials_capacity: int.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="156" x="12" y="290.2339">max_practical_capacity: int.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="77" x="12" y="303.0386">expected: int.</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="277" y1="309.6328" y2="309.6328"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="164" x="12" y="323.8433">number_of_activities() -&gt; int.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="158" x="12" y="336.6479">activities() -&gt; list(Activities).</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="260" x="12" y="349.4526">add_student(Student) -&gt; inplace modification.</text><!--MD5=[d6181cb537bdc20c0a3007a98a56832d]
+class Student--><rect fill="#FEFECE" filter="url(#fl2tmmfeo32am)" height="124.8281" id="Student" style="stroke: #A80036; stroke-width: 1.5;" width="263" x="313.5" y="205.5"/><ellipse cx="415.75" cy="221.5" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M418.7188,227.1406 Q418.1406,227.4375 417.5,227.5781 Q416.8594,227.7344 416.1563,227.7344 Q413.6563,227.7344 412.3281,226.0938 Q411.0156,224.4375 411.0156,221.3125 Q411.0156,218.1875 412.3281,216.5313 Q413.6563,214.875 416.1563,214.875 Q416.8594,214.875 417.5,215.0313 Q418.1563,215.1875 418.7188,215.4844 L418.7188,218.2031 Q418.0938,217.625 417.5,217.3594 Q416.9063,217.0781 416.2813,217.0781 Q414.9375,217.0781 414.25,218.1563 Q413.5625,219.2188 413.5625,221.3125 Q413.5625,223.4063 414.25,224.4844 Q414.9375,225.5469 416.2813,225.5469 Q416.9063,225.5469 417.5,225.2813 Q418.0938,225 418.7188,224.4219 L418.7188,227.1406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="50" x="436.25" y="225.6543">Student</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="314.5" x2="575.5" y1="237.5" y2="237.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="200" x="319.5" y="251.7104">index: int = Index of student in file.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="89" x="319.5" y="264.5151">first_name: str.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="87" x="319.5" y="277.3198">last_name: str.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="119" x="319.5" y="290.1245">student_number: int.</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="124" x="319.5" y="302.9292">courses: list[Course].</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="314.5" x2="575.5" y1="309.5234" y2="309.5234"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="251" x="319.5" y="323.7339">add_course(course) -&gt; inplace modification.</text><!--MD5=[0439d4a8301dc14766cd3e26135577fb]
+link Activity to Course--><path d="M248.47,124.57 C236.5,140.58 223.28,158.27 210.33,175.59 " fill="none" id="Activity-Course" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="207.05,179.98,215.6307,175.1457,210.034,175.968,209.2116,170.3713,207.05,179.98" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="251.74,120.2,243.1482,125.0147,248.7468,124.2051,249.5564,129.8037,251.74,120.2" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[e2c9118b5b072af52559f7b5d499988b]
+link Activity to Student--><path d="M337.59,124.26 C355.76,148.41 376.84,176.42 395.49,201.2 " fill="none" id="Activity-Student" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="398.7,205.47,396.5,195.87,395.7,201.47,390.1,200.67,398.7,205.47" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="334.53,120.2,336.73,129.8,337.53,124.2,343.13,125,334.53,120.2" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[74c98ce6e0011ec5da56b67bbaccc8a0]
+link Course to Student--><path d="M283.34,268 C291.61,268 299.89,268 308.16,268 " fill="none" id="Course-Student" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="313.32,268,304.32,264,308.32,268,304.32,272,313.32,268" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="278.11,268,287.11,272,283.11,268,287.11,264,278.11,268" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[397b937a04eaeeb2c77aa724d0e128c2]
+@startuml
+
+class Activity{
+add_student(student) -> Inplace modification.
+course: Course = The course which the activity belongs to.
+category: str = The category of the activity. Options: lecture, tutorial or practical.
+capacity: int.
+students: dict[str, Student].
+}
+
+class Course{
+number_of_activities() -> int.
+activities() -> list(Activities).
+add_student(Student) -> inplace modification.
+name: str.
+lectures: list[Activity].
+tutorials: list[Activity].
+practicals: list[Activity].
+max_tutorials_capacity: int.
+max_practical_capacity: int.
+expected: int.
+}
+
+class Student{
+add_course(course) -> inplace modification.
+index: int = Index of student in file.
+first_name: str.
+last_name: str.
+student_number: int.
+courses: list[Course].
+}
+
+Activity <-down-> Course
+Activity <-down-> Student
+Course <-right-> Student
+
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 11:22:07 CET 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.19+7-post-Ubuntu-0ubuntu122.04.1
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg><svg x="17" y="383"><defs><filter height="300%" id="fynf2jm1s035y" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FEFECE" filter="url(#fynf2jm1s035y)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="449" x="6" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="37" x="212" y="21.1387">Model</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="454" y1="25.9688" y2="25.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="437" x="12" y="39.251">index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="247" x="12" y="50.8916">((4 timeslots * 7 rooms + 1 evening slot) * 5 days).</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="278" x="12" y="62.5322">activity : str = string representation of the Activity object.</text><rect fill="#FEFECE" filter="url(#fynf2jm1s035y)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="441" x="490" y="14"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="141" x="640" y="27.1387">Activity_participant_list</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="491" x2="930" y1="31.9688" y2="31.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="278" x="496" y="45.251">activity : str = string representation of the Activity object.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="429" x="496" y="56.8916">student : str = string representation of the Student object. Based on their index number.</text><!--MD5=[fa7c4af55ef13e5cb0b47b093abca8c3]
+reverse link Model to Activity_participant_list--><path d="M460.22,38.5 C470.13,38.5 480.04,38.5 489.96,38.5 " fill="none" id="Model&lt;-Activity_participant_list" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="455.03,38.5,464.03,42.5,460.03,38.5,464.03,34.5,455.03,38.5" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[eb1fc970cf9febb415b2b355130c62f4]
+@startuml
+
+object Model{
+{field} index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144
+((4 timeslots * 7 rooms + 1 evening slot) * 5 days).
+activity : str = string representation of the Activity object.
+}
+
+object Activity_participant_list{
+activity : str = string representation of the Activity object.
+student : str = string representation of the Student object. Based on their index number.
+}
+
+Model <- Activity_participant_list
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 11:22:07 CET 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.19+7-post-Ubuntu-0ubuntu122.04.1
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg><!--MD5=[9f1c618e640de689c02a5403c17eeb96]
+@startuml
+label l [
+  {{
+
+class Activity{
+    add_student(student) -> Inplace modification.
+    course: Course = The course which the activity belongs to.
+    category: str = The category of the activity. Options: lecture, tutorial or practical.
+    capacity: int.
+    students: dict[str, Student].
+}
+
+class Course{
+    number_of_activities() -> int.
+    activities() -> list(Activities).
+    add_student(Student) -> inplace modification.
+    name: str.
+    lectures: list[Activity].
+    tutorials: list[Activity].
+    practicals: list[Activity].
+    max_tutorials_capacity: int.
+    max_practical_capacity: int.
+    expected: int.
+}
+
+class Student{
+    add_course(course) -> inplace modification.
+    index: int = Index of student in file.
+    first_name: str.
+    last_name: str.
+    student_number: int.
+    courses: list[Course].
+}
+
+Activity <-down-> Course
+Activity <-down-> Student
+Course <-right-> Student
+
+
+  }}
+  {{
+
+object Model{
+    {field} index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144 
+        ((4 timeslots * 7 rooms + 1 evening slot) * 5 days).
+    activity : str = string representation of the Activity object.
+}
+
+object Activity_participant_list{
+    activity : str = string representation of the Activity object.
+    student : str = string representation of the Student object. Based on their index number.
+}
+
+Model <- Activity_participant_list
+
+  }}
+]
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 11:22:07 CET 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.19+7-post-Ubuntu-0ubuntu122.04.1
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

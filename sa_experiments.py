@@ -75,15 +75,15 @@ if __name__ == "__main__":
     #         csv.writer(file).writerow(result)
 
     # heuristics = [["balance"], ["middle"], ["days"]]
-    # results = pool_exe(heuristic_tester, HillClimber, heuristics)
+    # results = pool_exe(heuristic_tester, SimulatedAnnealing, heuristics)
 
-    # with open("results/HillClimber/Heuristics Single Comparison.csv","a+",newline="",) as file:
+    # with open("results/HillClimber/SimulatedAnnealing Single Comparison.csv","a+",newline="",) as file:
     #     for result in results:
     #         csv.writer(file).writerow(result)
 
-    heuristics_combi = [["middle", "balance"], ["middle", "days"]]
-    results = pool_exe(heuristic_tester, HillClimber, heuristics_combi)
+    heuristics_combi = [["niddle", "balance"], ["middle", "days"]]
+    results = pool_exe(heuristic_tester, SimulatedAnnealing, heuristics_combi)
 
-    with open("results/HillClimber/Heuristics Double Comparison.csv","a+",newline="",) as file:
+    with open("results/HillClimber/SimulatedAnnealing Double Comparison.csv","a+",newline="",) as file:
         for result in results:
             csv.writer(file).writerow(result)
