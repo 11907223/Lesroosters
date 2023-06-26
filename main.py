@@ -18,24 +18,24 @@ if __name__ == "__main__":
     empty_model = Model()
 
     # _________________________RANDOM ALGORITHM________________________________________
-    random_algorithm = Random(empty_model)
+    # random_algorithm = Random(empty_model)
 
-    start_time = time.time()
-    random_algorithm.run(runs=20, verbose=True)
-    runtime = time.time() - start_time
-    
-    print_results('random', random_algorithm.model, runtime)
+    # start_time = time.time()
+    # random_algorithm.run(runs=20, verbose=True)
+    # runtime = start_time - time.time()
+
+    # print_results("random", random_algorithm.model, runtime)
 
     # ________________________BEAM SEARCH ALGORITHM____________________________________
 
-    # beam_search = BeamSearch(empty_model)
-    # print("STARTING BEAM SEARCH ALGORITHM \n")
+    beam_search = BeamSearch(empty_model)
+    print("STARTING BEAM SEARCH ALGORITHM \n")
 
-    # start_time = time.time()
-    # beam_search.run(beam=5, runs=100, heuristic="capacity", verbose=True)
-    # runtime = time.time() - start_time
+    start_time = time.time()
+    beam_search.run(beam=1, runs=10, heuristic="capacity", verbose=True)
+    runtime = start_time - time.time()
 
-    # print_results('beam search', beam_search.model, runtime)
+    print_results("beam search", beam_search.model, runtime)
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
     # hillclimber = HillClimber(random_algorithm.model)
@@ -55,17 +55,6 @@ if __name__ == "__main__":
     # runtime = time.time() - start_time
 
     # print_results('simulated annealing', simulated_annealing.model, runtime)
-
-    # ________________________BEAM SEARCH ALGORITHM________________________
-
-    # beam_search = BeamSearch(empty_model)
-    # print("STARTING BEAM SEARCH ALGORITHM \n")
-
-    # start_time = time.time()
-    # beam_search.run(beam=2, runs=1, heuristic="capacity", verbose=True)
-    # runtime = time.time() - start_time
-
-    # print_results('beam search', beam_search.model, runtime)
 
     # ________________________GREEDY ALGORITHM_________________________________________
     # start_time = time.time()
