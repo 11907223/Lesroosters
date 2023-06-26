@@ -330,7 +330,7 @@ class Model:
         return penalty_per_day
 
     def get_worst_days(self) -> dict[str, int]:
-        """Return the worst """
+        """Return the worst"""
         gap_per_day = self.get_penalties_per_day("gap penalties")
         conflict_per_day = self.get_penalties_per_day("conflict penalties")
 
@@ -444,8 +444,10 @@ class Model:
     def remove_duplicates(self, schedule: list[int]) -> list[int]:
         return list(set(schedule))
 
-    def calc_student_gap_penalty(self, daily_schedule: list[int]) -> int:
-        gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: 50}
+    def calc_student_gap_penalty(
+        self, daily_schedule: list[int], third_gap_penalty: int = 10
+    ) -> int:
+        gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: third_gap_penalty}
         penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
 
         return gap_penalty_map[sum(penalty_schedule)]
@@ -520,12 +522,13 @@ class Model:
 
         return total
 
-    def get_penalty_at_(self, index: int):
+    def get_penalty_at_index(self, index: int):
         return self.penalty_per_index[index]
 
-    def sort_activities_size(self, descending=True):
-        """
-        Sort the activities on nr. of participants, from most to least participants.
+    def sort_activities_on_enrollments(self, descending=True):
+        """Sort activities on nr. of participants, from most to least participants.
+
+        Sorting occurs inplace in self.unassgined_activities.
         """
         self.unassigned_activities = sorted(
             self.activity_enrollments,
@@ -546,7 +549,7 @@ class Model:
             return 1
         return 0
 
-    def sort_activities_overlap(self, student_overlap_value=True) -> None:
+    def sort_activities_on_overlap(self, student_overlap_value=True) -> None:
         """Sort the activities in ascend of overlapping activities.
 
         Sorts the unassigned activities in place.
@@ -589,7 +592,7 @@ class Model:
 
         return new_copy
 
-    def valid_schedule_of_(self, student: int) -> bool:
+    def check_valid_schedule_of_student(self, student: int) -> bool:
         """Evaluate if all activities of a student have been assigned to an index in the model.
 
         Args:
@@ -612,7 +615,7 @@ class Model:
         """Evaluate if the solution is valid."""
         # Evaluate if student with 5 courses has
         #   all activities scheduled in the solution.
-        if self.valid_schedule_of_(0) is False:
+        if self.check_valid_schedule_of_student(0) is False:
             return False
 
         # Evaluate if the number of activities is

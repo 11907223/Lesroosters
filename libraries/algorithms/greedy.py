@@ -24,11 +24,11 @@ class Greedy:
         self.model = empty_model.copy()
         self.empty_slots = list(self.model.solution.keys())
         if shuffle:
-            self.model.shuffle_activitiescalc_total_penalty
+            self.model.shuffle_activities()
         elif sort:
-            self.model.sort_activities_size(descending=True)
+            self.model.sort_activities_on_enrollments(descending=True)
         elif sort_overlap:
-            self.model.sort_activities_overlap()
+            self.model.sort_activities_on_overlap()
 
     def get_optimal_index(self, activity: tuple[str, str], current_penalty: int):
         """
@@ -76,7 +76,7 @@ class Greedy:
         """
         index, penalty = self.get_optimal_index(activity, current_penalty)
         self.model.add_activity(index, activity)
-        self.update_empty_calc_total_penalty
+        self.update_empty_slots()
         return penalty
 
     def update_empty_slots(self, index):
@@ -103,7 +103,7 @@ class Greedy:
 
 class RandomGreedy(Greedy):
     """
-    Combines random and greedy choices to contcalc_total_penaltyerate a schedule.
+    Combines random and greedy choices to contructively generate a schedule.
     """
 
     def insert_randomly(self, activity: tuple[str, str]):
