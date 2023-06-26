@@ -38,14 +38,14 @@ if __name__ == "__main__":
     print_results("beam search", beam_search.model, runtime)
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
-    # hillclimber = HillClimber(random_algorithm.model)
+    # hillclimber = HillClimber(random_algorithm.best_model)
     # print("\n STARTING HILLCLIMBER ALGORITHM")
 
     # start_time = time.time()
     # hillclimber.run(verbose=True, heuristics=['middle', 'day'])
     # runtime = time.time() - start_time
 
-    # print_results('hillclimber', hillclimber.model, runtime)
+    # print_results(hillclimber, runtime)
 
     # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     # print_results('randomgreedy', random_greedy, runtime)
 
     # __________________________BASELINE_______________________________________________
-    random.seed(10)
+    random.seed(0)
     with open("baseline.txt", "a+") as file:
         for i in range(10000):
             penalty = []
@@ -79,6 +79,5 @@ if __name__ == "__main__":
                 random_schedule = Random(empty_model)
                 penalty.append(random_schedule.run().calc_total_penalty())
                 print(f"Current run: {i * 100 + j + 1}", end="\r")
-            # print("\n".join([str(score) for score in penalty]))
             text = "\n".join([str(score) for score in penalty])
             file.write(f"\n{text}")

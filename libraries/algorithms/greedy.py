@@ -26,9 +26,9 @@ class Greedy:
         if shuffle:
             self.model.shuffle_activitiescalc_total_penalty
         elif sort:
-            self.model.sort_activities_size(descending=True)
+            self.model.sort_activities_on_enrollments(descending=True)
         elif sort_overlap:
-            self.model.sort_activities_overlap()
+            self.model.sort_activities_on_overlap()
 
     def get_optimal_index(self, activity: tuple[str, str], current_penalty: int):
         """
