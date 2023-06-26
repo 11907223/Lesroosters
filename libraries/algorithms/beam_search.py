@@ -37,9 +37,20 @@ class BeamSearch(Random):
         state = heapq.heappop(self.queue)
         return state[1]
 
-    def get_totpenalty_possibilities(
+    def get_tot_penalty_possibilities(
         self, model: Model, index: int, n: int
     ) -> list[tuple[str, str]]:
+        """Gets n possible activities that would fit in specific index of a model.
+        Possibilities are selected according to the total penalty.
+
+        Args:
+            model (Model): A model for wich the possibile activities are calculated.
+            index (int): The index in the model for wich possible activties are calculated.
+            n (int): The beam width, how many possible activities should be returned.
+
+        Returns:
+            list[Tuple(str,str)]: A list with activity tuples of length n.
+        """
         possibilities = {}
 
         # Check if activity capacity matches hall capacity
@@ -66,7 +77,7 @@ class BeamSearch(Random):
             n (int): The beam width specifying amount of possible activities to be returned.
 
         Returns:
-            list_possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
+            list[Tuple(str,str)]: A list with activity tuples of length n.
         """
         possibilities = {}
         no_possibilities = {}
@@ -96,7 +107,7 @@ class BeamSearch(Random):
             heuristic (str): Defaults to  'capacity', second option is "totalpenalty".
 
         Returns:
-            sorted_possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
+            list[Tuple(str,str)]: A list with activity tuples of length n.
         """
 
         # If there are possibilities
@@ -133,7 +144,7 @@ class BeamSearch(Random):
                 Options are "random", "capacity", "totalpenalty". Defaults to 'random'.
 
         Returns:
-            possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
+            list[Tuple(str,str)]: A list with activity tuples of length n.
 
         """
 
@@ -155,7 +166,7 @@ class BeamSearch(Random):
 
     def calc_priority(self, model: Model) -> int:
         """Calculate the priority of a model.
-         
+
         The priority of a model is based on total penalty and number of
         activities that still has to be assigned.
 
@@ -174,7 +185,7 @@ class BeamSearch(Random):
         self, model: Model, index: int, beam: int, heuristic="random"
     ) -> bool:
         """Create child-states according to the beam and the heuristic.
-        
+
         Created children states are added to the list of states.
 
         Args:
