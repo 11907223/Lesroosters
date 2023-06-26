@@ -124,7 +124,7 @@ class RandomGreedy(Greedy):
         added = self.model.add_activity(index, activity)
         self.update_empty_slots(index)
         print(activity, added)
-        return self.model.total_penalty()
+        return self.model.calc_total_penalty()
 
     def capacity_overflow(self, index, activity, max_difference=5):
         """
