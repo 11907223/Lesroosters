@@ -13,8 +13,7 @@ class HillClimber(Random):
     Each improvement is kept for the next iteration.
     Improvements are based on a decrease in penalty points.
     This HillClimber is based on a stochastic HillCimber.
-    It can be ran through the Random-Restart function to become a Random-Restart or
-    Shotgun HillClimber.
+    By running this HillClimber with steepest=True, it becomes a steepest ascend HillCLimber.
 
     This is a child of the Random() algorithm due to overlapping checking function and inits.
     """
@@ -242,6 +241,8 @@ class HillClimber(Random):
             modifier (float): Amount of weights to be assigned. Defaults to 2.
                     This means it becomes twice as likely for a location to be pushed
                         or pulled from.
+            steepest (bool): Evaluate if algorithm has to only take each steepest climb.
+                    Defaults to False. Will result in deterministic algorithm behaviour.
         """
         push_map = None
         pull_map = None
@@ -296,11 +297,13 @@ class HillClimber(Random):
             heuristics (list[str]): Optional list of heuristics to be used. Heuristics can be combined.
                 Options are:
                     'balance': Use weighted swapping to trade indices with a
-                    high penalty score to an index with a lower penalty score,
-                    'middle' : Use weighted swapping to trade indices with
+                        penalty score to an index with a lower penalty score,
+                    'middle': Use weighted swapping to trade indices with
                         high penalty scores towards the centre of the schedule (timeslot 11 & 1),
-                    'days' : Use weighted swapping to trade days containing
+                    'days': Use weighted swapping to trade days containing
                         high gap penalties with days containing high conflict hour penalties.
+                    'steepest': Evaluate if algorithm has to only take each steepest climb.
+                        Will result in deterministic algorithm behaviour.
             modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.2.
         """
         iteration_count: str | int = iterations
@@ -338,7 +341,7 @@ class HillClimber(Random):
                 break
             convergence_counter += 1
 
-        with open(f"{self}.csv", "a+", newline="") as file:
+        with open(f"`data/{self}.csv", "a+", newline="") as file:
             csv.writer(file).writerow(scores)
 
         return self.best_model
