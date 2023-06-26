@@ -7,10 +7,10 @@ Activity, Course, Hall and Student are immmutable data designed for data storage
 ## Table of Contents
 
 * [activity.py](#activity.py)
-* [course.py](#course)
-* [hall.py](#hall)
-* [model.py](#model)
-* [student.py](#student)
+* [course.py](#course.py)
+* [hall.py](#hall.py)
+* [model.py](#model.py)
+* [student.py](#student.py)
 
 ## [activity.py](/libraries/classes/activity.py)
 
