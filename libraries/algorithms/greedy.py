@@ -9,7 +9,7 @@ class Greedy:
     Greedy class constructively generates a schedule by locally taking optimal decisions.
 
     Attributes:
-        model (Model): MOdel (to be) filled  by algorithm.
+        model (Model): Model (to be) filled  by algorithm.
         empty_slots (list[int]): Stores unfilled indices in schedule.
     """
 
@@ -170,7 +170,7 @@ class RandomGreedy(Greedy):
             model (Model): the generated solution.
         """
         current_penalty = 0
-        random.seed(1)
+
         for i, activity in enumerate(self.model.unassigned_activities):
             # make random or greedy choice
             if random.random() < self.calc_random_chance(i):
