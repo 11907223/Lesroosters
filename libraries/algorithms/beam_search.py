@@ -42,7 +42,7 @@ class BeamSearch:
 
         # Check if activity capacity matches hall capacity
         for activity in model.unassigned_activities:
-            activity_capacity = model.get_student_count_in_(activity)
+            activity_capacity = model.get_student_count_in_activity(activity)
             if activity_capacity < capacity:
                 # If so, add activity to possibilities
                 possibilities.update({activity_capacity: activity})
@@ -83,7 +83,7 @@ class BeamSearch:
         return list_possibilities
 
     def evaluate_priority(self, model: Model) -> int:
-        penalty = model.total_penalty()
+        penalty = model.calc_total_penalty()
         unassigned = len(model.unassigned_activities)
 
         return penalty + unassigned
@@ -115,7 +115,7 @@ class BeamSearch:
         """
         Checks and accepts better solutions than the current solution.
         """
-        new_value = new_model.total_penalty()
+        new_value = new_model.calc_total_penalty()
         old_value = self.best_value
 
         # Minimalization of penalty score
@@ -143,7 +143,7 @@ class BeamSearch:
 
                 # Retrieve a random empty index from the model.
                 if step % 2:
-                    index = new_model.get_high_capacity_index()
+                    index = new_model.get_high_capacity_empty_index()
                 else:
                     index = new_model.get_random_index(empty=True)
 
@@ -154,7 +154,7 @@ class BeamSearch:
 
                     # write penalty of solution to csv
                     with open("results/beam_result.txt", "a+") as file:
-                        file.write(f"{new_model.total_penalty()}\n")
+                        file.write(f"{new_model.calc_total_penalty()}\n")
 
                     break
 

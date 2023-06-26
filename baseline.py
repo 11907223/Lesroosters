@@ -13,10 +13,10 @@ def worker(arg, q):
 
     random_schedule = Random(empty_model)
     random_schedule.run()
-    result = random_schedule.model.total_penalty()
+    result = random_schedule.best_model.calc_total_penalty()
     print(f"ID#{identifier}: penalty: {result}")
     file.write(f"\n{result}")
-    return "\n".join(str(random_schedule.model.total_penalty()))
+    return "\n".join(str(random_schedule.best_model.calc_total_penalty()))
 
     s = "this is a test"
     txt = s
@@ -75,10 +75,10 @@ if __name__ == "__main__":
 def task(identifier):
     random_schedule = Random(empty_model)
     random_schedule.run()
-    result = random_schedule.model.total_penalty()
+    result = random_schedule.best_model.calc_total_penalty()
     print(f"ID#{identifier}: penalty: {result}")
     file.write(f"\n{result}")
-    return "\n".join(str(random_schedule.model.total_penalty()))
+    return "\n".join(str(random_schedule.best_model.calc_total_penalty()))
 
 
 def main():

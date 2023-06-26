@@ -15,7 +15,7 @@ class Random:
     def __init__(self, initial_model: Model):
         """ "Init creates a copy of the initial model to ensure pointers map to new locations."""
         self.initial_model = initial_model.copy()
-        self.model = self.initial_model
+        self.best_model = self.initial_model
 
     def insert_randomly(self, activity_tuple, new_model) -> None:
         """Insert activity in random slot."""
@@ -34,9 +34,9 @@ class Random:
         Returns:
             bool: True if new model has a lower score than the stored model, else False.
         """
-        if new_model < self.model:
+        if new_model < self.best_model:
             # Save best model between iterations.
-            self.model = new_model
+            self.best_model = new_model
             return True
         return False
 
@@ -57,8 +57,8 @@ class Random:
         for run in range(runs):
             penalty_score = (
                 "∞"
-                if self.model.penalty_points == sys.maxsize
-                else self.model.penalty_points
+                if self.best_model.penalty_points == sys.maxsize
+                else self.best_model.penalty_points
             )
             print(
                 f"Run {run}/{runs}, current penalty score: {penalty_score}      ",
@@ -69,15 +69,16 @@ class Random:
             new_model = self.initial_model.copy()
 
             # Create random schedule.
-            for activity in new_model.participants:
+            for activity in new_model.activity_enrollments:
                 self.insert_randomly(activity, new_model)
 
-            new_model.update_penalty_points()
+            # Update penalty points of new model.
+            new_model.calc_total_penalty()
 
             # Accept new model if improved.
             self.check_solution(new_model)
 
-        return self.model
+        return self.best_model
 
     def __repr__(self) -> str:
         return "Random Algorithm"

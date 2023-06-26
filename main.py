@@ -6,6 +6,7 @@ from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
+import random
 import time
 import random
 
@@ -18,7 +19,7 @@ if __name__ == "__main__":
 
     # _________________________RANDOM ALGORITHM________________________________________
     random_algorithm = Random(empty_model)
-    
+
     start_time = time.time()
     random_algorithm.run(runs=20, verbose=True)
     runtime = time.time() - start_time
@@ -48,7 +49,7 @@ if __name__ == "__main__":
 
     # ______________________SIMULATED ANNEALING________________________________________
     # simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
-    
+
     # start_time = time.time()
     # simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
     # runtime = time.time() - start_time
@@ -81,14 +82,14 @@ if __name__ == "__main__":
     # print_results('randomgreedy', random_greedy, runtime)
 
     # __________________________BASELINE_______________________________________________
-
-    # with open("baseline.txt", "a+") as file:
-    #     penalty = []
-    #     for i in range(10000):
-    #         for j in range(100):
-    #             random_schedule = Random(empty_model)
-    #             penalty.append(random_schedule.run().total_penalty())
-    #         print(f"Current run: {i*j+j + i + 1}")
-    #         # print("\n".join([str(score) for score in penalty]))
-    #         text = '\n'.join([str(score) for score in penalty])
-    #         file.write(f"\n{text}")
+    random.seed(10)
+    with open("baseline.txt", "a+") as file:
+        for i in range(10000):
+            penalty = []
+            for j in range(100):
+                random_schedule = Random(empty_model)
+                penalty.append(random_schedule.run().calc_total_penalty())
+                print(f"Current run: {i * 100 + j + 1}", end="\r")
+            # print("\n".join([str(score) for score in penalty]))
+            text = "\n".join([str(score) for score in penalty])
+            file.write(f"\n{text}")

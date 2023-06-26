@@ -3,6 +3,7 @@ from libraries.algorithms.randomise import Random
 import sys
 import numpy as np
 import csv
+import math
 from typing import Optional
 
 
@@ -32,7 +33,11 @@ class HillClimber(Random):
         super().__init__(valid_model)
 
     def normalization_formula(
-        self, highest_score: float, lowest_score: float, score_to_update: float
+        self,
+        highest_score: float,
+        lowest_score: float,
+        score_to_update: float,
+        steepest: bool = False,
     ) -> float:
         """
         Calculates normalised weights based on scores in the model.
@@ -41,13 +46,14 @@ class HillClimber(Random):
             highest_score (float): The highest score stored.
             lowest_score (float): The lowest score stored.
             score_to_update (float): The score to update.
+            steepest (bool): Evaluate if only steepest points are to be swapped.
 
         Returns:
             float: The score to update normalized to a value between 0 and 1.
         """
-        return (score_to_update - lowest_score) / (
-            highest_score - lowest_score
-        )
+        if steepest is True:
+            score_to_update = math.log(score_to_update)
+        return (score_to_update - lowest_score) / (highest_score - lowest_score)
 
     def normalize_weights(self, weight_map: list[float]) -> np.array:
         """Normalize weights to a value between 0 and 1.
@@ -72,9 +78,7 @@ class HillClimber(Random):
 
         return np.array(normalized_scores)
 
-    def increase_centre_weight(
-        self, new_model, modifier: float=1.2
-    ) -> list[float]:
+    def increase_centre_weight(self, new_model, modifier: float = 1.2) -> list[float]:
         """Increase centre weight of day.
 
         The likelihood of placing high capacity penalty activities in timeslot
@@ -103,7 +107,7 @@ class HillClimber(Random):
         return np.array(new_scores)
 
     def increase_weight_of_days(
-        self, new_model: Model, day: int, modifier: float=1.2
+        self, new_model: Model, day: int, modifier: float = 1.2
     ) -> np.array:
         """Increase the likelihood of pushing or pulling to a specific day.
 
@@ -135,6 +139,7 @@ class HillClimber(Random):
         modifier: float = 1.2,
         centre_placement: bool = False,
         day_balancing: bool = False,
+        steepest: bool = False,
     ) -> tuple[np.array, np.array]:
         """Balancing of index penalties based on a given number of heuristics.
 
@@ -149,6 +154,8 @@ class HillClimber(Random):
                 day_balancing (bool): Whether to increase weights based on conflicts and gaps
                     in each day. Defaults to false. Attempts to move activities from high
                     conflict days to days with high gap penalties in an attempt to balance them.
+                steepest (bool): Evaluate if algorithm has to only take each steepest climb.
+                    Defaults to False. Will result in deterministic algorithm behaviour.
 
         Returns:
             tuple[list[float], list[float]]: Two lists of weights, of the length of model.
@@ -171,8 +178,8 @@ class HillClimber(Random):
             gap_day_map = new_scores + self.increase_weight_of_days(
                 new_model, worst_days["gap day"], modifier
             )
-            push_map = self.normalize_weights(conflict_day_map)
-            pull_map = self.normalize_weights(gap_day_map)
+            push_map = self.normalize_weights(conflict_day_map, steepest)
+            pull_map = self.normalize_weights(gap_day_map, steepest)
             return push_map, pull_map
 
         # If centre and day balancing are not selected, only normalize weights.
@@ -180,7 +187,7 @@ class HillClimber(Random):
         # A pull map is the opposite. By pulling and pushing opposites, the goal is to
         # have a net positive by having a higher decrease in capacity than the increase
         # that occurs in the increase.
-        push_map = self.normalize_weights(new_scores)
+        push_map = self.normalize_weights(new_scores, steepest)
         pull_map = 1 - np.array(push_map)
 
         return push_map, pull_map
@@ -193,15 +200,15 @@ class HillClimber(Random):
     ) -> None:
         """Swap two slots in the model at random.
 
-        The push_map and the pull_map respectively increase 
+        The push_map and the pull_map respectively increase
         the weight of high and low penalty locations.
 
         Args:
             new_model (Model): A copy of the currently stored model with mutations.
-            push_map (np.array): A list of weights for each index. 
+            push_map (np.array): A list of weights for each index.
                 Higher weights at an index means a greater likelihood the index is selected.
                 Defaults to None. Every index will then receive the same weight.
-            pull_map (np.array): A list of weights for each index. 
+            pull_map (np.array): A list of weights for each index.
                 Higher weights at an index means a greater likelihood the index is selected.
                 Defaults to None. Every index will then receive the same weight.
         """
@@ -216,7 +223,8 @@ class HillClimber(Random):
         new_model: Model,
         number_of_swaps: int = 1,
         heuristics: Optional[list[str]] = None,
-        modifier: float=1.2,
+        modifier: float = 1.2,
+        steepest: bool = False,
     ) -> None:
         """Swap a number of indices.
 
@@ -240,16 +248,23 @@ class HillClimber(Random):
         if heuristics is not None:
             if "middle" in heuristics:
                 push_map, pull_map = self.heuristic_balancing(
-                    new_model, centre_placement=True, modifier=modifier
+                    new_model,
+                    centre_placement=True,
+                    modifier=modifier,
+                    steepest=steepest,
                 )
             if "day" in heuristics:
                 conflict_map, gap_map = self.heuristic_balancing(
-                    new_model, day_balancing=True, modifier=modifier
+                    new_model, day_balancing=True, modifier=modifier, steepest=steepest
                 )
                 push_map += conflict_map
                 pull_map += gap_map
             elif "balance" in heuristics:
-                push_map, pull_map = self.heuristic_balancing(new_model, modifier=modifier)
+                push_map, pull_map = self.heuristic_balancing(
+                    new_model,
+                    modifier=modifier,
+                    steepest=steepest,
+                )
 
         for _ in range(number_of_swaps):
             self.swap_slots(new_model, push_map=push_map, pull_map=pull_map)
@@ -302,16 +317,17 @@ class HillClimber(Random):
             print(
                 f"Iteration {iteration}/{iteration_count}",
                 f"Convergence counter: {convergence_counter}",
-                f"current penalty score: {self.model.penalty_points}    ",
+                f"current penalty score: {self.best_model.penalty_points}    ",
                 end="\r",
             ) if verbose else None
 
             # Create a copy of the model to simulate a mutation.
-            new_model = self.model.copy()
+            new_model = self.best_model.copy()
 
             self.mutate_model(new_model, mutate_slots_number, heuristics, modifier)
 
-            scores.append(new_model.update_penalty_points())
+            # Update the score of the model and store it.
+            scores.append(new_model.calc_total_penalty())
 
             if self.check_solution(new_model) is True:
                 # Accept the mutation if it is an improvement.
@@ -322,10 +338,10 @@ class HillClimber(Random):
                 break
             convergence_counter += 1
 
-        with open(f"{self}.csv", 'a+', newline='') as file:
+        with open(f"{self}.csv", "a+", newline="") as file:
             csv.writer(file).writerow(scores)
 
-        return self.model
+        return self.best_model
 
     def __repr__(self) -> str:
         return "HillClimber Algorithm"
