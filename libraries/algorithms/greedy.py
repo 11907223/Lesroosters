@@ -47,7 +47,7 @@ class Greedy:
         lowest_penalty = sys.maxsize
         for index in self.empty_slots:
             self.model.add_activity(index, activity)
-            new_penalty = self.model.total_penalty()
+            new_penalty = self.model.calc_total_penalty()
 
             # if penalty unchanged, optimal index is found
             if new_penalty == current_penalty:
@@ -76,7 +76,7 @@ class Greedy:
         """
         index, penalty = self.get_optimal_index(activity, current_penalty)
         self.model.add_activity(index, activity)
-        self.update_empty_slots()
+        self.update_empty_slots(index)
         return penalty
 
     def update_empty_slots(self, index):
