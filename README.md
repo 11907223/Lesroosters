@@ -18,7 +18,22 @@ This case is based on the University Timetabling Problem, which is inspired by t
 
 ## Installation
 
+1. Download Python version 3.10.6
+2. Clone the repository: `git clone https://github.com/11907223/lesroosters`
+3. Navigate to the project directory: `cd lesroosters`
+4. Create a virtual environment for the visualisations: `python3 -m venv venv`
+5. Activate the virtual environment:
+   - For Mac/Linux: `source venv/bin/activate`
+   - For Windows: `venv\Scripts\activate.bat`
+6. Install the required dependencies: `pip install -r requirements.txt`
+
 ## Usage
+
+To run all algorithms
+`python3 main.py`
+
+To see visualisation
+`flask run`
 
 ## Folder Structure
 
