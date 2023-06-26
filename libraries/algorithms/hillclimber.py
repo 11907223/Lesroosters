@@ -54,7 +54,9 @@ class HillClimber(Random):
             score_to_update = math.log(score_to_update)
         return (score_to_update - lowest_score) / (highest_score - lowest_score)
 
-    def normalize_weights(self, weight_map: list[float], steepest: bool=False) -> np.array:
+    def normalize_weights(
+        self, weight_map: list[float], steepest: bool = False
+    ) -> np.array:
         """Normalize weights to a value between 0 and 1.
 
         Args:
