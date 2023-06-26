@@ -5,7 +5,7 @@ import heapq
 
 
 class BeamSearch(Random):
-    """The BeamSearch class represents a constructive Breadth Frist - Beam Search algorithm.
+    """The BeamSearch algorithm implements a constructive Breadth First - Beam Search algorithm.
 
     In this class, a state is a schedule.
     The first state is a empty schedule, the final states are filled schedules.
@@ -28,16 +28,12 @@ class BeamSearch(Random):
         self.queue: list[tuple[int, Model]] = []
 
     def reset_model(self) -> None:
-        """Resets the model and queue of the BeamSearch class."""
+        """Reset the model and queue of the BeamSearch class."""
         self.initial_model = Model()
         self.queue = []
 
     def get_next_state(self) -> Model:
-        """Method that gets the next state from the list of states.
-
-        Returns:
-            Model.
-        """
+        """Return the next model from the list of states."""
         state = heapq.heappop(self.queue)
         return state[1]
 
@@ -60,13 +56,14 @@ class BeamSearch(Random):
     def get_capacity_possibilities(
         self, model: Model, index: int, n: int
     ) -> list[tuple[str, str]]:
-        """Gets n possible activities that would fit in specific index of a model.
+        """Get n possible activities that would fit in specific index of a model.
+
         Possibilities are selected as possibilities according to capacity.
 
         Args:
             model (Model): A model for wich the possibile activities are calculated.
             index (int): The index in the model for wich possible activties are calculated.
-            n (int): The beam width, how many possible activities should be returned.
+            n (int): The beam width specifying amount of possible activities to be returned.
 
         Returns:
             list_possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
@@ -90,13 +87,13 @@ class BeamSearch(Random):
     def sort_possibilities(
         self, n: int, possibilities: dict, no_possibilities={}, heuristic="capacity"
     ) -> list[tuple[str, str]]:
-        """Sorts all possibilities according to heuristic and returns them.
+        """Sort all possibilities according to heuristic and returns them.
 
         Args:
             n (int): The beam width, how many possible activities should be returned.
             possibilities (dict): Dictionary of possible activities mapped to their capacity.
             no_possibilities (dict): Dictionary of not possible activities mapped to their capacity.
-            heuristic (str): default capacity, second option is "totalpenalty".
+            heuristic (str): Defaults to  'capacity', second option is "totalpenalty".
 
         Returns:
             sorted_possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
@@ -124,7 +121,8 @@ class BeamSearch(Random):
     def get_possibilities(
         self, model: Model, index: int, n: int, heuristic="random"
     ) -> list[tuple[str, str]]:
-        """Gets n possible activities that would fit in specific index of a model.
+        """Get n possible activities that would fit in specific index of a model.
+
         Possibilities are be calculated according to heuristic.
 
         Args:
@@ -132,7 +130,7 @@ class BeamSearch(Random):
             index (int): The index in the model for wich possible activties are calculated.
             n (int): The beam width, how many possible activities should be returned.
             heuristic (str): The heurisitc that should be used to calculate possible activities.
-                Options are "random", "capacity", "totalpenalty"
+                Options are "random", "capacity", "totalpenalty". Defaults to 'random'.
 
         Returns:
             possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
@@ -156,14 +154,16 @@ class BeamSearch(Random):
         return possibilities
 
     def calc_priority(self, model: Model) -> int:
-        """Calculates the priority of a model, based on total penalty and number of
+        """Calculate the priority of a model.
+         
+        The priority of a model is based on total penalty and number of
         activities that still has to be assigned.
 
         Args:
             model (Model): The model that needs to be calculated.
 
         Returns:
-            priority (int): A priority scroe for the model.
+            priority (int): A priority score of the model.
         """
         penalty = model.calc_total_penalty()
         unassigned = len(model.unassigned_activities)
@@ -173,9 +173,9 @@ class BeamSearch(Random):
     def create_children(
         self, model: Model, index: int, beam: int, heuristic="random"
     ) -> bool:
-        """
-        Creates child-states according to the beam and the heursitic,
-        once created child-states are added to the list of states.
+        """Create child-states according to the beam and the heuristic.
+        
+        Created children states are added to the list of states.
 
         Args:
             model (Model): The model that is used to create child-states.
@@ -185,7 +185,7 @@ class BeamSearch(Random):
                 options are "random", "capacity" and "totalpenalty"
 
         Returns:
-            bool: True if child-states are successfully created
+            bool: True if child-states are successfully created.
         """
 
         # Retrieve all valid possible activities for the index
@@ -205,7 +205,7 @@ class BeamSearch(Random):
         return True
 
     def run(self, beam=2, runs=1, heuristic="random", verbose: bool = False) -> Model:
-        """Runs the beam search algorithm untill a valid solution is found.
+        """Run the beam search algorithm untill a valid solution is found.
 
         Args:
             beam (int): The beam that the algorithm should use.

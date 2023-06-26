@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     # __________________________BASELINE_______________________________________________
     random.seed(0)
-    with open("data/baseline.txt", "a+") as file:
+    with open("results/baseline.txt", "a+") as file:
         for i in range(10000):
             penalty = []
             for j in range(100):
