@@ -40,9 +40,8 @@ class Greedy:
             current_penalty (int): Penalty points of the current model.
 
         Returns:
-            tuple[int, int]:
-                optimal_index (int): best index found.
-                lowest_penalty (int): total penalty after inserting activity at optimal_index.
+            optimal_index (int): best index found.
+            lowest_penalty (int): total penalty after inserting activity at optimal_index.
         """
 
         # loop over timeslots
