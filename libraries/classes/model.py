@@ -9,8 +9,6 @@ import numpy as np
 import copy
 import random
 
-activity_type = tuple[str, str]
-
 
 class Model:
     """A model representation for a schedule.
@@ -19,13 +17,26 @@ class Model:
 
     Attributes:
         courses (dict[str, Course]): A mapping of a course name to a Course object.
-        students (dict[str, Student]): A mapping of a student index (based on loading order) to a Student object.
-        halls (dict[str, Hall]): A mapping of a hall index (based on loading order) to a Hall object.
+        students (dict[str, Student]):
+            A mapping of a student index (based on loading order) to a Student object.
+        halls (dict[str, Hall]):
+            A mapping of a hall index (based on loading order) to a Hall object.
         solution (dict[int, tuple[str, str]]): A mapping of a schedule slot index
-            (which maps to day-timeslot-hall) to an activity. An activity is represented as ('Course name', 'Activity').
+            (which maps to day-timeslot-hall) to an activity.
+            An activity is represented as ('Course name', 'Activity').
             Example of an activity: ('Heuristieken 1', 'lecture 1').
-        participants (dict[tuple[str, str], set[int]]): A dictionary containing activities and their set of students
-            students are represented by their index number.
+        activity_enrollments (dict[tuple[str, str], set[int]]):
+            A dictionary containing activities and their set of students.
+            Students are represented by their index number.
+        penalty_per_index (dict[int, int]): Dictionary of penalty points per index.
+            E.G. {'(timeslot) 0': 5 (penalty points)}.
+        penalties_per_student (dict[int, dict[int, dict[str, int]]]):
+            A mapping of student IDs to a dict of days which map to the conflict penalties and gap penalties.
+            Example: {(student) 0: {(day) 0: conflict penalties : 5, gap penalties : 2}.
+        unassigned_activities (list[tuple[str, str]]):
+            A list of activities which have not been placed in the solution.
+        penalty_points (int | float): Number of penalty points added together.
+            Defaults to infinite on an empty model and is overwritten when model is filled.
     """
 
     def __init__(self, path: str = "data", auto_load_students: bool = True) -> None:
@@ -40,16 +51,22 @@ class Model:
         self.students: dict[int, Student] = load_students(self.courses, path)
         self.halls: dict[int, Hall] = load_halls(path)
         self.solution = self.init_model((None, None))
-        self.activity_enrollments: dict[tuple[str, str], set[int]] = self.init_student_model()
+        self.activity_enrollments: dict[
+            tuple[str, str], set[int]
+        ] = self.init_student_model()
         self.penalty_per_index: dict[int, int] = self.init_model(0)
-        self.penalties_per_student: dict[int, dict[int, dict[str, int]]] = defaultdict(dict)
-        self.unassigned_activities = list(self.activity_enrollments.keys())
+        self.penalties_per_student: dict[int, dict[int, dict[str, int]]] = defaultdict(
+            dict
+        )
+        self.unassigned_activities: tuple[str, str] = list(
+            self.activity_enrollments.keys()
+        )
 
         # Initiate an empty model with an improbably high score to ensure it always evaluates
         #   worse vs. other models. As an empty model contains no data,
         #   it can score no negative points and therefore would compare as better than
         #   a generated model.
-        self.penalty_points: int | float = float('inf')
+        self.penalty_points: int | float = float("inf")
 
         if auto_load_students is True:
             # Add members to activities in self.participants.
@@ -61,11 +78,12 @@ class Model:
         """Initiate a string representation of a schedule.
 
         Returns:
-            dict[int : dict(str, str)]: Index (0 - 144) mapping to a dict containing course and activity.
+            dict[int : dict(str, str)]: 
+                Index (0 - 144) mapping to a dict containing course and activity.
                 Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'},
                 {1: {'course': None, 'activity': None}, etc.}
         """
-        schedule_model: dict[int, int | activity_type] = {
+        schedule_model: dict[int, int | tuple[str, str]] = {
             index: dict_value for index in range((7 * 4 + 1) * 5)
         }
 
@@ -175,7 +193,7 @@ class Model:
 
     def remove_activity(
         self,
-        activity: Optional[activity_type] = None,
+        activity: Optional[tuple[str, str]] = None,
         index: Optional[int] = None,
     ) -> bool:
         """Remove activity from the schedule model.
@@ -268,7 +286,7 @@ class Model:
             index for index in self.solution if self.solution[index] == activity
         }.pop()
 
-    def get_activity_of_index(self, index: int) -> activity_type:
+    def get_activity_of_index(self, index: int) -> tuple[str, str]:
         """Return activity stored at index in model.
 
         Args:
@@ -330,7 +348,7 @@ class Model:
         return penalty_per_day
 
     def get_worst_days(self) -> dict[str, int]:
-        """Return the worst"""
+        """Return the day of highest gap penalties and the day of highest conflict penalties."""
         gap_per_day = self.get_penalties_per_day("gap penalties")
         conflict_per_day = self.get_penalties_per_day("conflict penalties")
 
@@ -437,25 +455,43 @@ class Model:
         return penalty_points
 
     def calc_student_course_conflict(self, daily_schedule: list[int]) -> int:
+        """Calculate the number of overlapping timeslots for a student.
+
+        Args:
+            daily_schedule (list[int]): List of timeslots at which student has activities.
+        """
         return len(
             [element for element in daily_schedule if daily_schedule.count(element) > 1]
         )
 
     def remove_duplicates(self, schedule: list[int]) -> list[int]:
+        """Ensure each conflict only counted once.
+
+        Args:
+            schedule (list[int]): List of timeslots ranging from 0 to 4."""
         return list(set(schedule))
 
     def calc_student_gap_penalty(
-        self, daily_schedule: list[int], third_gap_penalty: int = 10
+        self, daily_schedule: list[int], third_gap_penalty: int = 5
     ) -> int:
+        """ "Calculate gap penalties for each student.
+
+        Args:
+            daily_schedule (list[int]): List of timeslots in a day at which student has activities.
+            third_gap_penalty (int): Penalty if 3 gaps in a daily schedule. Defaults to 5.
+        """
         gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: third_gap_penalty}
         penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
 
         return gap_penalty_map[sum(penalty_schedule)]
 
     def calc_student_schedule_penalties(self) -> dict[str, int]:
-        """Calculate penalties of each gap in a student schedule.
+        """Calculate gap and conflict penalties of each schedule of each student.
 
-        Function also keeps track of the model in self.student_penalties.
+        Returns:
+            dict[str, int]: Key: "conflict penalties", "gap penalties".
+                Value: Sum of each penalty.
+
         """
         total_gap_penalties = 0
         total_course_conflicts_penalties = 0
@@ -497,11 +533,13 @@ class Model:
             "gap penalties": total_gap_penalties,
         }
 
-    def sum_student_schedule_penalties(self):
+    def sum_student_schedule_penalties(self) -> int:
+        """Return a numeric sum of total conflict and gap penalties."""
         penalties = self.calc_student_schedule_penalties()
         return penalties["conflict penalties"] + penalties["gap penalties"]
 
-    def modify_index_penalty(self, index: int, new_penalty: int):
+    def modify_index_penalty(self, index: int, new_penalty: int) -> None:
+        """Ädjust the stored penalty value at a given index."""
         self.penalty_per_index[index] = new_penalty
 
     def calc_total_penalty(self) -> int:
@@ -509,7 +547,7 @@ class Model:
 
         Also updates stored value of penalty_points.
 
-        Return:
+        Returns:
             int: Sum of all penalties.
         """
         total = (
@@ -522,11 +560,16 @@ class Model:
 
         return total
 
-    def get_penalty_at_index(self, index: int):
+    def get_penalty_at_index(self, index: int) -> int:
+        """ "Returns the stored penalty at a given index."""
         return self.penalty_per_index[index]
 
-    def sort_activities_on_enrollments(self, descending=True):
+    def sort_activities_on_enrollments(self, descending=True) -> None:
         """Sort activities on nr. of participants, from most to least participants.
+
+        Args:
+            descending (bool): Direction in which activities are to be sorted.
+                Defaults to True.
 
         Sorting occurs inplace in self.unassgined_activities.
         """
@@ -535,24 +578,34 @@ class Model:
             key=lambda key: len(self.activity_enrollments[key]),
             reverse=descending,
         )
-        return True
 
-    def calc_activity_overlap(self, activity1, activity2, student_overlap_value=True):
+    def calc_activity_overlap(
+        self, activity1, activity2, student_overlap_value=True
+    ) -> None:
+        """ "Calculate the number of overlapping students or activities.
+
+        Args:
+            activity1 (tuple[str, str]): 'Course Name', 'Activity'.
+            activity2 (tuple[str, str]): Same as activity1. E.G. ('Heuristieken', 'lecture 1')
+        """
         overlap = len(
             self.activity_enrollments[activity1].intersection(
                 self.activity_enrollments[activity2]
             )
         )
         if student_overlap_value is True:
+            # Return number of overlapping students.
             return overlap
         elif overlap != 0:
+            # Return overlap of activity.
             return 1
+        # Return no overlap found.
         return 0
 
     def sort_activities_on_overlap(self, student_overlap_value=True) -> None:
         """Sort the activities in ascend of overlapping activities.
 
-        Sorts the unassigned activities in place.
+        Self.unassigned_activities is sorted in place.
 
         Args:
             student_overlap_value (bool): Sorts by number of overlapping students if True.
@@ -567,19 +620,18 @@ class Model:
                 if activity1[0] != activity2[0]:
                     # Ensure activities from different courses.
                     overlap_count[activity1] += self.calc_activity_overlap(
-                        activity1[0], activity2[2], student_overlap_value
+                        activity1[0], activity2[0], student_overlap_value
                     )
 
         self.unassigned_activities = sorted(
             overlap_count, key=lambda act: overlap_count[act], reverse=True
         )
 
-    def shuffle_activities(self) -> list[tuple[str, str]]:
-        """Return a randomly shuffled list of activities."""
+    def shuffle_activities(self) -> None:
+        """Shuffles unassigned activities in place."""
         self.unassigned_activities = random.sample(
             self.unassigned_activities, len(self.unassigned_activities)
         )
-        return True
 
     def copy(self) -> "Model":
         """Return a copy of the model."""
@@ -613,7 +665,7 @@ class Model:
 
     def is_solution(self) -> bool:
         """Evaluate if the solution is valid."""
-        # Evaluate if student with 5 courses has
+        # Evaluate if a student with 5 courses has
         #   all activities scheduled in the solution.
         if self.check_valid_schedule_of_student(0) is False:
             return False
@@ -632,6 +684,9 @@ class Model:
             return True
         else:
             return False
+
+    def __repr__(self) -> str:
+        return f"Model penalty points: {self.penalty_points}."
 
     def __add__(self, other: object) -> int:
         if isinstance(other, Model):
