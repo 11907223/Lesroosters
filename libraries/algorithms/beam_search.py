@@ -245,9 +245,9 @@ class BeamSearch(Random):
 
                 # Retrieve a random empty index from the model.
                 if step % 3:
-                    index = new_model.get_high_capacity_empty_index()
-                else:
                     index = new_model.get_random_index(empty=True)
+                else:
+                    index = new_model.get_high_capacity_empty_index()
 
                 if self.create_children(new_model, index, beam, heuristic) is False:
                     # Stop if a solution is found

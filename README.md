@@ -32,8 +32,6 @@ This case is based on the University Timetabling Problem, which is inspired by t
 To run all algorithms
 `python3 main.py`
 
-To see visualisation
-`flask run`
 
 ## Folder Structure
 
