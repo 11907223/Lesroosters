@@ -7,13 +7,21 @@ import sys
 class Greedy:
     """
     Greedy class constructively generates a schedule by locally taking optimal decisions.
+
+    Attributes:
+        model (Model): MOdel (to be) filled  by algorithm.
+        empty_slots (list[int]): Stores unfilled indices in schedule.
     """
 
     def __init__(
-        self, empty_model: Model, shuffle=False, sort=False, sort_overlap=True
+        self,
+        empty_model: Model,
+        shuffle: bool = False,
+        sort: bool = False,
+        sort_overlap: bool = True,
     ) -> None:
         """
-        Initialize Greedy.
+        Initializes a greedy algorithm.
 
         Args:
             empty_model (Model): empty model to be filled.
@@ -22,7 +30,7 @@ class Greedy:
             sort_overlap (bool) : to optionally sort activities by amount of overlap with other activities.
         """
         self.model = empty_model.copy()
-        self.empty_slots = list(self.model.solution.keys())
+        self.empty_slots: list[int] = list(self.model.solution.keys())
         if shuffle:
             self.model.shuffle_activities()
         elif sort:
@@ -30,17 +38,19 @@ class Greedy:
         elif sort_overlap:
             self.model.sort_activities_on_overlap()
 
-    def get_optimal_index(self, activity: tuple[str, str], current_penalty: int):
-        """
-        Finds the best index for a given activity based on penalty points.
+    def get_optimal_index(
+        self, activity: tuple[str, str], current_penalty: int
+    ) -> tuple[int, int]:
+        """Find the best index for a given activity based on penalty points.
 
         Args:
-            activity (tuple): activity to find the optimal index for.
-            current_penalty (int): penalty points of the current model.
+            activity (tuple): Activity to find the optimal index for.
+            current_penalty (int): Penalty points of the current model.
 
         Returns:
-            optimal_index (int): best index found.
-            lowest_penalty (int): total penalty after inserting activity at optimal_index.
+            tuple[int, int]:
+                optimal_index (int): best index found.
+                lowest_penalty (int): total penalty after inserting activity at optimal_index.
         """
 
         # loop over timeslots

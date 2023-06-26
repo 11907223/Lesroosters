@@ -10,6 +10,8 @@ import random
 import time
 import random
 
+random.seed(0)
+
 if __name__ == "__main__":
     courses = ld.load_courses()
     students = ld.load_students(courses)
@@ -28,14 +30,14 @@ if __name__ == "__main__":
 
     # ________________________BEAM SEARCH ALGORITHM____________________________________
 
-    beam_search = BeamSearch(empty_model)
-    print("STARTING BEAM SEARCH ALGORITHM \n")
+    # beam_search = BeamSearch(empty_model)
+    # print("STARTING BEAM SEARCH ALGORITHM \n")
 
-    start_time = time.time()
-    beam_search.run(beam=1, runs=10, heuristic="capacity", verbose=True)
-    runtime = start_time - time.time()
+    # start_time = time.time()
+    # beam_search.run(beam=1, runs=10, heuristic="capacity", verbose=True)
+    # runtime = start_time - time.time()
 
-    print_results("beam search", beam_search.initial_model, runtime)
+    # print_results("beam search", beam_search.initial_model, runtime)
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
     # hillclimber = HillClimber(random_algorithm.best_model)
@@ -72,7 +74,7 @@ if __name__ == "__main__":
 
     # __________________________BASELINE_______________________________________________
     random.seed(0)
-    with open("baseline.txt", "a+") as file:
+    with open("data/baseline.txt", "a+") as file:
         for i in range(10000):
             penalty = []
             for j in range(100):

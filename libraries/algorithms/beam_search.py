@@ -3,8 +3,6 @@ from libraries.algorithms.randomise import Random
 import random
 import heapq
 
-random.seed(0)
-
 
 class BeamSearch(Random):
     """The BeamSearch class represents a constructive Breadth Frist - Beam Search algorithm.
@@ -43,6 +41,22 @@ class BeamSearch(Random):
         state = heapq.heappop(self.queue)
         return state[1]
 
+    def get_totpenalty_possibilities(
+        self, model: Model, index: int, n: int
+    ) -> list[tuple[str, str]]:
+        possibilities = {}
+
+        # Check if activity capacity matches hall capacity
+        for activity in model.unassigned_activities:
+            model.add_activity(index, activity)
+            penalty = model.calc_total_penalty()
+
+            possibilities.update({activity: penalty})
+
+            model.remove_activity(index=index)
+
+        return self.sort_possibilities(n, possibilities, heuristic="totalpenalty")
+
     def get_capacity_possibilities(
         self, model: Model, index: int, n: int
     ) -> list[tuple[str, str]]:
@@ -71,17 +85,18 @@ class BeamSearch(Random):
                 # If not, add activity to no possibilities
                 no_possibilities.update({activity: activity_capacity})
 
-        return self.check_possibilities(possibilities, no_possibilities, n)
+        return self.sort_possibilities(n, possibilities, no_possibilities)
 
-    def check_possibilities(
-        self, possibilities: dict, no_possibilities: dict, n: int
+    def sort_possibilities(
+        self, n: int, possibilities: dict, no_possibilities={}, heuristic="capacity"
     ) -> list[tuple[str, str]]:
-        """Checks wether there are possibilities and returns them.
+        """Sorts all possibilities according to heuristic and returns them.
 
         Args:
+            n (int): The beam width, how many possible activities should be returned.
             possibilities (dict): Dictionary of possible activities mapped to their capacity.
             no_possibilities (dict): Dictionary of not possible activities mapped to their capacity.
-            n (int): The beam width, how many possible activities should be returned.
+            heuristic (str): default capacity, second option is "totalpenalty".
 
         Returns:
             sorted_possibilities (list[Tuple(str,str)]): A list with activity tuples of length n.
@@ -89,11 +104,16 @@ class BeamSearch(Random):
 
         # If there are possibilities
         if possibilities:
-            # Sort possibilities in descending order and return first n elements
-            sorted_possibilities = sorted(
-                possibilities.items(), key=lambda x: x[1], reverse=True
-            )
+            if heuristic == "totalpenalty":
+                # Sort possibilities in ascending order
+                sorted_possibilities = sorted(possibilities.items(), key=lambda x: x[1])
+            else:
+                # Sort possibilities in descending order
+                sorted_possibilities = sorted(
+                    possibilities.items(), key=lambda x: x[1], reverse=True
+                )
             list_possibilities = [item[0] for item in sorted_possibilities]
+
             return list_possibilities[:n]
 
         # Sort no possibilities in ascending order and return first n elements
@@ -121,6 +141,9 @@ class BeamSearch(Random):
 
         if heuristic == "capacity":
             possibilities = self.get_capacity_possibilities(model, index, n)
+            return possibilities
+        elif heuristic == "totalpenalty":
+            possibilities = self.get_totpenalty_possibilities(model, index, n)
             return possibilities
 
         # If no heursitic was passed as argument, pick random activities
@@ -181,20 +204,6 @@ class BeamSearch(Random):
 
         return True
 
-    def check_solution(self, model: Model) -> None:
-        """Checks and accepts better solutions than the current solution.
-
-        Args:
-            model (Model): The model that should be checked.
-        """
-        new_value = model.calc_total_penalty()
-        old_value = self.best_value
-
-        # Minimalization of penalty score
-        if new_value <= old_value:
-            self.best_model = model
-            self.best_value = new_value
-
     def run(self, beam=2, runs=1, heuristic="random", verbose: bool = False) -> Model:
         """Runs the beam search algorithm untill a valid solution is found.
 
@@ -224,7 +233,7 @@ class BeamSearch(Random):
                 new_model = self.get_next_state()
 
                 # Retrieve a random empty index from the model.
-                if step % 2:
+                if step % 3:
                     index = new_model.get_high_capacity_empty_index()
                 else:
                     index = new_model.get_random_index(empty=True)

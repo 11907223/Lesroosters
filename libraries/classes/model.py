@@ -58,7 +58,7 @@ class Model:
         self.penalties_per_student: dict[int, dict[int, dict[str, int]]] = defaultdict(
             dict
         )
-        self.unassigned_activities: tuple[str, str] = list(
+        self.unassigned_activities: list[tuple[str, str]] = list(
             self.activity_enrollments.keys()
         )
 
@@ -78,7 +78,7 @@ class Model:
         """Initiate a string representation of a schedule.
 
         Returns:
-            dict[int : dict(str, str)]: 
+            dict[int : dict(str, str)]:
                 Index (0 - 144) mapping to a dict containing course and activity.
                 Example: {0: {'course': 'Heuristieken', 'activity': 'lecture 1'},
                 {1: {'course': None, 'activity': None}, etc.}
@@ -564,7 +564,7 @@ class Model:
         """ "Returns the stored penalty at a given index."""
         return self.penalty_per_index[index]
 
-    def sort_activities_on_enrollments(self, descending=True) -> None:
+    def sort_activities_on_enrollments(self, descending: bool = True) -> None:
         """Sort activities on nr. of participants, from most to least participants.
 
         Args:
@@ -580,7 +580,10 @@ class Model:
         )
 
     def calc_activity_overlap(
-        self, activity1, activity2, student_overlap_value=True
+        self,
+        activity1: tuple[str, str],
+        activity2: tuple[str, str],
+        student_overlap_value: bool = True,
     ) -> None:
         """ "Calculate the number of overlapping students or activities.
 
@@ -602,7 +605,7 @@ class Model:
         # Return no overlap found.
         return 0
 
-    def sort_activities_on_overlap(self, student_overlap_value=True) -> None:
+    def sort_activities_on_overlap(self, student_overlap_value: bool = True) -> None:
         """Sort the activities in ascend of overlapping activities.
 
         Self.unassigned_activities is sorted in place.
@@ -620,7 +623,7 @@ class Model:
                 if activity1[0] != activity2[0]:
                     # Ensure activities from different courses.
                     overlap_count[activity1] += self.calc_activity_overlap(
-                        activity1[0], activity2[0], student_overlap_value
+                        activity1, activity2, student_overlap_value
                     )
 
         self.unassigned_activities = sorted(
