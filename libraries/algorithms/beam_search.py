@@ -270,18 +270,20 @@ class BeamSearch(Random):
                 new_model = self.get_next_state()
 
                 # Retrieve a random empty index from the model.
-                if step % 3:
-                    index = new_model.get_random_index(empty=True)
-                else:
-                    index = new_model.get_high_capacity_empty_index()
+                # if step % 3:
+                #     index = new_model.get_random_index(empty=True)
+                # else:
+                index = new_model.get_high_capacity_empty_index()
 
                 if self.create_children(new_model, index, beam, heuristic) is False:
                     # Stop if a solution is found
                     self.check_solution(new_model)
 
                     # write penalty of solution to csv
-                    with open(f"results/{heuristic}_beam_n={beam}.txt", "a+") as file:
-                        file.write(f"{new_model.calc_total_penalty()}\n")
+                    # with open(
+                    #     f"results/BeamSearch/{heuristic}_beam_n={beam}.txt", "a+"
+                    # ) as file:
+                    #     file.write(f"{new_model.calc_total_penalty()}\n")
 
                     break
 

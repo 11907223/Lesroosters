@@ -20,3 +20,13 @@ total penalty: 1167, capacity penalty: 334, evening penalty: 25
 student penalty: {'conflict penalties': 471, 'gap penalties': 337}
 correct solution True
 
+
+Heuristic: random, Beam: 2, Runtime: 65.73790383338928, Runs: 1 
+total penalty: 1337, capacity penalty: 311, evening penalty: 25 
+student penalty: {'conflict penalties': 503, 'gap penalties': 498} 
+correct solution: True
+
+Heuristic: random, Beam: 2, Runtime: 66.6027181148529, Runs: 1 
+total penalty: 1337, capacity penalty: 311, evening penalty: 25 
+student penalty: {'conflict penalties': 503, 'gap penalties': 498} 
+correct solution: True
