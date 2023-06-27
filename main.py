@@ -16,6 +16,7 @@ def main(algorithm, runs, heuristic):
     random.seed(0)
     empty_model = Model()
 
+
     # _________________________RANDOM ALGORITHM________________________________________
     if algorithm == "random":
         random_algorithm = Random(empty_model)
@@ -39,40 +40,20 @@ def main(algorithm, runs, heuristic):
 
         print_results("beam search", beam_search.initial_model, runtime)
 
-    # ______________________HILLCLIMBER ALGORITHM______________________________________
-    elif algorithm == "hillclimber":
-        hillclimber = HillClimber(random_algorithm.best_model)
-        print("\n STARTING HILLCLIMBER ALGORITHM")
-
+    # ______________________HILLCLIMBER & SIMULATED ANNEALING___________________________
+    elif algorithm in ["hillclimber", "simulated_annealing"]:
+        algorithms = {"hillclimber": HillClimber, "simulated_annealing": SimulatedAnnealing}
+        
         start_time = time.time()
-        hillclimber.run(verbose=True, heuristics=["middle", "day"])
-        runtime = time.time() - start_time
-
-        print_results("hillclimber", hillclimber.best_model, runtime)
-
-    # ______________________SIMULATED ANNEALING________________________________________
-    elif algorithm == "simulated_annealing":
-        simulated_annealing = SimulatedAnnealing(
-            random_algorithm.best_model, temperature=10
-        )
-
-        random_restart(
-            SimulatedAnnealing,
+        best_model = random_restart(
+            algorithms[algorithm],
             heuristics=["middle", "day"],
             verbose=True,
-            iterations=200,
-        )
-        start_time = time.time()
-        simulated_annealing.run(
-            iterations=100,
-            verbose=True,
-            heuristics=["middle", "day"],
-            type="exponential",
-            alpha=0.95,
+            runs=runs
         )
         runtime = time.time() - start_time
 
-        print_results("simulated annealing", simulated_annealing.best_model, runtime)
+        print_results(f"{algorithm}", best_model, runtime)
 
     # ________________________GREEDY ALGORITHM_________________________________________
     elif algorithm == 'greedy':
@@ -87,7 +68,7 @@ def main(algorithm, runs, heuristic):
 
     # ________________________RANDOMGREEDY ALGORITHM___________________________________
     elif algorithm == 'random_greedy':
-        options = {"sort_size": False, "sort_overlap": False, "shuffle": False, None: False}
+        options = {"sort_size": False, "sort_overlap": False, "shuffle": False}
         options[heuristic] = True
 
         start_time = time.time()
@@ -114,10 +95,16 @@ if __name__ == "__main__":
     # set-up parsing command line arguments
     parser = argparse.ArgumentParser(description="run a specific algorithm")
 
+    def validate_num_arguments(num_arguments):
+        if num_arguments > 3:
+            raise argparse.ArgumentTypeError("Too many arguments. Maximum allowed is 3.")
+        return num_arguments
+
     # adding arguments
     parser.add_argument("algorithm", help = "algorithm to run")
     parser.add_argument("--n", help = "number of runs", default=1, type=int)
-    parser.add_argument("--hr", "--heuristics", help="heuristic(s) used in run")
+    parser.add_argument("--hr", "--heuristic", help="heuristic used in run")
+    parser.add_argument("--hrs", "--heuristics", nargs='*', help="multiple heuristics used in run", type=validate_num_arguments)
 
     # read arguments from command line
     args = parser.parse_args()
