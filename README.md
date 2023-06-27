@@ -29,9 +29,17 @@ This case is based on the University Timetabling Problem, which is inspired by t
 
 ## Usage
 
-To run all algorithms
-`python3 main.py`
+To see explanaition of main.py amnd commandline arguments run:
+`python3 main.py -h`
 
+Structure of command line argument:
+`python3 main.py a [--help] [--n N] [--hr HR]`
+
+To run random 10 times:
+`python3 main.py random --n 10`
+
+To run greedy once:
+`python3 main.py greedy`
 
 ## Folder Structure
 
