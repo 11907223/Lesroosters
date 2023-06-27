@@ -33,10 +33,10 @@ def main(algorithm, runs):
         print("STARTING BEAM SEARCH ALGORITHM \n")
 
         start_time = time.time()
-        beam_search.run(beam=1, runs=runs, heuristic="capacity", verbose=True)
+        beam_search.run(beam=2, runs=runs, heuristic="random", verbose=True)
         runtime = start_time - time.time()
 
-        visualize(beam_search.initial_model)
+        # visualize(beam_search.initial_model)
 
         print_results("beam search", beam_search.initial_model, runtime)
 

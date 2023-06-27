@@ -39,7 +39,9 @@ class Model:
             Defaults to infinite on an empty model and is overwritten when model is filled.
     """
 
-    def __init__(self, path: str = "data", auto_load_students: bool = True) -> None:
+    def __init__(
+        self, path: str = "data", auto_load_students: bool = True
+    ) -> None:
         """Initiatizes a model for a schedule.
 
         Args:
@@ -55,9 +57,9 @@ class Model:
             tuple[str, str], set[int]
         ] = self.init_student_model()
         self.penalty_per_index: dict[int, int] = self.init_model(0)
-        self.penalties_per_student: dict[int, dict[int, dict[str, int]]] = defaultdict(
-            dict
-        )
+        self.penalties_per_student: dict[
+            int, dict[int, dict[str, int]]
+        ] = defaultdict(dict)
         self.unassigned_activities: list[tuple[str, str]] = list(
             self.activity_enrollments.keys()
         )
@@ -129,13 +131,15 @@ class Model:
                 self.add_student_to_activity(int(student), activity_tuple)
 
     def get_random_index(
-        self, empty: bool = False, weights: Optional(list[int]) = None
+        self, empty: bool = False, weights: Optional[list[int]] = None
     ) -> int:
         """Return random empty index in the schedule.
 
         Args:
             empty (bool): Flag if random index has to be empty.
                 Defaults to false.
+            weights (list[int]): Weight to be assigned to each index.
+                Defaults to none, which results in equal weight for each index.
         """
         while True:
             # Acquire index independent of content in index.
@@ -262,14 +266,18 @@ class Model:
             # Find the course object the activity belongs to
             course = self.courses[course_name]
             # Combine all course activities in one list
-            all_activities = course.lectures + course.practicals + course.tutorials
+            all_activities = (
+                course.lectures + course.practicals + course.tutorials
+            )
 
             # Iterate over all Activity objects
             for object in all_activities:
                 # If type matches Activity category
                 if type == object.category:
                     # Set capacity
-                    capacity = len(self.activity_enrollments[(course_name, type)])
+                    capacity = len(
+                        self.activity_enrollments[(course_name, type)]
+                    )
 
             return int(capacity)
         else:
@@ -283,7 +291,9 @@ class Model:
             activity (tuple[str, str]): ('course name', 'lecture 1')
         """
         return {
-            index for index in self.solution if self.solution[index] == activity
+            index
+            for index in self.solution
+            if self.solution[index] == activity
         }.pop()
 
     def get_activity_of_index(self, index: int) -> tuple[str, str]:
@@ -298,7 +308,9 @@ class Model:
         """Return bool if student in specified course."""
         return True if student in self.courses[course].students else False
 
-    def add_student_to_activity(self, student: int, activity: tuple[str, str]) -> bool:
+    def add_student_to_activity(
+        self, student: int, activity: tuple[str, str]
+    ) -> bool:
         """Add student to an activity in the model.
 
         Args:
@@ -390,7 +402,9 @@ class Model:
 
         return highest_penalties
 
-    def calc_capacity_penalty_at_(self, index: int, activity: tuple[str, str]) -> int:
+    def calc_capacity_penalty_at_(
+        self, index: int, activity: tuple[str, str]
+    ) -> int:
         """Return the capacity penalty for an activity over capacity.
 
         Args:
@@ -461,7 +475,11 @@ class Model:
             daily_schedule (list[int]): List of timeslots at which student has activities.
         """
         return len(
-            [element for element in daily_schedule if daily_schedule.count(element) > 1]
+            [
+                element
+                for element in daily_schedule
+                if daily_schedule.count(element) > 1
+            ]
         )
 
     def remove_duplicates(self, schedule: list[int]) -> list[int]:
@@ -481,7 +499,9 @@ class Model:
             third_gap_penalty (int): Penalty if 3 gaps in a daily schedule. Defaults to 5.
         """
         gap_penalty_map = {0: 0, 1: 1, 2: 3, 3: third_gap_penalty}
-        penalty_schedule = np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+        penalty_schedule = (
+            np.diff(np.sort(self.remove_duplicates(daily_schedule))) - 1
+        )
 
         return gap_penalty_map[sum(penalty_schedule)]
 
@@ -584,12 +604,15 @@ class Model:
         activity1: tuple[str, str],
         activity2: tuple[str, str],
         student_overlap_value: bool = True,
-    ) -> None:
+    ) -> int:
         """ "Calculate the number of overlapping students or activities.
 
         Args:
             activity1 (tuple[str, str]): 'Course Name', 'Activity'.
             activity2 (tuple[str, str]): Same as activity1. E.G. ('Heuristieken', 'lecture 1')
+            student_overlap_value (bool): Evaluate type of value to be returned. Defaults to true.
+                On true will return the number of students enrolled in both activity1 and activity2.
+                Otherwise will return binary 1 if there is overlap, 0 if there is not.
         """
         overlap = len(
             self.activity_enrollments[activity1].intersection(
@@ -605,7 +628,9 @@ class Model:
         # Return no overlap found.
         return 0
 
-    def sort_activities_on_overlap(self, student_overlap_value: bool = True) -> None:
+    def sort_activities_on_overlap(
+        self, student_overlap_value: bool = True
+    ) -> None:
         """Sort the activities in ascend of overlapping activities.
 
         Self.unassigned_activities is sorted in place.
@@ -640,7 +665,9 @@ class Model:
         """Return a copy of the model."""
         new_copy = copy.copy(self)
         new_copy.solution = copy.copy(self.solution)
-        new_copy.activity_enrollments = copy.deepcopy(self.activity_enrollments)
+        new_copy.activity_enrollments = copy.deepcopy(
+            self.activity_enrollments
+        )
         new_copy.unassigned_activities = [
             copy.deepcopy(tuple) for tuple in self.unassigned_activities
         ]
@@ -693,17 +720,15 @@ class Model:
     def __add__(self, other: object) -> int:
         if isinstance(other, Model):
             return self.penalty_points + other.penalty_points
-        return (
-            TypeError,
-            f"Addition not possible between Model and {type(other)}.",
+        raise TypeError(
+            f"Addition not possible between Model and {type(other)}."
         )
 
     def __sub__(self, other: object) -> int:
         if isinstance(other, Model):
             return self.penalty_points - other.penalty_points
-        return (
-            TypeError,
-            f"Subtraction not possible between Model and {type(other)}.",
+        raise TypeError(
+            f"Subtraction not possible between Model and {type(other)}."
         )
 
     def __eq__(self, other: object) -> bool:
