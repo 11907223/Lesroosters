@@ -119,6 +119,7 @@ if __name__ == "__main__":
     # read arguments from command line
     args = parser.parse_args()
 
+    # formatting
     if args.hr == []:
         args.hr = None
     elif args.algorithm in ["beam_search", "greedy", "random_greedy"] and args.hr:
