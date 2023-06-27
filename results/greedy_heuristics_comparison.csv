@@ -1,0 +1,5 @@
+heuristic,total penalty,conflict penalty,gap penalty,capacity penalty,evening penalty,runtime
+no heuristic,513,359,94,45,15,253.3409388065338
+sort by size (desc),351,326,10,0,15,247.7493793964386
+sort by overlap (desc),344,309,14,1,20,210.86817932128906
+shuffle,474,356,78,20,20,195.3408932685852
