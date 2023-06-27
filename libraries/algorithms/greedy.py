@@ -13,9 +13,7 @@ class Greedy:
         empty_slots (list[int]): Stores unfilled indices in schedule.
     """
 
-    def __init__(
-        self, empty_model: Model, shuffle=False, sort=False, sort_overlap=True
-    ) -> None:
+    def __init__(self, empty_model: Model, shuffle=False, sort=False, sort_overlap=False) -> None:
         """Initialize a greedy algorithm.
 
         Args:
@@ -25,7 +23,7 @@ class Greedy:
             sort_overlap (bool) : to optionally sort activities by amount of overlap with other activities.
         """
         self.model = empty_model.copy()
-        self.empty_slots: list[int] = list(self.model.solution.keys())
+        self.empty_slots = list(self.model.solution.keys())
         if shuffle:
             self.model.shuffle_activities()
         elif sort:
@@ -33,10 +31,8 @@ class Greedy:
         elif sort_overlap:
             self.model.sort_activities_on_overlap()
 
-    def get_optimal_index(
-        self, activity: tuple[str, str], current_penalty: int
-    ) -> tuple[int, int]:
-        """Find the best index for a given activity based on penalty points.
+    def get_optimal_index(self, activity, current_penalty) -> tuple[int, int]:
+        """Finds the best index for a given activity based on penalty points.
 
         Args:
             activity (tuple): Activity to find the optimal index for.
@@ -67,8 +63,8 @@ class Greedy:
 
         return optimal_index, lowest_penalty
 
-    def insert_greedily(self, activity: tuple[str, str], current_penalty: int) -> int:
-        """Insert activity greedily.
+    def insert_greedily(self, activity, current_penalty) -> int:
+        """Inserts activity greedily.
 
         Args:
             activity (tuple): activity to be inserted.
@@ -83,14 +79,15 @@ class Greedy:
         return penalty
 
     def update_empty_slots(self, index) -> None:
-        """Remove an index from the list of empty slots.
+        """Removes an index from the list of empty slots.
+
         Args:
             index (int): slot that has been filled.
         """
         self.empty_slots.remove(index)
 
     def run(self) -> Model:
-        """Run greedy algorithm once.
+        """Runs greedy algorithm once.
 
         Returns:
             model (Model): the generated solution.
@@ -98,7 +95,7 @@ class Greedy:
         current_penalty = 0
         for activity in self.model.unassigned_activities:
             current_penalty = self.insert_greedily(activity, current_penalty)
-            print("penalty:", current_penalty, end="\r")
+            print("penalty:", current_penalty, f'{"  " * 10}', end="\r")
 
         return self.model
 
@@ -108,8 +105,8 @@ class RandomGreedy(Greedy):
     Combines random and greedy choices to contructively generate a schedule.
     """
 
-    def insert_randomly(self, activity: tuple[str, str]) -> int:
-        """Insert activity at random index while considering room size.
+    def insert_randomly(self, activity) -> int:
+        """Inserts activity at random index while considering room size.
 
         Args:
             activity (tuple): activity to be inserted.
@@ -117,18 +114,16 @@ class RandomGreedy(Greedy):
         Returns:
             (int) total penalty after insertion.
         """
-        # index = self.model.get_random_index(empty=True)
         overflow = True
         while overflow:
             index = self.model.get_random_index(empty=True)
             overflow = self.capacity_overflow(index, activity)
-        added = self.model.add_activity(index, activity)
+        self.model.add_activity(index, activity)
         self.update_empty_slots(index)
-        print(activity, added)
         return self.model.calc_total_penalty()
 
     def capacity_overflow(self, index, activity, max_difference=5) -> bool:
-        """Check if insertion causes an unreasonable capacity penalty.
+        """Checks if insertion causes an unreasonable capacity penalty.
 
         Args:
             index (int)         : where activity would be inserted.
@@ -143,7 +138,7 @@ class RandomGreedy(Greedy):
         return False
 
     def calc_random_chance(self, i, start=0.7, alpha=0.064) -> float:
-        """Calculate the probability of a random insertion based on a exponential.
+        """Calculates the probability of a random insertion based on a exponential.
 
         Args:
             i (int)       : amount of activities inserted. 0 <= i <= 72.
@@ -157,7 +152,7 @@ class RandomGreedy(Greedy):
         return start * np.exp(-alpha * i)
 
     def run(self) -> Model:
-        """Run the random-greedy algorithm once.
+        """Runs the random-greedy algorithm once.
 
         Args:
             random_chance (float): probability of a random insertion.
@@ -168,6 +163,7 @@ class RandomGreedy(Greedy):
         current_penalty = 0
 
         for i, activity in enumerate(self.model.unassigned_activities):
+            
             # make random or greedy choice
             if random.random() < self.calc_random_chance(i):
                 current_penalty = self.insert_randomly(activity)
