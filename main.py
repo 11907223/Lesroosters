@@ -61,6 +61,8 @@ def main(algorithm, runs, heuristic):
 
     # ________________________GREEDY & RANDOMGREEDY ALGORITHM____________________________
     elif algorithm in ["greedy", "random_greedy"]:
+        
+        # turn on heuristic
         options = {"sort_size": False, "sort_overlap": False, "shuffle": False}
         options[heuristic] = True
 
