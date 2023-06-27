@@ -280,6 +280,7 @@ class HillClimber(Random):
         heuristics: Optional[list[str]] = None,
         modifier: float = 1.2,
         verbose: bool = False,
+        store_scores: bool = False,
     ) -> Model:
         """Run the hillclimber algorithm for a specified number of iterations.
 
@@ -303,6 +304,8 @@ class HillClimber(Random):
             modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.2.
             verbose (bool): Evaluate if run prints current iteration and penalty score.
                 Defaults to False.
+            store_scores (bool): Evaluate if scores have to be stored for plotting. Defaults to false.
+                Will store scores in results/HillClimber Algorithm.csv.
         """
         iteration_count: str | int = iterations
         if convergence != sys.maxsize:
@@ -315,6 +318,8 @@ class HillClimber(Random):
 
         convergence_counter = 0
         for iteration in range(iterations):
+            self.iteration = iteration
+
             print(
                 f"Iteration {iteration}/{iteration_count} "
                 f"Convergence counter: {convergence_counter} ",
@@ -339,8 +344,9 @@ class HillClimber(Random):
                 break
             convergence_counter += 1
 
-        with open(f"results/{self}.csv", "a+", newline="") as file:
-            csv.writer(file).writerow(scores)
+        if store_scores is True:
+            with open(f"results/{self}.csv", "a+", newline="") as file:
+                csv.writer(file).writerow(scores)
 
         return self.best_model
 
