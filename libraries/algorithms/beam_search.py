@@ -231,7 +231,7 @@ class BeamSearch(Random):
         """
         runtime = time.time() - start_time
 
-        with open(f"results/beam_search_runtime.txt", "a+") as file:
+        with open(f"results/BeamSearch/beam_search_runtime.txt", "a+") as file:
             file.write(
                 f"\nHeuristic: {heuristic}, Beam: {beam}, Runtime: {runtime}, Runs: {runs} \n"
                 f"total penalty: {self.initial_model.calc_total_penalty()}, capacity penalty: {self.initial_model.calc_total_capacity_penalties()}, evening penalty: {self.initial_model.calc_evening_penalties()} \n"
