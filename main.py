@@ -11,7 +11,7 @@ import random
 import time
 import argparse
 
-def main(algorithm, runs, heuristic, heuristics):
+def main(algorithm, runs, heuristic):
     random.seed(0)
     empty_model = Model()
 
@@ -48,7 +48,7 @@ def main(algorithm, runs, heuristic, heuristics):
         start_time = time.time()
         best_model = random_restart(
             algorithms[algorithm],
-            heuristics=heuristics,
+            heuristics=heuristic,
             verbose=True,
             runs=runs
         )
@@ -111,29 +111,18 @@ if __name__ == "__main__":
     # set-up parsing command line arguments
     parser = argparse.ArgumentParser(description="run a specific algorithm")
 
-    def validate_num_arguments(num_arguments):
-        if num_arguments > 3:
-            raise argparse.ArgumentTypeError(
-                "Too many arguments. Maximum allowed is 3."
-            )
-        return num_arguments
-
     # adding arguments
     parser.add_argument("algorithm", help="algorithm to run")
     parser.add_argument("--n", help="number of runs", default=1, type=int)
-    parser.add_argument("--hr", "--heuristic", help="heuristic used in run")
-    parser.add_argument(
-        "--hrs",
-        "--heuristics",
-        nargs="*",
-        help="multiple heuristics used in run",
-        type=validate_num_arguments,
-    )
+    parser.add_argument("--hr", "--heuristics", nargs='*', help="heuristic(s) used in run")
 
     # read arguments from command line
     args = parser.parse_args()
 
-    # if args.hrs
+    if args.hr == []:
+        args.hr = None
+    elif args.algorithm in ["beam_search", "greedy", "random_greedy"] and args.hr:
+        args.hr = args.hr[0] 
 
     # run main with provided arguments
-    main(args.algorithm, args.n, args.hr, args.hrs)
+    main(args.algorithm, args.n, args.hr)
