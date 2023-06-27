@@ -12,7 +12,7 @@ import random
 import time
 import argparse
 
-def main(algorithm, runs, heuristic):
+def main(algorithm, runs, heuristic, heuristics):
     random.seed(0)
     empty_model = Model()
 
@@ -47,7 +47,7 @@ def main(algorithm, runs, heuristic):
         start_time = time.time()
         best_model = random_restart(
             algorithms[algorithm],
-            heuristics=["middle", "day"],
+            heuristics=heuristics,
             verbose=True,
             runs=runs
         )
