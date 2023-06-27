@@ -1,7 +1,7 @@
-import libraries.helpers.load_data as ld
 from libraries.algorithms.randomise import Random
 from libraries.classes.model import Model
 from libraries.helpers.print_results import print_results
+from libraries.helpers.save_greedy_run import to_csv 
 from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
@@ -14,6 +14,13 @@ import argparse
 def main(algorithm, runs, heuristic):
     random.seed(0)
     empty_model = Model()
+
+    algorithms = {
+            "hillclimber"        : HillClimber,
+            "simulated_annealing": SimulatedAnnealing,
+            "greedy"             : Greedy,
+            "random_greedy"      : RandomGreedy
+        }
 
     # _________________________RANDOM ALGORITHM________________________________________
     if algorithm == "random":
@@ -40,10 +47,6 @@ def main(algorithm, runs, heuristic):
 
     # ______________________HILLCLIMBER & SIMULATED ANNEALING___________________________
     elif algorithm in ["hillclimber", "simulated_annealing"]:
-        algorithms = {
-            "hillclimber": HillClimber,
-            "simulated_annealing": SimulatedAnnealing,
-        }
 
         start_time = time.time()
         best_model = random_restart(
@@ -56,46 +59,32 @@ def main(algorithm, runs, heuristic):
 
         print_results(f"{algorithm}", best_model, runtime)
 
-    # ________________________GREEDY ALGORITHM_________________________________________
-    elif algorithm == "greedy":
-        options = {
-            "sort_size": False,
-            "sort_overlap": False,
-            "shuffle": False,
-            None: False,
-        }
-        options[heuristic] = True
-
-        start_time = time.time()
-        greedy_solution = Greedy(
-            empty_model,
-            sort=options["sort_size"],
-            sort_overlap=options["sort_overlap"],
-            shuffle=options["shuffle"],
-        ).run()
-        runtime = time.time() - start_time
-
-        print_results("greedy", greedy_solution, runtime)
-
-    # ________________________RANDOMGREEDY ALGORITHM___________________________________
-    elif algorithm == "random_greedy":
+    # ________________________GREEDY & RANDOMGREEDY ALGORITHM____________________________
+    elif algorithm in ["greedy", "random_greedy"]:
         options = {"sort_size": False, "sort_overlap": False, "shuffle": False}
         options[heuristic] = True
 
-        start_time = time.time()
-        random_greedy = RandomGreedy(
-            empty_model,
-            sort=options["sort_size"],
-            sort_overlap=options["sort_overlap"],
-            shuffle=options["shuffle"],
-        ).run()
-        runtime = time.time() - start_time
+        # select correct algorithm
+        for run_number in range(runs):
+            random.seed(run_number)
 
-        print_results("randomgreedy", random_greedy, runtime)
+            start_time = time.time()
+            greedy_solution = algorithms[algorithm](
+                empty_model,
+                sort         = options["sort_size"],
+                sort_overlap = options["sort_overlap"],
+                shuffle      = options["shuffle"],
+            ).run()
+            runtime = time.time() - start_time
 
+            # save and display results
+            to_csv(greedy_solution, runtime, run_number, heuristic, filename=f"{algorithm}_{heuristic}_{runs}runs")
+            print_results(algorithm, greedy_solution, runtime)
+
+        print(f"{runs} run(s) finished. Results have been saved to ./results/Greedy/{algorithm}_{heuristic}_{runs}runs.csv")
+        
     # __________________________BASELINE_______________________________________________
     elif algorithm == "baseline":
-        random.seed(0)
         with open("results/baseline.txt", "a+") as file:
             for i in range(10000):
                 penalty = []
@@ -103,6 +92,7 @@ def main(algorithm, runs, heuristic):
                     random_schedule = Random(empty_model)
                     penalty.append(random_schedule.run().calc_total_penalty())
                     print(f"Current run: {i * 100 + j + 1}", end="\r")
+
                 text = "\n".join([str(score) for score in penalty])
                 file.write(f"\n{text}")
 
