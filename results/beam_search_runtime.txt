@@ -1,0 +1,22 @@
+----------------- Deterministisch --------------------------------
+Heuristic: capacity, Beam: 2, Runtime: 17.218730926513672, Runs: 1
+total penalty: 557, capacity penalty: 0, evening penalty: 25
+student penalty: {'conflict penalties': 405, 'gap penalties': 127}
+correct solution: True
+
+---------------- Random % 3 --------------------------------
+Heuristic: capacity, Beam: 2, Runtime: 25.408451795578003, Runs: 1
+total penalty: 932, capacity penalty: 36, evening penalty: 20
+student penalty: {'conflict penalties': 464, 'gap penalties': 412}
+correct solution True
+
+Heuristic: random, Beam: 2, Runtime: 26.75147294998169, Runs: 1
+total penalty: 1464, capacity penalty: 416, evening penalty: 25
+student penalty: {'conflict penalties': 570, 'gap penalties': 453}
+correct solution: True
+
+Heuristic: totalpenalty, Beam: 2, Runtime: 6822.830051898956, Runs: 1
+total penalty: 1167, capacity penalty: 334, evening penalty: 25
+student penalty: {'conflict penalties': 471, 'gap penalties': 337}
+correct solution True
+

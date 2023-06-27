@@ -2,10 +2,11 @@ from libraries.classes.model import Model
 from libraries.algorithms.randomise import Random
 import random
 import heapq
+import time
 
 
 class BeamSearch(Random):
-    """The BeamSearch algorithm implements a constructive Breadth First - Beam Search algorithm.
+    """The BeamSearch algorithm implements a constructive Depth First - Beam Search algorithm.
 
     In this class, a state is a schedule.
     The first state is a empty schedule, the final states are filled schedules.
@@ -152,7 +153,7 @@ class BeamSearch(Random):
             possibilities = self.get_capacity_possibilities(model, index, n)
             return possibilities
         elif heuristic == "totalpenalty":
-            possibilities = self.get_totpenalty_possibilities(model, index, n)
+            possibilities = self.get_tot_penalty_possibilities(model, index, n)
             return possibilities
 
         # If no heursitic was passed as argument, pick random activities
@@ -179,7 +180,7 @@ class BeamSearch(Random):
         penalty = model.calc_total_penalty()
         unassigned = len(model.unassigned_activities)
 
-        return penalty + (unassigned * 5)
+        return penalty + (unassigned * 40)
 
     def create_children(
         self, model: Model, index: int, beam: int, heuristic="random"
@@ -215,6 +216,29 @@ class BeamSearch(Random):
 
         return True
 
+    def write_info_to_file(
+        self, model: Model, start_time, heuristic, beam, runs
+    ) -> None:
+        """Writes all information on a model to a txt file results/beam_search_runtime.txt.
+
+        Args:
+            model (Model): The model that should be analysed and saved to the file.
+            start_time (time): The start time of the algorithm.
+            heursitic (str): The heursitic that was used to create the model.
+            beam (int): The beam that was used to create the model.
+            runs(int): The number of runs that the algorithm did.
+
+        """
+        runtime = time.time() - start_time
+
+        with open(f"results/beam_search_runtime.txt", "a+") as file:
+            file.write(
+                f"\nHeuristic: {heuristic}, Beam: {beam}, Runtime: {runtime}, Runs: {runs} \n"
+                f"total penalty: {self.initial_model.calc_total_penalty()}, capacity penalty: {self.initial_model.calc_total_capacity_penalties()}, evening penalty: {self.initial_model.calc_evening_penalties()} \n"
+                f"student penalty: {self.initial_model.calc_student_schedule_penalties()} \n"
+                f"correct solution: {self.initial_model.is_solution()}\n"
+            )
+
     def run(self, beam=2, runs=1, heuristic="random", verbose: bool = False) -> Model:
         """Run the beam search algorithm untill a valid solution is found.
 
@@ -228,6 +252,8 @@ class BeamSearch(Random):
         Returns:
             model (Model): Best model out of all runs.
         """
+        start_time = time.time()
+
         for i in range(runs):
             self.reset_model()
             priority = self.calc_priority(self.initial_model)
@@ -254,12 +280,14 @@ class BeamSearch(Random):
                     self.check_solution(new_model)
 
                     # write penalty of solution to csv
-                    with open("results/beam_result.txt", "a+") as file:
+                    with open(f"results/{heuristic}_beam_n={beam}.txt", "a+") as file:
                         file.write(f"{new_model.calc_total_penalty()}\n")
 
                     break
 
         # Update the input graph with the best result found.
         self.initial_model = self.best_model
+
+        self.write_info_to_file(self.initial_model, start_time, heuristic, beam, runs)
 
         return self.initial_model

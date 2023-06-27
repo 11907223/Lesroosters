@@ -7,7 +7,6 @@ from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
-from libraries.algorithms.random_restart import random_restart
 import random
 import time
 import random
@@ -15,13 +14,17 @@ import random
 random.seed(0)
 
 if __name__ == "__main__":
+    courses = ld.load_courses()
+    students = ld.load_students(courses)
+    halls = ld.load_halls()
+
     empty_model = Model()
 
     # _________________________RANDOM ALGORITHM________________________________________
-    random_algorithm = Random(empty_model)
+    # random_algorithm = Random(empty_model)
 
     # start_time = time.time()
-    random_algorithm.run(runs=2, verbose=True)
+    # random_algorithm.run(runs=20, verbose=True)
     # runtime = start_time - time.time()
 
     # print_results("random", random_algorithm.model, runtime)
@@ -32,8 +35,8 @@ if __name__ == "__main__":
     print("STARTING BEAM SEARCH ALGORITHM \n")
 
     start_time = time.time()
-    beam_search.run(beam=2, runs=100, heuristic="random", verbose=True)
-    runtime = start_time - time.time()
+    beam_search.run(beam=2, runs=100, heuristic="capacity", verbose=True)
+    runtime = time.time() - start_time
 
     # visualize(beam_search.initial_model)
 
@@ -50,14 +53,13 @@ if __name__ == "__main__":
     # print_results('hillclimber', hillclimber.best_model, runtime)
 
     # ______________________SIMULATED ANNEALING________________________________________
-    simulated_annealing = SimulatedAnnealing(random_algorithm.best_model, temperature=10)
+    # simulated_annealing = SimulatedAnnealing(random_algorithm.model, temperature=10)
 
-    random_restart(SimulatedAnnealing, heuristics=['middle', 'day'], verbose=True, iterations=200)
-    start_time = time.time()
-    simulated_annealing.run(iterations=100, verbose=True, heuristics=['middle', 'day'], type="exponential", alpha=0.95)
-    runtime = time.time() - start_time
+    # start_time = time.time()
+    # simulated_annealing.run(verbose=True, heuristics=['middle', 'day'])
+    # runtime = time.time() - start_time
 
-    print_results('simulated annealing', simulated_annealing.best_model, runtime)
+    # print_results('simulated annealing', simulated_annealing.best_model, runtime)
 
     # ________________________GREEDY ALGORITHM_________________________________________
     # start_time = time.time()
