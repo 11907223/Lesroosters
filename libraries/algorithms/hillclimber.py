@@ -278,7 +278,7 @@ class HillClimber(Random):
         convergence: int = sys.maxsize,
         mutate_slots_number: int = 1,
         heuristics: Optional[list[str]] = None,
-        modifier: float = 1.2,
+        modifier: float = 1.5,
         verbose: bool = False,
         store_scores: bool = False,
     ) -> Model:

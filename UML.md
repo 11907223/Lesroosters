@@ -18,32 +18,6 @@ label l [
 
 @startuml FirstDiagram
 
-class Schedule{
-    days: dict[str: Day]
-    -init_schedule() -> dict[str: Day]
-    day_schedule(day) -> list[slots] in day
-    insert_activity(Day, Slot, Activity) -> bool. Modifies activity in place.
-    as_list_of_dicts() -> dict representation of the Schedule.
-}
-
-class Day{
-    day: str = Name of the day.
-    slots : Dict OR list of slots.
-    -init_day() : Fills the day with empty ScheduleSlots.
-}
-
-class Hall_slot{
-    day : str
-    time: str.
-    room: str = Name of room.
-    room_capacity : int = Max students inside a room.
-    activity : Activity.
-    is_empty() -> bool. Check if slot is occupied.
-    fill() -> Set an active activity for the slot.
-    check_capacity() -> bool. Check if capacity of room is not exceeded.
-    as_dict() -> Return a dict representation of the slot.
-}
-
 class Activity{
     add_student(student) -> Inplace modification.
     course: Course = The course which the activity belongs to.
@@ -74,9 +48,6 @@ class Student{
     courses: list[Course].
 }
 
-Day -up-> Schedule
-Hall_slot -up-> Day
-Activity -up-> Hall_slot
 Activity <-down-> Course
 Activity <-down-> Student
 Course <-right-> Student
@@ -86,7 +57,7 @@ Course <-right-> Student
 
 @startuml ModelDiagram
 
-object Schedule{
+object Model{
     {field} index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144 
         ((4 timeslots * 7 rooms + 1 evening slot) * 5 days).
     activity : str = string representation of the Activity object.
@@ -97,12 +68,10 @@ object Activity_participant_list{
     student : str = string representation of the Student object. Based on their index number.
 }
 
-Schedule <- Activity_participant_list
+Model <- Activity_participant_list
 
 @enduml
 
 </div>
 
-![UML Diagram](images/FirstDiagram.svg)
-
-![Model Diagram](images/ModelDiagram.svg)
+![UML Diagram](UML.svg)
