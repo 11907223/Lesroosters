@@ -17,7 +17,7 @@ def main(algorithm, runs, heuristic):
     empty_model = Model()
 
     # _________________________RANDOM ALGORITHM________________________________________
-    if algorithm == 'random':
+    if algorithm == "random":
         random_algorithm = Random(empty_model)
 
         start_time = time.time()
@@ -27,7 +27,7 @@ def main(algorithm, runs, heuristic):
         print_results("random", random_algorithm.best_model, runtime)
 
     # ________________________BEAM SEARCH ALGORITHM____________________________________
-    elif algorithm == 'beam_search':
+    elif algorithm == "beam_search":
         beam_search = BeamSearch(empty_model)
         print("STARTING BEAM SEARCH ALGORITHM \n")
 
@@ -40,26 +40,39 @@ def main(algorithm, runs, heuristic):
         print_results("beam search", beam_search.initial_model, runtime)
 
     # ______________________HILLCLIMBER ALGORITHM______________________________________
-    elif algorithm == 'hillclimber':
+    elif algorithm == "hillclimber":
         hillclimber = HillClimber(random_algorithm.best_model)
         print("\n STARTING HILLCLIMBER ALGORITHM")
 
         start_time = time.time()
-        hillclimber.run(verbose=True, heuristics=['middle', 'day'])
+        hillclimber.run(verbose=True, heuristics=["middle", "day"])
         runtime = time.time() - start_time
 
-        print_results('hillclimber', hillclimber.best_model, runtime)
+        print_results("hillclimber", hillclimber.best_model, runtime)
 
     # ______________________SIMULATED ANNEALING________________________________________
-    elif algorithm == 'simulated_annealing':
-        simulated_annealing = SimulatedAnnealing(random_algorithm.best_model, temperature=10)
+    elif algorithm == "simulated_annealing":
+        simulated_annealing = SimulatedAnnealing(
+            random_algorithm.best_model, temperature=10
+        )
 
-        random_restart(SimulatedAnnealing, heuristics=['middle', 'day'], verbose=True, iterations=200)
+        random_restart(
+            SimulatedAnnealing,
+            heuristics=["middle", "day"],
+            verbose=True,
+            iterations=200,
+        )
         start_time = time.time()
-        simulated_annealing.run(iterations=100, verbose=True, heuristics=['middle', 'day'], type="exponential", alpha=0.95)
+        simulated_annealing.run(
+            iterations=100,
+            verbose=True,
+            heuristics=["middle", "day"],
+            type="exponential",
+            alpha=0.95,
+        )
         runtime = time.time() - start_time
 
-        print_results('simulated annealing', simulated_annealing.best_model, runtime)
+        print_results("simulated annealing", simulated_annealing.best_model, runtime)
 
     # ________________________GREEDY ALGORITHM_________________________________________
     elif algorithm == 'greedy':
@@ -70,7 +83,7 @@ def main(algorithm, runs, heuristic):
         greedy_solution = Greedy(empty_model, sort=options["sort_size"], sort_overlap=options["sort_overlap"], shuffle=options["shuffle"]).run()
         runtime = time.time() - start_time
 
-        print_results('greedy', greedy_solution, runtime)
+        print_results("greedy", greedy_solution, runtime)
 
     # ________________________RANDOMGREEDY ALGORITHM___________________________________
     elif algorithm == 'random_greedy':
@@ -81,10 +94,10 @@ def main(algorithm, runs, heuristic):
         random_greedy = RandomGreedy(empty_model, sort=options["sort_size"], sort_overlap=options["sort_overlap"], shuffle=options["shuffle"]).run()
         runtime = time.time() - start_time
 
-        print_results('randomgreedy', random_greedy, runtime)
+        print_results("randomgreedy", random_greedy, runtime)
 
     # __________________________BASELINE_______________________________________________
-    elif algorithm == 'baseline':
+    elif algorithm == "baseline":
         random.seed(0)
         with open("results/baseline.txt", "a+") as file:
             for i in range(10000):
@@ -96,9 +109,10 @@ def main(algorithm, runs, heuristic):
                 text = "\n".join([str(score) for score in penalty])
                 file.write(f"\n{text}")
 
+
 if __name__ == "__main__":
     # set-up parsing command line arguments
-    parser = argparse.ArgumentParser(description = "run a specific algorithm")
+    parser = argparse.ArgumentParser(description="run a specific algorithm")
 
     # adding arguments
     parser.add_argument("algorithm", help = "algorithm to run")
