@@ -95,6 +95,13 @@ def main(algorithm, runs, heuristic):
 
                 text = "\n".join([str(score) for score in penalty])
                 file.write(f"\n{text}")
+    
+    # invalid command
+    else:
+        print(
+            "Error: Command must be one of the following: [random, beam_search, hillclimber, simulated_annealing, greedy, random_greedy]"
+        )
+        return
 
 
 if __name__ == "__main__":
