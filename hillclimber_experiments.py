@@ -1,4 +1,6 @@
-from libraries.helpers.experiments.hillclimber.hillclimber_tuner import iter_tuner
+from libraries.helpers.experiments.hillclimber.hillclimber_tuner import (
+    iter_tuner,
+)
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
 from libraries.algorithms.random_restart import random_restart
@@ -6,11 +8,33 @@ import multiprocessing
 import random
 import csv
 
-# Source: https://stackoverflow.com/questions/10415028/how-to-get-the-return-value-of-a-function-passed-to-multiprocessing-process
 
 
-def map_wrapper(heuristic, return_dict):
-    return_dict[" ".join(heuristic)] = random_restart(HillClimber, seed=None, heuristics=heuristic, verbose=2, store_runs=True)
+def heuristic_tester(algorithm, heuristic, results):
+    results[" ".join(heuristic)] = random_restart(
+        algorithm=algorithm,
+        seed=None,
+        heuristics=heuristic,
+        verbose=2,
+        store_runs=True,
+    )
+
+
+def pool_exe(target, algorithm, heuristics):
+    # Source: https://stackoverflow.com/questions/10415028/how-to-get-the-return-value-of-a-function-passed-to-multiprocessing-process
+    manager = multiprocessing.Manager()
+    results = manager.dict()
+    jobs = []
+
+    for heuristic in heuristics:
+        p = multiprocessing.Process(target=target, args=(algorithm, heuristic, results))
+        jobs.append(p)
+        p.start()
+
+    for process in jobs:
+        process.join()
+
+    return results.items()
 
 
 if __name__ == "__main__":
@@ -28,7 +52,6 @@ if __name__ == "__main__":
     #     results[modifier] = modifier_results
     #     print(results)
 
-
     # with open("results/HillClimber/Modifier Tuner.csv", 'a+', newline='') as file:
     #     for result in results.items():
     #         csv.writer(file).writerow(result)
@@ -44,21 +67,14 @@ if __name__ == "__main__":
     #     for result in results.items():
     #         csv.writer(file).writerow(result)
 
-    manager = multiprocessing.Manager()
-    results = manager.dict()
-    jobs = []
+    heuristics = [["balance"], ["middle"], ["days"]]
 
-    heuristics = [['balance'], ['middle'], ['days']]
+    results = pool_exe(heuristic_tester, HillClimber, heuristics)
 
-    for heuristic in heuristics:
-        p = multiprocessing.Process(target=map_wrapper, args=(heuristic, results))
-        jobs.append(p)
-        p.start()
-
-    for process in jobs:
-        process.join()
-
-    with open("results/HillClimber/Heuristics Single Comparison.csv", 'a+', newline='') as file:
-        for result in results.items():
+    with open(
+        "results/HillClimber/Heuristics Single Comparison.csv",
+        "a+",
+        newline="",
+    ) as file:
+        for result in results:
             csv.writer(file).writerow(result)
-
