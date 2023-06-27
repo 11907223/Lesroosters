@@ -7,16 +7,16 @@ from libraries.algorithms.beam_search import BeamSearch
 from libraries.classes.model import Model
 from libraries.helpers.load_data import load_courses, load_students, load_halls
 from dotenv import load_dotenv
+import os
+import ast
 
-load_dotenv()
+# Load environment variables from .env file
+dotenv_path = os.path.join(os.path.dirname(__file__), "visualization/.env")
+load_dotenv(dotenv_path)
 
 from flask import Flask, render_template
 
 app = Flask(__name__)
-
-# knop algoritme kiezen
-# lijst studenten + aantal vakken per student
-# lijst vakken, aant studenten, aant hoorcolleges, werkcolleges, practica
 
 
 @app.route("/")
@@ -32,27 +32,10 @@ def index():
     weekdays = {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday"}
     timeslots = {0: "9", 1: "11", 2: "13", 3: "15", 4: "17"}
 
-    # Initialize model and run random algorithm
-    model = Model()
-
-    # ------------------- RANDOM ---------------------
-    # random_schedule = Random(model)
-    # schedule_solution = random_schedule.run()
-
-    # ------------------- GREEDY ---------------------
-    # greedy_schedule = Greedy(model)
-
-    # ------------------- BEAM SEARCH ---------------------
-    beam_schedule = BeamSearch(model)
-    schedule_solution = beam_schedule.run(
-        beam=1, runs=1, heuristic="capacity", verbose=True
-    )
-
+    schedule_solution = read_dict_from_txt()
+    print(schedule_solution)
     # Create a dict of the solution
     schedule_dict = create_dict(schedule_solution, halls, weekdays, timeslots)
-
-    # Create a list of all students
-    students_list = create_student_list(students)
 
     # Calcualte penalty
     penalty = schedule_solution.total_penalty()
@@ -90,14 +73,19 @@ def create_dict(model: Model, halls: dict, weekdays: dict, timeslot: dict) -> di
     return schedule_dict
 
 
-def create_student_list(students: dict) -> list:
-    """Create a list of all students."""
-    students_list = []
+def read_dict_from_txt() -> dict:
+    schedule_dict = {}
 
-    for student in students.values():
-        student_info = (
-            f"{student.first_name} {student.last_name}, {student.student_number}"
-        )
-        students_list.append(student_info)
+    # Open the text file for reading
+    with open(
+        "/Users/elisevaniterson/Documents/Programming/lesroosters/results/model_result.txt",
+        "r",
+    ) as file:
+        # Read the content of the file
+        file_content = file.read()
 
-    return students_list
+        # Evaluate the content as a literal expression to get the dictionary
+        schedule_dict = ast.literal_eval(file_content)
+
+    # Return the resulting dictionary
+    return schedule_dict
