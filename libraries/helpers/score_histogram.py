@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as ss 
 
-def plot_histogram(data_file='../../baseline.txt', output_path='../../images/', output_name='score_distribution_random_schedules', save=True):
+def plot_histogram(data_file='../../results/baseline.txt', output_path='../../images/', output_name='score_distribution_random_schedules_5', save=True):
     
     random_scores = []
     with open(data_file) as mytxt:
@@ -34,3 +34,5 @@ def plot_histogram(data_file='../../baseline.txt', output_path='../../images/', 
     
     if save:
         plt.savefig(f'{output_path}{output_name}.png', bbox_inches='tight')
+    
+plot_histogram()
