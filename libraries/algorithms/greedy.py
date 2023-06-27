@@ -95,7 +95,7 @@ class Greedy:
         current_penalty = 0
         for activity in self.model.unassigned_activities:
             current_penalty = self.insert_greedily(activity, current_penalty)
-            print("penalty:", current_penalty, f'{"  " * 10}', end="\r")
+            print("totl penalty:", current_penalty, f'{"  " * 10}', end="\r")
 
         return self.model
 
@@ -161,6 +161,7 @@ class RandomGreedy(Greedy):
             Model: the generated solution.
         """
         current_penalty = 0
+        print("\n"*2, end="")
 
         for i, activity in enumerate(self.model.unassigned_activities):
             
@@ -170,8 +171,8 @@ class RandomGreedy(Greedy):
             else:
                 current_penalty = self.insert_greedily(activity, current_penalty)
 
-            print(
-                f'penalty: {current_penalty} capacity penalty: {self.model.calc_total_capacity_penalties()} gap penalty: {self.model.calc_student_schedule_penalties()["gap penalties"]}  at activity: {i}'
-            )  # , end='\r')
+            # print progress
+            print("\033[F"*3)
+            print(f'total penalty: {current_penalty}\ninserted activities {i}/72')
 
         return self.model
