@@ -133,5 +133,7 @@ if __name__ == "__main__":
     # read arguments from command line
     args = parser.parse_args()
 
+    # if args.hrs
+
     # run main with provided arguments
-    main(args.algorithm, args.n, args.hr)
+    main(args.algorithm, args.n, args.hr, args.hrs)
