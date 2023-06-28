@@ -9,10 +9,10 @@ from libraries.algorithms.beam_search import BeamSearch
 from libraries.algorithms.hillclimber import HillClimber
 from libraries.algorithms.simulated_annealing import SimulatedAnnealing
 from libraries.algorithms.random_restart import random_restart
-import random
-import time
 import argparse
-
+import random
+import sys
+import time
 
 def main(algorithm, runs, heuristic, save, visualize):
     random.seed(0)
@@ -73,24 +73,30 @@ def main(algorithm, runs, heuristic, save, visualize):
         options = {"sort_size": False, "sort_overlap": False, "shuffle": False}
         options[heuristic] = True
 
-        # select correct algorithm
+        # initial values
+        greedy_best = empty_model.copy()
+        runtime = 0
+
         for run_number in range(runs):
             random.seed(run_number)
 
             start_time = time.time()
-            greedy_solution = algorithms[algorithm](
+            greedy = algorithms[algorithm](
                 empty_model, options["shuffle"], options["sort_size"], options["sort_overlap"]
-            ).run()
-            runtime = time.time() - start_time
+            )
+            greedy_result = greedy.run()
+            runtime += time.time() - start_time
 
+            if greedy_result < greedy_best:
+                greedy_best = greedy_result.copy()
+            
             if save:
-                # save and display results
                 to_csv(
-                    greedy_solution, runtime, run_number, heuristic,
+                    greedy_result, runtime, run_number, heuristic,
                     filename=f"{algorithm}_{heuristic}_{runs}runs",
                 )
 
-            print_results(algorithm, greedy_solution, runtime)
+        print_results(algorithm, greedy_best, runtime)
         print(f"{runs} run(s) finished.")
 
         if save:
@@ -99,7 +105,7 @@ def main(algorithm, runs, heuristic, save, visualize):
             )
 
         if visualize:
-            visualize_schedule(greedy_solution)
+            visualize_schedule(greedy_best)
 
     # __________________________BASELINE_______________________________________________
     elif algorithm == "baseline":
