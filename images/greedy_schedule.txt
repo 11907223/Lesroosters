@@ -1,0 +1,149 @@
+ +-----------+--------+--------+-----------------------------------------------+-------------+
+| day       | time   | hall   | activity                                      | #students   |
+|-----------+--------+--------+-----------------------------------------------+-------------|
+| Monday    | 9-11   | A1.04  | Technology for games lecture 1                | 38          |
+| Monday    | 9-11   | A1.06  |                                               |             |
+| Monday    | 9-11   | A1.08  |                                               |             |
+| Monday    | 9-11   | A1.10  |                                               |             |
+| Monday    | 9-11   | B0.201 |                                               |             |
+| Monday    | 9-11   | C0.110 | Programmeren in Java 2 practical 1            | 110         |
+| Monday    | 9-11   | C1.112 |                                               |             |
+| Monday    | 11-13  | A1.04  | Technology for games tutorial 1               | 38          |
+| Monday    | 11-13  | A1.06  |                                               |             |
+| Monday    | 11-13  | A1.08  |                                               |             |
+| Monday    | 11-13  | A1.10  | Reflectie op de digitale cultuur lecture 1    | 51          |
+| Monday    | 11-13  | B0.201 | Data Mining lecture 1                         | 27          |
+| Monday    | 11-13  | C0.110 | Calculus 2 lecture 1                          | 106         |
+| Monday    | 11-13  | C1.112 |                                               |             |
+| Monday    | 13-15  | A1.04  | Data Mining practical 1                       | 27          |
+| Monday    | 13-15  | A1.06  | Architectuur en computerorganisatie lecture 2 | 21          |
+| Monday    | 13-15  | A1.08  |                                               |             |
+| Monday    | 13-15  | A1.10  | Reflectie op de digitale cultuur lecture 2    | 51          |
+| Monday    | 13-15  | B0.201 |                                               |             |
+| Monday    | 13-15  | C0.110 | Calculus 2 tutorial 1                         | 106         |
+| Monday    | 13-15  | C1.112 |                                               |             |
+| Monday    | 15-17  | A1.04  | Architectuur en computerorganisatie lecture 1 | 21          |
+| Monday    | 15-17  | A1.06  |                                               |             |
+| Monday    | 15-17  | A1.08  |                                               |             |
+| Monday    | 15-17  | A1.10  | Bioinformatica practical 1                    | 45          |
+| Monday    | 15-17  | B0.201 |                                               |             |
+| Monday    | 15-17  | C0.110 | Reflectie op de digitale cultuur tutorial 1   | 51          |
+| Monday    | 15-17  | C1.112 |                                               |             |
+| Monday    | 17-19  | C0.110 | Bioinformatica tutorial 1                     | 45          |
+| Tuesday   | 9-11   | A1.04  | Technology for games lecture 2                | 38          |
+| Tuesday   | 9-11   | A1.06  |                                               |             |
+| Tuesday   | 9-11   | A1.08  |                                               |             |
+| Tuesday   | 9-11   | A1.10  | Data Mining tutorial 1                        | 27          |
+| Tuesday   | 9-11   | B0.201 |                                               |             |
+| Tuesday   | 9-11   | C0.110 | Databases 2 lecture 1                         | 72          |
+| Tuesday   | 9-11   | C1.112 |                                               |             |
+| Tuesday   | 11-13  | A1.04  | Project Genetic Algorithms practical 1        | 36          |
+| Tuesday   | 11-13  | A1.06  |                                               |             |
+| Tuesday   | 11-13  | A1.08  |                                               |             |
+| Tuesday   | 11-13  | A1.10  | Heuristieken 1 tutorial 1                     | 44          |
+| Tuesday   | 11-13  | B0.201 | Project Numerical Recipes practical 1         | 44          |
+| Tuesday   | 11-13  | C0.110 | Databases 2 tutorial 1                        | 72          |
+| Tuesday   | 11-13  | C1.112 |                                               |             |
+| Tuesday   | 13-15  | A1.04  | Heuristieken 2 lecture 1                      | 32          |
+| Tuesday   | 13-15  | A1.06  | Advanced Heuristics practical 1               | 20          |
+| Tuesday   | 13-15  | A1.08  |                                               |             |
+| Tuesday   | 13-15  | A1.10  | Moderne Databases practical 1                 | 54          |
+| Tuesday   | 13-15  | B0.201 |                                               |             |
+| Tuesday   | 13-15  | C0.110 | Software engineering lecture 1                | 75          |
+| Tuesday   | 13-15  | C1.112 |                                               |             |
+| Tuesday   | 15-17  | A1.04  | Heuristieken 2 tutorial 1                     | 32          |
+| Tuesday   | 15-17  | A1.06  |                                               |             |
+| Tuesday   | 15-17  | A1.08  |                                               |             |
+| Tuesday   | 15-17  | A1.10  | Moderne Databases tutorial 1                  | 54          |
+| Tuesday   | 15-17  | B0.201 |                                               |             |
+| Tuesday   | 15-17  | C0.110 | Software engineering practical 1              | 75          |
+| Tuesday   | 15-17  | C1.112 |                                               |             |
+| Tuesday   | 17-19  | C0.110 |                                               |             |
+| Wednesday | 9-11   | A1.04  | Advanced Heuristics lecture 1                 | 20          |
+| Wednesday | 9-11   | A1.06  |                                               |             |
+| Wednesday | 9-11   | A1.08  |                                               |             |
+| Wednesday | 9-11   | A1.10  | Zoeken sturen en bewegen practical 1          | 42          |
+| Wednesday | 9-11   | B0.201 |                                               |             |
+| Wednesday | 9-11   | C0.110 | Software engineering tutorial 1               | 75          |
+| Wednesday | 9-11   | C1.112 |                                               |             |
+| Wednesday | 11-13  | A1.04  | Autonomous Agents 2 lecture 2                 | 22          |
+| Wednesday | 11-13  | A1.06  |                                               |             |
+| Wednesday | 11-13  | A1.08  |                                               |             |
+| Wednesday | 11-13  | A1.10  |                                               |             |
+| Wednesday | 11-13  | B0.201 |                                               |             |
+| Wednesday | 11-13  | C0.110 | Kansrekenen 2 lecture 1                       | 84          |
+| Wednesday | 11-13  | C1.112 | Collectieve Intelligentie tutorial 1          | 61          |
+| Wednesday | 13-15  | A1.04  | Autonomous Agents 2 lecture 1                 | 22          |
+| Wednesday | 13-15  | A1.06  |                                               |             |
+| Wednesday | 13-15  | A1.08  |                                               |             |
+| Wednesday | 13-15  | A1.10  |                                               |             |
+| Wednesday | 13-15  | B0.201 |                                               |             |
+| Wednesday | 13-15  | C0.110 | Kansrekenen 2 lecture 2                       | 84          |
+| Wednesday | 13-15  | C1.112 |                                               |             |
+| Wednesday | 15-17  | A1.04  | Autonomous Agents 2 practical 1               | 22          |
+| Wednesday | 15-17  | A1.06  |                                               |             |
+| Wednesday | 15-17  | A1.08  |                                               |             |
+| Wednesday | 15-17  | A1.10  |                                               |             |
+| Wednesday | 15-17  | B0.201 |                                               |             |
+| Wednesday | 15-17  | C0.110 |                                               |             |
+| Wednesday | 15-17  | C1.112 |                                               |             |
+| Wednesday | 17-19  | C0.110 | Autonomous Agents 2 tutorial 1                | 22          |
+| Thursday  | 9-11   | A1.04  | Compilerbouw practicum practical 1            | 40          |
+| Thursday  | 9-11   | A1.06  | Machine Learning lecture 2                    | 22          |
+| Thursday  | 9-11   | A1.08  |                                               |             |
+| Thursday  | 9-11   | A1.10  | Moderne Databases lecture 1                   | 54          |
+| Thursday  | 9-11   | B0.201 |                                               |             |
+| Thursday  | 9-11   | C0.110 | Netwerken en systeembeveiliging practical 1   | 64          |
+| Thursday  | 9-11   | C1.112 | Lineaire Algebra lecture 1                    | 54          |
+| Thursday  | 11-13  | A1.04  | Webprogrammeren en databases lecture 2        | 39          |
+| Thursday  | 11-13  | A1.06  | Informatie- en organisatieontwerp lecture 1   | 21          |
+| Thursday  | 11-13  | A1.08  |                                               |             |
+| Thursday  | 11-13  | A1.10  | Lineaire Algebra lecture 2                    | 54          |
+| Thursday  | 11-13  | B0.201 | Algoritmen en complexiteit lecture 1          | 43          |
+| Thursday  | 11-13  | C0.110 | Compilerbouw lecture 1                        | 69          |
+| Thursday  | 11-13  | C1.112 |                                               |             |
+| Thursday  | 13-15  | A1.04  | Webprogrammeren en databases practical 1      | 39          |
+| Thursday  | 13-15  | A1.06  | Informatie- en organisatieontwerp lecture 2   | 21          |
+| Thursday  | 13-15  | A1.08  |                                               |             |
+| Thursday  | 13-15  | A1.10  | Algoritmen en complexiteit practical 1        | 43          |
+| Thursday  | 13-15  | B0.201 |                                               |             |
+| Thursday  | 13-15  | C0.110 | Compilerbouw lecture 2                        | 69          |
+| Thursday  | 13-15  | C1.112 |                                               |             |
+| Thursday  | 15-17  | A1.04  | Webprogrammeren en databases tutorial 1       | 39          |
+| Thursday  | 15-17  | A1.06  | Informatie- en organisatieontwerp practical 1 | 21          |
+| Thursday  | 15-17  | A1.08  |                                               |             |
+| Thursday  | 15-17  | A1.10  | Algoritmen en complexiteit tutorial 1         | 43          |
+| Thursday  | 15-17  | B0.201 |                                               |             |
+| Thursday  | 15-17  | C0.110 | Compilerbouw practical 1                      | 69          |
+| Thursday  | 15-17  | C1.112 |                                               |             |
+| Thursday  | 17-19  | C0.110 | Informatie- en organisatieontwerp tutorial 1  | 21          |
+| Friday    | 9-11   | A1.04  | Webprogrammeren en databases lecture 1        | 39          |
+| Friday    | 9-11   | A1.06  |                                               |             |
+| Friday    | 9-11   | A1.08  |                                               |             |
+| Friday    | 9-11   | A1.10  | Heuristieken 1 lecture 1                      | 44          |
+| Friday    | 9-11   | B0.201 | Data Mining lecture 2                         | 27          |
+| Friday    | 9-11   | C0.110 | Compilerbouw tutorial 1                       | 69          |
+| Friday    | 9-11   | C1.112 |                                               |             |
+| Friday    | 11-13  | A1.04  | Machine Learning lecture 1                    | 22          |
+| Friday    | 11-13  | A1.06  |                                               |             |
+| Friday    | 11-13  | A1.08  |                                               |             |
+| Friday    | 11-13  | A1.10  | Bioinformatica lecture 2                      | 45          |
+| Friday    | 11-13  | B0.201 | Interactie-ontwerp lecture 1                  | 25          |
+| Friday    | 11-13  | C0.110 | Collectieve Intelligentie lecture 2           | 61          |
+| Friday    | 11-13  | C1.112 | Analysemethoden en -technieken lecture 1      | 49          |
+| Friday    | 13-15  | A1.04  | Interactie-ontwerp lecture 2                  | 25          |
+| Friday    | 13-15  | A1.06  |                                               |             |
+| Friday    | 13-15  | A1.08  |                                               |             |
+| Friday    | 13-15  | A1.10  | Bioinformatica lecture 1                      | 45          |
+| Friday    | 13-15  | B0.201 |                                               |             |
+| Friday    | 13-15  | C0.110 | Collectieve Intelligentie lecture 3           | 61          |
+| Friday    | 13-15  | C1.112 |                                               |             |
+| Friday    | 15-17  | A1.04  |                                               |             |
+| Friday    | 15-17  | A1.06  |                                               |             |
+| Friday    | 15-17  | A1.08  |                                               |             |
+| Friday    | 15-17  | A1.10  | Bioinformatica lecture 3                      | 45          |
+| Friday    | 15-17  | B0.201 |                                               |             |
+| Friday    | 15-17  | C0.110 | Collectieve Intelligentie lecture 1           | 61          |
+| Friday    | 15-17  | C1.112 |                                               |             |
+| Friday    | 17-19  | C0.110 | Collectieve Intelligentie practical 1         | 61          |
++-----------+--------+--------+-----------------------------------------------+-------------+

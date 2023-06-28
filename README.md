@@ -151,9 +151,17 @@ In this project various algorithms were tested under a limited amount of time to
 As a constraint-optimization problem, the goal was to minimize the number of penalty points assigned to a timetable.
 
 
-In this project, it has been discovered that with a limited amount of processing time, the Randomized-Greedy Algorithm forms the most optimized problem. By applying a heuristic of minimizing the number of overlapping classes of students, it made a schedule with a total of 344 of which 309 can be attributed to penalty points due to conflict. Schedule gap penalties accounted for just 14 penalty points, and 1 penalty point was given for a single activity being 1 person over capacity. 20 penalty points were given for activities occupying the evening slots.
+In this project, it has been discovered that with a limited amount of processing time, the Randomized-Greedy Algorithm forms the most optimized problem in 211 seconds. This is a deterministic optimization algorithm. By applying a heuristic of minimizing the number of overlapping classes of students, it made a schedule with a total of 344 of which 309 can be attributed to penalty points due to conflict. Schedule gap penalties accounted for just 14 penalty points, and 1 penalty point was given for a single activity being 1 person over capacity. 20 penalty points were given for activities occupying the evening slots.
 
-It is possible to reduce potential conflict penalties by increasing the number of different activities. By splitting lectures into two groups (lecture 1a and 1b), students can be at their respective activities without having a requirement of being at two places at the same hour. Currently the schedule is filled for 72 out of 145 slots. By making use of more timeslots, it is possible that created schedules reduce the number of overlapping activities for students.
+It is possible to reduce potential conflict penalties by increasing the number of different activities. By splitting lectures into two groups (lecture 1a and 1b), students can be at their respective activities without having a requirement of being at two places at the same hour. Currently the schedule is filled for 72 out of 145 slots. By making use of more timeslots, it is possible that created schedules reduce the number of overlapping activities for students. 
+
+> *click the image for a complete overview*
+
+ [![img](/images/screenshot_greedy_schedule.png)](/images/greedy_schedule.txt)
+ 
+
+
+There is the fact that a university timetable has a development span of 1 semester. This means that it is likely that more optimal solutions can be developed with different algorithms that better utilize that time.
 
 ## Acknowledgements
 This project was performed by Niels Huang, Nina van der Meulen en Elise van Iterson.
