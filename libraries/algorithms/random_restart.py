@@ -14,7 +14,7 @@ def random_restart(
     algorithm: HillClimber | SimulatedAnnealing,
     seed: int = 0,
     runs: int = 20,
-    temperature: int = 2,
+    temperature: int = 3,
     iterations: int = 2821,
     convergence: int = sys.maxsize,
     mutate_slots_number: int = 1,
@@ -40,7 +40,7 @@ def random_restart(
         runs (int): Amount of runs to be performed. Defaults to 20.
         iterations (int): Number of iterations for the Hillclimber to 'climb'.
             Defaults to 2821 iterations.
-        temperature (int): Startin temperature for simulated annealing. Defaults to 1.
+        temperature (int): Startin temperature for simulated annealing. Defaults to 3.
         convergence (bool): Evaluate if iterations are based on convergence.
             If no value is given, convergence is not evaluated.
         mutate_slots_number (int): Number of mutations to occur each iteration.

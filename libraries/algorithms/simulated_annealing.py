@@ -17,13 +17,13 @@ class SimulatedAnnealing(HillClimber):
     this is a child of the HillClimber algorithm.
     """
 
-    def __init__(self, model: Model, temperature: int | float = 1):
+    def __init__(self, model: Model, temperature: int | float = 3):
         """Initialise the Simulated Annealing algorithm class.
 
         Args:
             model (Model): A model with a filled in solution.
             temperature (int): starting temperature which accepts changes.
-                Defaults to 1.
+                Defaults to 3.
 
         Raises:
             Exception: Provided solution is invalid."""
