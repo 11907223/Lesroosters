@@ -79,20 +79,14 @@ def main(algorithm, runs, heuristic, save, visualize):
 
             start_time = time.time()
             greedy_solution = algorithms[algorithm](
-                empty_model,
-                sort=options["sort_size"],
-                sort_overlap=options["sort_overlap"],
-                shuffle=options["shuffle"],
+                empty_model, options["shuffle"], options["sort_size"], options["sort_overlap"]
             ).run()
             runtime = time.time() - start_time
 
             if save:
                 # save and display results
                 to_csv(
-                    greedy_solution,
-                    runtime,
-                    run_number,
-                    heuristic,
+                    greedy_solution, runtime, run_number, heuristic,
                     filename=f"{algorithm}_{heuristic}_{runs}runs",
                 )
 
@@ -162,7 +156,7 @@ if __name__ == "__main__":
     # formatting
     if args.heuristics == []:
         args.heuristics = None
-    elif args.algorithm in ["beam_search", "greedy", "random_greedy"] and args.heurstics:
+    elif args.algorithm in ["beam_search", "greedy", "random_greedy"] and args.heuristics:
         args.heuristics = args.heuristics[0]
 
     # run main with provided arguments
