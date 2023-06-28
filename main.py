@@ -11,7 +11,6 @@ from libraries.algorithms.simulated_annealing import SimulatedAnnealing
 from libraries.algorithms.random_restart import random_restart
 import argparse
 import random
-import sys
 import time
 
 def main(algorithm, runs, heuristic, save, visualize):
