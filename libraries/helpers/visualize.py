@@ -1,3 +1,5 @@
+from libraries.helpers.load_data import load_halls
+from libraries.classes.model import Model
 import pandas as pd
 import tkinter as tk
 from tkinter import ttk
@@ -14,11 +16,9 @@ def create_df(schedule: dict) -> pd.DataFrame:
             filled in the schedule on the correct day and timeslot.
     """
 
-    # Create a list of weekdays (column headers)
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-
-    # Create a list of timeslots (row headers)
     timeslots = ["9-11", "11-13", "13-15", "15-17", "17-19"]
+    halls = load_halls()
 
     # Create an empty DataFrame
     df = pd.DataFrame(index=timeslots, columns=weekdays)
@@ -28,6 +28,12 @@ def create_df(schedule: dict) -> pd.DataFrame:
         if course is not None and lecture is not None:
             day = index // 29
             timeslot_index = (index % 29) // 7
+            if (index % 29) == 28:
+                # Evening slot exception.
+                hall = 5
+            else:
+                # Regular hall indexing.
+                hall = (index % 29) % 7
 
             # Map the timeslot index to the corresponding timeslot
             timeslot = timeslots[timeslot_index]
@@ -35,15 +41,17 @@ def create_df(schedule: dict) -> pd.DataFrame:
             # Map the location to the corresponding weekday
             weekday = weekdays[day]
 
+            value = f"{course}\n- {lecture}, {halls[hall]}"
+
             # Check if the cell is already populated
             if pd.notnull(df.loc[timeslot, weekday]):
                 # Concatenate the new value with the existing value
                 existing_value = df.loc[timeslot, weekday]
-                new_value = f"{existing_value}\n{course}, {lecture}"
+                new_value = f"{existing_value}\n{value}"
                 df.loc[timeslot, weekday] = new_value
             else:
                 # Assign the value to the cell
-                df.loc[timeslot, weekday] = f"{course}, {lecture}"
+                df.loc[timeslot, weekday] = value
 
     return df
 
@@ -65,7 +73,7 @@ def tkinter_pop_up(df: pd.DataFrame) -> None:
         "Custom.Treeview",
         background="#FFFFE0",
         foreground="black",
-        rowheight=120,
+        rowheight=150,
         fieldbackground="#677a46",
         font=("Arial", 12),
         wraplength=50,
@@ -76,37 +84,13 @@ def tkinter_pop_up(df: pd.DataFrame) -> None:
     tree["columns"] = [""] + df.columns.tolist()
     tree["show"] = "headings"
 
+    # Add column headings to the Treeview
+    for col in df.columns:
+        tree.heading(col, text=col)
+
     # Add rows to the Treeview
-    tree.insert(
-        "",
-        tk.END,
-        values=[""] + df.columns.tolist(),
-        tags="header",
-    )  # Column headers row
     for index, row in df.iterrows():
         tree.insert("", tk.END, values=[index] + row.tolist())
-
-    # Define a function to apply cell colors based on conditions
-    # def apply_cell_colors():
-    #     for i, col in enumerate(df.columns):
-    #         for j, value in enumerate(df[col]):
-    #             if pd.isnull(value):  # Check for None or NaN values
-    #                 continue  # Skip empty cells
-    #             elif value == "Some Condition":
-    #                 tree.tag_configure(f"cell_{i}_{j}", background="red")
-    #             elif value == "Another Condition":
-    #                 tree.tag_configure(f"cell_{i}_{j}", background="blue")
-    #             # Add more conditions and colors as needed
-
-    # # Call the function to apply cell colors
-    # apply_cell_colors()
-
-    # # Apply the cell colors to the Treeview
-    # for i, col in enumerate(df.columns):
-    #     for j, value in enumerate(df[col]):
-    #         if pd.isnull(value):  # Check for None or NaN values
-    #             continue  # Skip empty cells
-    #         tree.item(f"::I{j}::T{i}", tags=f"cell_{i}_{j}")
 
     # Add Treeview to a scrollable frame
     scrollbar = ttk.Scrollbar(window, orient="vertical", command=tree.yview)
@@ -118,11 +102,12 @@ def tkinter_pop_up(df: pd.DataFrame) -> None:
     window.mainloop()
 
 
-def visualize_schedule(schedule: dict) -> None:
+def visualize_schedule(model: Model) -> None:
     """Visualizes a schedule in a pop up window.
 
     Args:
         schedule (dict): A schedule dictionary with indices 0-144 that map to activity tuples.
     """
-    df = create_df(schedule)
+
+    df = create_df(model.solution)
     tkinter_pop_up(df)

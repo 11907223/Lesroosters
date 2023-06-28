@@ -33,7 +33,7 @@ def main(algorithm, runs, heuristic):
         runtime = time.time() - start_time
 
         print_results("random", random_algorithm.best_model, runtime)
-        visualize_schedule(random_algorithm.initial_model.solution)
+        visualize_schedule(random_algorithm.initial_model)
 
     # ________________________BEAM SEARCH ALGORITHM____________________________________
     elif algorithm == "beam_search":
@@ -47,7 +47,7 @@ def main(algorithm, runs, heuristic):
         # visualize(beam_search.initial_model)
 
         print_results("beam search", beam_search.initial_model, runtime)
-        visualize_schedule(beam_search.initial_model.solution)
+        visualize_schedule(beam_search.initial_model)
 
     # ______________________HILLCLIMBER & SIMULATED ANNEALING___________________________
     elif algorithm in ["hillclimber", "simulated_annealing"]:
@@ -58,7 +58,7 @@ def main(algorithm, runs, heuristic):
         runtime = time.time() - start_time
 
         print_results(f"{algorithm}", best_model, runtime)
-        visualize_schedule(best_model.solution)
+        visualize_schedule(best_model)
 
     # ________________________GREEDY & RANDOMGREEDY ALGORITHM____________________________
     elif algorithm in ["greedy", "random_greedy"]:
@@ -96,13 +96,14 @@ def main(algorithm, runs, heuristic):
 
     # __________________________BASELINE_______________________________________________
     elif algorithm == "baseline":
+        # Minimum number of runs with baseline is 100.
         with open("results/baseline.txt", "a+") as file:
-            for i in range(10000):
+            for i in range(runs):
                 penalty = []
                 for j in range(100):
                     random_schedule = Random(empty_model)
                     penalty.append(random_schedule.run().calc_total_penalty())
-                    print(f"Current run: {i * 100 + j + 1}", end="\r")
+                    print(f"Current run cycle: {i}; {j} out of 100", end="\r")
 
                 text = "\n".join([str(score) for score in penalty])
                 file.write(f"\n{text}")
