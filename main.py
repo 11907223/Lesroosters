@@ -30,7 +30,7 @@ def main(algorithm, runs, heuristic):
 
         start_time = time.time()
         random_algorithm.run(runs=runs, verbose=True)
-        runtime = start_time - time.time()
+        runtime = time.time() - start_time
 
         print_results("random", random_algorithm.best_model, runtime)
         visualize_schedule(random_algorithm.initial_model.solution)
