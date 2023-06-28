@@ -216,9 +216,7 @@ class BeamSearch(Random):
 
         return True
 
-    def write_info_to_file(
-        self, model: Model, start_time, heuristic, beam, runs
-    ) -> None:
+    def write_final_to_file(self, start_time, heuristic, beam, runs) -> None:
         """Writes all information on a model to a txt file results/beam_search_runtime.txt.
 
         Args:
@@ -239,7 +237,15 @@ class BeamSearch(Random):
                 f"correct solution: {self.initial_model.is_solution()}\n"
             )
 
-    def run(self, beam=2, runs=1, heuristic="random", verbose: bool = False) -> Model:
+    def run(
+        self,
+        beam=2,
+        runs=1,
+        heuristic="random",
+        save=False,
+        deterministic=True,
+        verbose: bool = False,
+    ) -> Model:
         """Run the beam search algorithm untill a valid solution is found.
 
         Args:
@@ -247,6 +253,8 @@ class BeamSearch(Random):
             runs (int): The number of times that the algorithm should run.
             heursitic (str): The heuristic that the algorithm should use,
                 default is "random" and options are "capacity" and "totalpenalty"
+            save (bool): Determines if results should be saved in external files, default is false.
+            deterministic (bool): Determines if algorithm should insert randomness.
             verbose (bool): Keeps track of runs, steps and best solution found.
 
         Returns:
@@ -269,27 +277,29 @@ class BeamSearch(Random):
 
                 new_model = self.get_next_state()
 
-                # Retrieve a random empty index from the model.
-                # if step % 3:
-                #     index = new_model.get_random_index(empty=True)
-                # else:
-                index = new_model.get_high_capacity_empty_index()
+                #  Retrieve a random empty index from the model.
+                if not deterministic and step % 3:
+                    index = new_model.get_random_index(empty=True)
+                else:
+                    index = new_model.get_high_capacity_empty_index()
 
                 if self.create_children(new_model, index, beam, heuristic) is False:
                     # Stop if a solution is found
                     self.check_solution(new_model)
 
-                    # write penalty of solution to csv
-                    # with open(
-                    #     f"results/BeamSearch/{heuristic}_beam_n={beam}.txt", "a+"
-                    # ) as file:
-                    #     file.write(f"{new_model.calc_total_penalty()}\n")
+                    if save:
+                        # write penalty of solution to csv
+                        with open(
+                            f"results/BeamSearch/{heuristic}_beam_n={beam}.txt", "a+"
+                        ) as file:
+                            file.write(f"{new_model.calc_total_penalty()}\n")
 
                     break
 
         # Update the input graph with the best result found.
         self.initial_model = self.best_model
 
-        self.write_info_to_file(self.initial_model, start_time, heuristic, beam, runs)
+        if save:
+            self.write_final_to_file(start_time, heuristic, beam, runs)
 
         return self.initial_model

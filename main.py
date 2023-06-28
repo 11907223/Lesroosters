@@ -13,7 +13,7 @@ import time
 import argparse
 
 
-def main(algorithm, runs, heuristic):
+def main(algorithm, runs, heuristic, save):
     random.seed(0)
     empty_model = Model()
 
@@ -41,7 +41,7 @@ def main(algorithm, runs, heuristic):
         print("STARTING BEAM SEARCH ALGORITHM \n")
 
         start_time = time.time()
-        beam_search.run(beam=2, runs=runs, heuristic=heuristic, verbose=True)
+        beam_search.run(beam=2, runs=runs, heuristic=heuristic, save=save, verbose=True)
         runtime = time.time() - start_time
 
         # visualize(beam_search.initial_model)
@@ -126,6 +126,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--hr", "--heuristics", nargs="*", help="heuristic(s) used in run"
     )
+    parser.add_argument(
+        "--s", "--save", action="store_true", help="saves results in files"
+    )
 
     # read arguments from command line
     args = parser.parse_args()
@@ -137,4 +140,4 @@ if __name__ == "__main__":
         args.hr = args.hr[0]
 
     # run main with provided arguments
-    main(args.algorithm, args.n, args.hr)
+    main(args.algorithm, args.n, args.hr, args.s)

@@ -30,3 +30,8 @@ Heuristic: random, Beam: 2, Runtime: 66.6027181148529, Runs: 1
 total penalty: 1337, capacity penalty: 311, evening penalty: 25 
 student penalty: {'conflict penalties': 503, 'gap penalties': 498} 
 correct solution: True
+
+Heuristic: None, Beam: 2, Runtime: 23.36208415031433, Runs: 1 
+total penalty: 1337, capacity penalty: 311, evening penalty: 25 
+student penalty: {'conflict penalties': 503, 'gap penalties': 498} 
+correct solution: True
