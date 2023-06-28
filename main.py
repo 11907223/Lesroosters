@@ -94,8 +94,8 @@ def main(algorithm, runs, heuristic, save, visualize):
                     heuristic,
                     filename=f"{algorithm}_{heuristic}_{runs}runs",
                 )
-            print_results(algorithm, greedy_solution, runtime)
 
+            print_results(algorithm, greedy_solution, runtime)
         print(f"{runs} run(s) finished.")
 
         if save:
