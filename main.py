@@ -2,6 +2,7 @@ from libraries.algorithms.randomise import Random
 from libraries.classes.model import Model
 from libraries.helpers.print_results import print_results
 from libraries.helpers.save_greedy_run import to_csv
+from libraries.helpers.score_histogram import plot_histogram
 from libraries.helpers.visualize import visualize_schedule
 from libraries.algorithms.greedy import Greedy, RandomGreedy
 from libraries.algorithms.beam_search import BeamSearch
@@ -109,7 +110,7 @@ def main(algorithm, runs, heuristic, save, visualize):
     # __________________________BASELINE_______________________________________________
     elif algorithm == "baseline":
         # Minimum number of runs with baseline is 100.
-        with open("results/baseline.txt", "a+") as file:
+        with open(f"results/baseline_{runs*100}runs.txt", "a+") as file:
             for i in range(runs):
                 penalty = []
                 for j in range(100):
@@ -119,6 +120,16 @@ def main(algorithm, runs, heuristic, save, visualize):
 
                 text = "\n".join([str(score) for score in penalty])
                 file.write(f"\n{text}")
+
+        print(f'Baseline of {runs*100} runs finished. Results saved in ./results/baseline{runs*100}runs.txt')
+        
+        if save:
+            plot_histogram(
+                data_file=f'./results/baseline_{runs*100}runs.txt', 
+                output_path='./images/', 
+                output_name=f'{algorithm}_{runs*100}runs_score_distribution')
+            
+            print(f'histogram of score distribution plotted and saved to ./images/{algorithm}_{runs}runs_score_distribution.png')
 
     # invalid command
     else:
@@ -149,10 +160,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # formatting
-    if args.hr == []:
-        args.hr = None
-    elif args.algorithm in ["beam_search", "greedy", "random_greedy"] and args.hr:
-        args.hr = args.hr[0]
+    if args.heuristics == []:
+        args.heuristics = None
+    elif args.algorithm in ["beam_search", "greedy", "random_greedy"] and args.heurstics:
+        args.heuristics = args.heuristics[0]
 
     # run main with provided arguments
-    main(args.algorithm, args.n, args.hr, args.s, args.v)
+    main(args.algorithm, args.n, args.heuristics, args.save, args.visualize)
