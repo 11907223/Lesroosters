@@ -134,15 +134,15 @@ if __name__ == "__main__":
 
     # adding arguments
     parser.add_argument("algorithm", help="algorithm to run")
-    parser.add_argument("--n", help="number of runs", default=1, type=int)
+    parser.add_argument("-n", help="number of runs", default=1, type=int)
     parser.add_argument(
-        "--hr", "--heuristics", nargs="*", help="heuristic(s) used in run"
+        "-hr", "--heuristics", nargs="*", help="heuristic(s) used in run"
     )
     parser.add_argument(
-        "--s", "--save", action="store_true", help="saves results in files"
+        "-s", "--save", action="store_true", help="saves results in files"
     )
     parser.add_argument(
-        "--v", "--visualize", action="store_true", help="visualizes schedule in pop up"
+        "-v", "--visualize", action="store_true", help="visualizes schedule in pop up"
     )
 
     # read arguments from command line
