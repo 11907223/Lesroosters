@@ -24,12 +24,33 @@ Functions:
 
 ## [print_results.py](/libraries/helpers/print_results.py)
 
-This file contains functions to read all course, student, and location data from csv files.
+This file contains a function to print the results of a model in a nice format.
+
+Function:
+* print_results
+
+## [save_greedy_run.py](/libraries/helpers/save_greedy_run.py)
+
+This file contains a function save the results of the greedy algorithm to a csv.
+
+Function:
+* to_csv
+
+## [score_histogram.py](/libraries/helpers/score_histogram.py)
+
+This file contains a function to plot the baseline results to a histogram.
+
+Function:
+* plot_histogram
+
+## [visualize.py](/libraries/helpers/visualize.py)
+
+This file contains functions to visualize a model with tkinter in a pop up window.
 
 Functions:
-* load_courses
-* load_students
-* load_halls
-* _load_subjects
-* _update_course
+* create_df
+* tkinter_pop_up
+* visualize_schedule
+
+
 
