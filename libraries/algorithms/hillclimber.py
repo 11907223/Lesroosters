@@ -334,6 +334,7 @@ class HillClimber(Random):
 
             # Update the score of the model and store it.
             scores.append(new_model.calc_total_penalty())
+            self.scores = scores
 
             if self.check_solution(new_model) is True:
                 # Accept the mutation if it is an improvement.
@@ -348,7 +349,7 @@ class HillClimber(Random):
             with open(f"results/{self}.csv", "a+", newline="") as file:
                 csv.writer(file).writerow(scores)
 
-        return self.best_model
+        return self.best_model, scores
 
     def __repr__(self) -> str:
         return "HillClimber Algorithm"

@@ -6,6 +6,9 @@ from typing import Optional
 import random
 import sys
 import os
+import pickle
+import time
+import csv
 
 def random_restart(
     algorithm: HillClimber | SimulatedAnnealing,
@@ -66,6 +69,7 @@ def random_restart(
     print(f"Starting {os.getpid()}")
     print("")  # Ensure command not overwritten.
     for run in range(runs):
+        start_time = time.time()
         # Generate a new random model.
         random_model = Random(Model()).run()
         print(
@@ -81,7 +85,7 @@ def random_restart(
             exe = algorithm(random_model)
 
         # Run the algorithm.
-        new_model = exe.run(
+        new_model, scores = exe.run(
             iterations=iterations,
             convergence=convergence,
             mutate_slots_number=mutate_slots_number,
@@ -89,10 +93,16 @@ def random_restart(
             modifier=modifier,
             verbose=verbosity,
         )
+        end_time = time.time() - start_time
+
         scores.append(new_model.penalty_points)
         if new_model < best_model:
             # Save the newly generated model if it has a lower score than the old model.
             best_model = new_model
+        with open(f'{algorithm} models.pkl', 'ab+') as file:
+            pickle.dump(new_model, file, pickle.HIGHEST_PROTOCOL)
+        with open(f"{algorithm} scores.csv", 'a+', newline='') as score_file:
+            csv.writer(score_file).writerow((round(end_time, 3), new_model.penalty_points, scores))
 
     if store_runs is True:
         # Enables averaging of scores over runs for tuning and comparison of heuristics.

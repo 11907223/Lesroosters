@@ -81,9 +81,11 @@ if __name__ == "__main__":
     #     for result in results:
     #         csv.writer(file).writerow(result)
 
-    heuristics_combi = [["niddle", "balance"], ["middle", "days"]]
-    results = pool_exe(heuristic_tester, SimulatedAnnealing, heuristics_combi)
+    # heuristics_combi = [["niddle", "balance"], ["middle", "days"]]
+    # results = pool_exe(heuristic_tester, SimulatedAnnealing, heuristics_combi)
 
-    with open("results/HillClimber/SimulatedAnnealing Double Comparison.csv","a+",newline="",) as file:
-        for result in results:
-            csv.writer(file).writerow(result)
+    # with open("results/HillClimber/SimulatedAnnealing Double Comparison.csv","a+",newline="",) as file:
+    #     for result in results:
+    #         csv.writer(file).writerow(result)
+
+    random_restart(SimulatedAnnealing, runs=9999, seed=None, heuristics=['middle', 'days'], verbose=1)
