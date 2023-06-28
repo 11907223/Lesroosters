@@ -85,19 +85,23 @@ def main(algorithm, runs, heuristic, save, visualize):
             ).run()
             runtime = time.time() - start_time
 
-            # save and display results
-            to_csv(
-                greedy_solution,
-                runtime,
-                run_number,
-                heuristic,
-                filename=f"{algorithm}_{heuristic}_{runs}runs",
-            )
+            if save:
+                # save and display results
+                to_csv(
+                    greedy_solution,
+                    runtime,
+                    run_number,
+                    heuristic,
+                    filename=f"{algorithm}_{heuristic}_{runs}runs",
+                )
             print_results(algorithm, greedy_solution, runtime)
 
-        print(
-            f"{runs} run(s) finished. Results have been saved to ./results/Greedy/{algorithm}_{heuristic}_{runs}runs.csv"
-        )
+        print(f"{runs} run(s) finished.")
+
+        if save:
+            print(
+                f"Results have been saved to ./results/Greedy/{algorithm}_{heuristic}_{runs}runs.csv"
+            )
 
         if visualize:
             visualize_schedule(greedy_solution)
