@@ -58,7 +58,7 @@ def main(algorithm, runs, heuristic, save, visualize):
     elif algorithm in ["hillclimber", "simulated_annealing"]:
         start_time = time.time()
         best_model = random_restart(
-            algorithms[algorithm], heuristics=heuristic, verbose=1, runs=runs, save=save,
+            algorithms[algorithm], heuristics=heuristic, verbose=2, runs=runs, save=save,
         )
         runtime = time.time() - start_time
 

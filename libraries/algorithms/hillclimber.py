@@ -274,7 +274,7 @@ class HillClimber(Random):
 
     def run(
         self,
-        iterations: int = 2000,
+        iterations: int = 2812,
         convergence: int = sys.maxsize,
         mutate_slots_number: int = 1,
         heuristics: Optional[list[str]] = None,
@@ -286,7 +286,7 @@ class HillClimber(Random):
 
         Args:
             iterations (int): Number of iterations for the Hillclimber to 'climb'.
-                Defaults to 2000 iterations.
+                Defaults to 2812 iterations.
             convergence (bool): Evaluate if iterations are based on convergence.
                 If no value is given, convergence is not evaluated.
             mutate_slots_number (int): Number of mutations to occur each iteration.
@@ -301,7 +301,7 @@ class HillClimber(Random):
                         high gap penalties with days containing high conflict hour penalties.
                     'steepest': Evaluate if algorithm has to only take each steepest climb.
                         Will result in deterministic algorithm behaviour.
-            modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.2.
+            modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.5.
             verbose (bool): Evaluate if run prints current iteration and penalty score.
                 Defaults to False.
             store_scores (bool): Evaluate if scores have to be stored for plotting. Defaults to false.
@@ -332,13 +332,14 @@ class HillClimber(Random):
 
             self.mutate_model(new_model, mutate_slots_number, heuristics, modifier)
 
-            # Update the score of the model and store it.
-            scores.append(new_model.calc_total_penalty())
-            self.scores = scores
+            # Update the score of the model.
+            new_score = new_model.calc_total_penalty()
 
             if self.check_solution(new_model) is True:
                 # Accept the mutation if it is an improvement.
                 convergence_counter = 0
+                scores.append(new_score)
+                self.scores = scores
             elif convergence_counter > convergence:
                 # Assume convergence has occured when solution remains the same for
                 #   a given value of convergence_counter.

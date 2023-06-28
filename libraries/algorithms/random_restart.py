@@ -65,7 +65,7 @@ def random_restart(
     best_model = Model()
 
     verbosity = True if verbose >= 2 else False
-    print(f"Starting {os.getpid()}")
+    print(f"Starting PID Number {os.getpid()}")
     print("")  # Ensure command not overwritten.
     for run in range(runs):
         start_time = time.time()
