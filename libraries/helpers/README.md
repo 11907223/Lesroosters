@@ -43,10 +43,11 @@ This file contains a function to print the results of a model in a nice format.
 
 Function:
 * print_results
+* model_to_df
 
 ## [save_greedy_run.py](/libraries/helpers/save_greedy_run.py)
 
-This file contains a function save the results of the greedy algorithm to a csv.
+This file contains a function save the results of the greedy/randomgreedy algorithm to a csv.
 
 Function:
 * to_csv
