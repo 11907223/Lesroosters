@@ -15,9 +15,12 @@ All algorithms are dependant on a functional Model class to manipulate.
     * [simulated_annealing.py](#simulated_annealing.py)
 
 ## [beam_search.py](/libraries/algorithms/beam_search.py)
-The beam search algorithm is usually a breadth first algorithm with a priority queue and a limit (beam) on the number of child states that will be created. In this project, the beam search is closer to a depth first algorithm with a priority queue and beam (n) because the state space of this case is too extensive for a breadth first algorithm.
+The beam search algorithm is usually a breadth first algorithm with a priority queue and a limit (beam) on the number of child states that will be created. In this project, the beam search is implemented as a depth first algorithm because the state space of this case is too extensive for a breadth first algorithm. The priority of states in the queue is calculated through total penalty points and the number of unassigned activities of the state.
 
-The beam search picks a timeslot and location (index) based on highest capacity available and 1 out of 3 times randomly. For this index, n activities are selected based on the chosen heuristic. The default heuristic is "random", where activities are picked randomly. The other two heuristics are "capacity" where activities are selected based on their capacity and its match to the index capacity, and "totalpenalty" where activities are selected based on the total penalty they cause in the timetable.
+Available heuristics:
+* Random: activities are randomly picked
+* Capacity: activities are selected according to their capacity and if they closely match the capacity of the lecture hall.
+* Total penalty: activities are selected so that they result in the lowest possible penalty points for the schedule.
 
 ## [greedy.py](/libraries/algorithms/greedy.py)
 
@@ -25,7 +28,7 @@ The greedy module contains both a deterministic Greedy and a random Greedy.
 
 ## The HillClimber Family
 
-The HillClimber family all function in the same manners as they are child and parent classes of eachother. The Random Restart is a meta-algorithm which gives eiter HillClimber or Simulated Annealing a randomly generated model for each new run. Running HillClimber or Simulated Annealing on their own requires a valid (filled in) timetable. 
+The HillClimber family all function in the same manners as they are child and parent classes of eachother. The Random Restart is a meta-algorithm which gives eiter HillClimber or Simulated Annealing a randomly generated model for each new run. Running HillClimber or Simulated Annealing on their own requires a valid (filled in) timetable.
 
 Multiple toggles are possible for running the algorithms. It is possible to adjust the number of iterations, the number of swaps each iteration, to evaluate based on convergence, and a number of heuristics.
 
