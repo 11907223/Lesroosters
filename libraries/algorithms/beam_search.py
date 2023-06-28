@@ -254,7 +254,8 @@ class BeamSearch(Random):
             heursitic (str): The heuristic that the algorithm should use,
                 default is "random" and options are "capacity" and "totalpenalty"
             save (bool): Determines if results should be saved in external files, default is false.
-            deterministic (bool): Determines if algorithm should insert randomness.
+            deterministic (bool): Determines if algorithm is deterministic, default is true.
+                If set to false, randomness will be inserted in algorithm.
             verbose (bool): Keeps track of runs, steps and best solution found.
 
         Returns:
