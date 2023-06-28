@@ -30,25 +30,12 @@ Data stems from the University of Amsterdam Computer Science track. The timetabl
 ## Installation
 
 1. Download Python version 3.10.6.
-2. Clone the repository: 
+2. Clone the repository:
 ```bash
 git clone https://github.com/11907223/lesroosters
 ```
 3. Navigate to the project root directory.
-4. Create a virtual environment for the visualisations: 
-```bash
-python3 -m venv venv
-```
-5. Activate the virtual environment:
-   - For Mac/Linux: 
-   ```bash
-   source venv/bin/activate
-   ```
-   - For Windows: 
-   ```bash
-   venv\Scripts\activate.bat
-   ```
-6. Install the required dependencies: 
+4. Install the required dependencies:
 ```bash
 pip install -r requirements.txt
 ```
@@ -86,9 +73,6 @@ python3 main.py greedy
 - [results:](/results/) Contains all the resulting data from the research.
 - [images:](/images/) Contains image files of results and UML.
 - [requirements.txt](/requirements.txt) Lists the required Python packages and their versions.
-- [visualization:](/visualization/) Generated PDF for user to download.
-    - [static:](/visualization/static/) Holds static assets such as CSS.
-    - [templates:](/visualization/templates/) Contains HTML templates for rendering the views.
 
 
 ## Project Summary
