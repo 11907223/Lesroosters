@@ -97,6 +97,7 @@ class Greedy:
             current_penalty = self.insert_greedily(activity, current_penalty)
             print("total penalty:", current_penalty, f'{"  " * 10}', end="\r")
 
+        self.model.calc_total_penalty()
         return self.model
 
 
@@ -175,4 +176,5 @@ class RandomGreedy(Greedy):
             print("\033[F"*3)
             print(f'total penalty: {current_penalty}\ninserted activities {i}/72')
 
+        self.model.calc_total_penalty()
         return self.model
