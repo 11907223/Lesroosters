@@ -3,7 +3,7 @@
 This package includes several algorithms for problem optimalisation.
 BeamSearch, Greedy (and RandomGreedy) are constructive algorithms. HillClimber and Simulated Annealing are iterative algorithms. Random Restart is a meta-algorithm for HillCLimber and Simulated Annealing.
 
-All algorithms are dependant on a functional Model class to manipulate.
+All algorithms are dependent on a functional Model class to manipulate.
 
 ## Table of Contents
 
@@ -24,7 +24,16 @@ Available heuristics:
 
 ## [greedy.py](/libraries/algorithms/greedy.py)
 
-The greedy module contains both a deterministic Greedy and a random Greedy.
+The greedy module contains the "Greedy" and "RandomGreedy" classes, used to run constructive algorithms that generate a schedule from an empty model, by gradually inserting activities into it.
+The greedy algorithm inserts the activities step-by-step at the index that minimizes the total amount of penalty points the most.
+RandomGreedy is a subclass of Greedy that works similarly, but occasionally inserts an activity at a random index instead of the "best", based on a probability that decays exponentially as the run progresses. 
+
+Heuristics:
+* The exponential function was used to prevent an random insertion at the end of a run, which could cause significant amount of gap penalties that can not be 'corrected' by greedy choices anymore. The parameters of the exponential function are set to start of with a 0.7 probability of random insertion and decrease so that it will be 10% of that at the halfway mark (0.07). 
+* RandomGreedy considers room size when inserting an activity, to prevent unnecessary capacity penalties.
+* sort (optional): sorts activities to be inserted from largest to smallest.
+* sort_overlap (optional): sorts activities to be inserted on amount of overlap, from most to least.
+* shuffle (optional): randomly shuffles the list of activities to be inserted.
 
 ## The HillClimber Family
 
@@ -37,7 +46,7 @@ Available heuristics:
 * Balancing: Increases the likelihood of swapping an activity causing a high penalty to an index with a low penalty.
 * Day placement: Increases the likelihood of moving activities from days with a high number of activity overlap for students towards days with a high number of gap hours for students.
 
-It is posible to run a combination of heuristics.
+It is possible to run a combination of heuristics.
 
 ### [hillclimber.py](/libraries/algorithms/hillclimber.py)
 
@@ -50,5 +59,3 @@ The Simulated Annealing algorithm is a child of the HillClimber and utilizes a c
 ### [random_restart.py](/libraries/algorithms/random_restart.py)
 
 The random restart algorithm runs on top of the two other algorithms and allows for comparison between different runs of the HillClimber. It attempts to search a greater statespace in comparison to both the HillCLimber and the Simulated Annealing.
-
-
