@@ -1,3 +1,0 @@
-# Experiments
-
-## Table of Contents

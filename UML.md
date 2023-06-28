@@ -74,4 +74,5 @@ Model <- Activity_participant_list
 
 </div>
 
-![UML Diagram](UML.svg)
+![UML Diagram](FirstDiagram.svg)
+![](ModelDiagram.svg)
