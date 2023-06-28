@@ -8,7 +8,6 @@ import random
 import sys
 import os
 import time
-import csv
 
 
 def random_restart(
@@ -23,7 +22,6 @@ def random_restart(
     modifier: float = 1.5,
     verbose: int = 0,
     save: bool = False,
-    store_runs: bool = False,
 ):
     """Random Restart is a meta algorithm for a HillClimber or Simulated Annealing.
 
