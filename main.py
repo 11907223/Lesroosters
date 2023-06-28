@@ -13,7 +13,7 @@ import time
 import argparse
 
 
-def main(algorithm, runs, heuristic, save):
+def main(algorithm, runs, heuristic, save, visualize):
     random.seed(0)
     empty_model = Model()
 
@@ -33,7 +33,9 @@ def main(algorithm, runs, heuristic, save):
         runtime = time.time() - start_time
 
         print_results("random", random_algorithm.best_model, runtime)
-        visualize_schedule(random_algorithm.initial_model)
+
+        if visualize:
+            visualize_schedule(random_algorithm.initial_model)
 
     # ________________________BEAM SEARCH ALGORITHM____________________________________
     elif algorithm == "beam_search":
@@ -47,7 +49,9 @@ def main(algorithm, runs, heuristic, save):
         # visualize(beam_search.initial_model)
 
         print_results("beam search", beam_search.initial_model, runtime)
-        visualize_schedule(beam_search.initial_model)
+
+        if visualize:
+            visualize_schedule(beam_search.initial_model)
 
     # ______________________HILLCLIMBER & SIMULATED ANNEALING___________________________
     elif algorithm in ["hillclimber", "simulated_annealing"]:
@@ -58,7 +62,9 @@ def main(algorithm, runs, heuristic, save):
         runtime = time.time() - start_time
 
         print_results(f"{algorithm}", best_model, runtime)
-        visualize_schedule(best_model)
+
+        if visualize:
+            visualize_schedule(best_model)
 
     # ________________________GREEDY & RANDOMGREEDY ALGORITHM____________________________
     elif algorithm in ["greedy", "random_greedy"]:
@@ -92,7 +98,9 @@ def main(algorithm, runs, heuristic, save):
         print(
             f"{runs} run(s) finished. Results have been saved to ./results/Greedy/{algorithm}_{heuristic}_{runs}runs.csv"
         )
-        visualize_schedule(greedy_solution)
+
+        if visualize:
+            visualize_schedule(greedy_solution)
 
     # __________________________BASELINE_______________________________________________
     elif algorithm == "baseline":
@@ -129,6 +137,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--s", "--save", action="store_true", help="saves results in files"
     )
+    parser.add_argument(
+        "--v", "--visualize", action="store_true", help="visualizes schedule in pop up"
+    )
 
     # read arguments from command line
     args = parser.parse_args()
@@ -140,4 +151,4 @@ if __name__ == "__main__":
         args.hr = args.hr[0]
 
     # run main with provided arguments
-    main(args.algorithm, args.n, args.hr, args.s)
+    main(args.algorithm, args.n, args.hr, args.s, args.v)
