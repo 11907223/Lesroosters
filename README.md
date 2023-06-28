@@ -29,7 +29,17 @@ Data stems from the University of Amsterdam Computer Science track. The timetabl
 
 ## Installation
 
-1. Download Python version 3.10.6.
+### Prerequisite requirements.
+Python version 3.10.6.
+tkinter version 8.6
+
+
+1. Installation of tkinter:
+```bash
+sudo apt-get install python3-tk
+```
+
+
 2. Clone the repository:
 ```bash
 git clone https://github.com/11907223/lesroosters

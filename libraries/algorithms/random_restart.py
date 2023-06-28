@@ -6,6 +6,9 @@ from typing import Optional
 import random
 import sys
 import os
+import pickle
+import time
+import csv
 
 def random_restart(
     algorithm: HillClimber | SimulatedAnnealing,
@@ -18,6 +21,7 @@ def random_restart(
     heuristics: Optional[list[str]] = None,
     modifier: float = 1.5,
     verbose: int = 0,
+    save: bool = False,
     store_runs: bool = False,
 ):
     """Random Restart is a meta algorithm for a HillClimber or Simulated Annealing.
@@ -55,8 +59,8 @@ def random_restart(
         verbose (int): Evaluate if current run and score found is printed.
             Defaults to 0, in which none is printed. at 1, only run is printed.
             On 2, algorithm verbosity is also added.
-        store_runs (bool): Evaluate if each run score is to be stored. Defaults to false.
-            If true, will return a list of scores 
+        save (bool): Evaluate if generated models are to be stored. Defaults to False.
+            Will store files in /libraries/results/random_restart/<class algorithm version> model and scores.
     """
     random.seed(seed)
     scores: list[int] = []
@@ -66,6 +70,7 @@ def random_restart(
     print(f"Starting {os.getpid()}")
     print("")  # Ensure command not overwritten.
     for run in range(runs):
+        start_time = time.time()
         # Generate a new random model.
         random_model = Random(Model()).run()
         print(
@@ -81,7 +86,7 @@ def random_restart(
             exe = algorithm(random_model)
 
         # Run the algorithm.
-        new_model = exe.run(
+        new_model, scores = exe.run(
             iterations=iterations,
             convergence=convergence,
             mutate_slots_number=mutate_slots_number,
@@ -89,12 +94,18 @@ def random_restart(
             modifier=modifier,
             verbose=verbosity,
         )
+        end_time = time.time() - start_time
+
         scores.append(new_model.penalty_points)
         if new_model < best_model:
             # Save the newly generated model if it has a lower score than the old model.
             best_model = new_model
 
-    if store_runs is True:
-        # Enables averaging of scores over runs for tuning and comparison of heuristics.
-        return scores
+        if save is True:
+            # Store the generated models and their data in memory.
+            with open(f'results/random_restart/{algorithm} models.pkl', 'ab+') as file:
+                pickle.dump(new_model, file, pickle.HIGHEST_PROTOCOL)
+            with open(f"results/random_restart/{algorithm} scores.csv", 'a+', newline='') as score_file:
+                csv.writer(score_file).writerow((round(end_time, 3), new_model.penalty_points, scores))
+
     return best_model

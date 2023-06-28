@@ -1,19 +1,100 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="79px" preserveAspectRatio="none" style="width:942px;height:79px;" version="1.1" viewBox="0 0 942 79" width="942px" zoomAndPan="magnify"><defs><filter height="300%" id="fsqj4h26qx348" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FEFECE" filter="url(#fsqj4h26qx348)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="449" x="6" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="58" x="201.5" y="21.1387">Schedule</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="454" y1="25.9688" y2="25.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="437" x="12" y="39.251">index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="247" x="12" y="50.8916">((4 timeslots * 7 rooms + 1 evening slot) * 5 days).</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="278" x="12" y="62.5322">activity : str = string representation of the Activity object.</text><rect fill="#FEFECE" filter="url(#fsqj4h26qx348)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="441" x="490" y="14"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="141" x="640" y="27.1387">Activity_participant_list</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="491" x2="930" y1="31.9688" y2="31.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="278" x="496" y="45.251">activity : str = string representation of the Activity object.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="429" x="496" y="56.8916">student : str = string representation of the Student object. Based on their index number.</text><!--MD5=[20cb0694eb88de527ed293dff0b63fba]
-reverse link Schedule to Activity_participant_list--><path d="M460.22,38.5 C470.13,38.5 480.04,38.5 489.96,38.5 " fill="none" id="Schedule&lt;-Activity_participant_list" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="455.03,38.5,464.03,42.5,460.03,38.5,464.03,34.5,455.03,38.5" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[8c29fff5beda7e60e566055e5cf5b92b]
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="523px" preserveAspectRatio="none" style="width:1561px;height:523px;" version="1.1" viewBox="0 0 1561 523" width="1561px" zoomAndPan="magnify"><defs><filter height="300%" id="fcx8p1a32uae4" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="130.7344" style="stroke: #A80036; stroke-width: 1.5;" width="118" x="495.5" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="37" x="536" y="21.1387">Model</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="496.5" x2="612.5" y1="25.9688" y2="25.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="37" x="501.5" y="39.251">courses</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="42" x="501.5" y="50.8916">students</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="21" x="501.5" y="62.5322">halls</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="37" x="501.5" y="74.1729">solution</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="97" x="501.5" y="85.8135">activity_enrollments</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="88" x="501.5" y="97.4541">penalty_per_index</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="106" x="501.5" y="109.0947">penalties_per_student</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="101" x="501.5" y="120.7354">unassigned_activities</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="70" x="501.5" y="132.376">penalty_points</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="247" x="183" y="199"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="50" x="281.5" y="212.1387">courses</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="184" x2="429" y1="216.9688" y2="216.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="79" x="189" y="230.251">dict[str, Course]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="235" x="189" y="241.8916">A mapping of a course name to a Course object.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="375" x="1048" y="199"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="56" x="1207.5" y="212.1387">students</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="1049" x2="1422" y1="216.9688" y2="216.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="83" x="1054" y="230.251">dict[str, Student]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="363" x="1054" y="241.8916">A mapping of a student index (based on loading order) to a Student object.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="333" x="608" y="199"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="29" x="760" y="212.1387">halls</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="609" x2="940" y1="216.9688" y2="216.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="62" x="614" y="230.251">dict[str, Hall]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="321" x="614" y="241.8916">A mapping of a hall index (based on loading order) to a Hall object.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="84.1719" style="stroke: #A80036; stroke-width: 1.5;" width="308" x="536.5" y="308"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="50" x="665.5" y="321.1387">solution</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="537.5" x2="843.5" y1="325.9688" y2="325.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="107" x="542.5" y="339.251">dict[int, tuple[str, str]]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="171" x="542.5" y="350.8916">A mapping of a schedule slot index.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="296" x="542.5" y="362.5322">An index maps a day-timeslot-hall combination to an activity.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="271" x="542.5" y="374.1729">An activity is represented as ('Course name', 'Activity').</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="255" x="542.5" y="385.8135">Example of an activity: ('Heuristieken 1', 'lecture 1').</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="291" x="111" y="319.5"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="123" x="195" y="332.6387">activity_enrollments</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="112" x2="401" y1="337.4688" y2="337.4688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="130" x="117" y="350.751">dict[tuple[str, str], set[int]]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="279" x="117" y="362.3916">A dictionary containing activities and their set of students.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="238" x="117" y="374.0322">Students are represented by their index number.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="204" x="1133.5" y="319.5"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="112" x="1179.5" y="332.6387">penalty_per_index</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="1134.5" x2="1336.5" y1="337.4688" y2="337.4688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="55" x="1139.5" y="350.751">dict[int, int]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="184" x="1139.5" y="362.3916">Dictionary of penalty points per index.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="192" x="1139.5" y="374.0322">E.G. {'(timeslot) 0': 5 (penalty points)}.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="478" x="447.5" y="452"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="140" x="616.5" y="465.1387">penalties_per_student</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="448.5" x2="924.5" y1="469.9688" y2="469.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="142" x="453.5" y="483.251">dict[int, dict[int, dict[str, int]]]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="466" x="453.5" y="494.8916">A mapping of student IDs to a dict of days which map to the conflict penalties and gap penalties.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="351" x="453.5" y="506.5322">Example: {(student) 0: {(day) 0: conflict penalties : 5, gap penalties : 2}.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="49.25" style="stroke: #A80036; stroke-width: 1.5;" width="303" x="6" y="458"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="134" x="90.5" y="471.1387">unassigned_activities</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="308" y1="475.9688" y2="475.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="85" x="12" y="489.251">list[tuple[str, str]]</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="291" x="12" y="500.8916">A list of activities which have not been placed in the solution.</text><rect fill="#FEFECE" filter="url(#fcx8p1a32uae4)" height="60.8906" style="stroke: #A80036; stroke-width: 1.5;" width="389" x="1161" y="452"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="91" x="1310" y="465.1387">penalty_points</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="1162" x2="1549" y1="469.9688" y2="469.9688"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="43" x="1167" y="483.251">int | float</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="205" x="1167" y="494.8916">Number of penalty points added together.</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="377" x="1167" y="506.5322">Defaults to infinite on an empty model and is overwritten when model is filled.</text><!--MD5=[c6aef7df6096b137a46a6d53832b74b9]
+reverse link Model to courses--><path d="M491.04,112.37 C445.38,139.62 385.2,175.54 346.18,198.82 " fill="none" id="Model&lt;-courses" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="495.41,109.76,485.6328,110.9461,491.1188,112.3262,489.7387,117.8121,495.41,109.76" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[72e5dd7c1ad38d675f53e798c58ab890]
+reverse link Model to students--><path d="M618.87,88.49 C735.7,113.88 983.8,167.8 1127.14,198.95 " fill="none" id="Model&lt;-students" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="613.74,87.38,621.6905,93.1929,618.6269,88.4374,623.3824,85.3738,613.74,87.38" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[de306ff81f7108a364f05d60f323c257]
+reverse link Model to halls--><path d="M618.03,117.24 C657.58,143.85 706.96,177.06 739.54,198.98 " fill="none" id="Model&lt;-halls" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="613.75,114.36,618.9999,122.693,617.9037,117.1434,623.4533,116.0472,613.75,114.36" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[a0101379eb726f530aaa46033ed74ecb]
+reverse link halls to solution--><!--MD5=[b583635092bf8847d882fdd361793bb1]
+reverse link Model to solution--><path d="M559.79,144.56 C564.54,177.48 573.52,216.35 590.5,248 C602.52,270.4 621.05,291.12 638.92,307.89 " fill="none" id="Model&lt;-solution" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="559.07,139.33,556.3677,148.8009,559.7691,144.2809,564.2891,147.6823,559.07,139.33" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[6cb14af5da153a089cfc9687628a2b05]
+reverse link courses to activity_enrollments--><!--MD5=[086ffc61312e18c33fcf73d624d9bf2e]
+reverse link Model to activity_enrollments--><path d="M490.46,85.65 C390.35,104.54 204.2,145.99 165.5,199 C136.41,238.86 180.58,288.34 216.94,319.3 " fill="none" id="Model&lt;-activity_enrollments" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="495.45,84.72,485.8702,82.4337,490.5343,85.6345,487.3335,90.2987,495.45,84.72" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[7ac6ba7c4a4050a5a73dd7dfea0e0174]
+reverse link students to penalty_per_index--><!--MD5=[8f904a39bfe34e26607a9f4a12081998]
+reverse link Model to penalty_per_index--><path d="M619.04,88.1 C700.7,106.69 844.43,144.14 958.5,199 C993.38,215.78 997.06,228.51 1030.5,248 C1075.75,274.37 1128.84,300.4 1169.65,319.43 " fill="none" id="Model&lt;-penalty_per_index" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="613.75,86.9,621.6315,92.8061,618.6241,88.0149,623.4153,85.0075,613.75,86.9" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[e5f871a81d31bf85bc7d39eaa3c8036b]
+reverse link solution to penalties_per_student--><!--MD5=[5d76988e96e52a87b32a8dd7f640ea42]
+reverse link Model to penalties_per_student--><path d="M523.81,143.89 C498.74,211.95 474.16,316.26 519.5,392 C535.64,418.95 562.97,438.25 590.91,451.86 " fill="none" id="Model&lt;-penalties_per_student" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="525.62,139.05,518.7334,146.0909,523.8769,143.7363,526.2315,148.8799,525.62,139.05" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[44ed6589032c8787327b4fa4779fec5a]
+reverse link activity_enrollments to unassigned_activities--><!--MD5=[1082dd77a470d418c31af7ba82756c4c]
+reverse link Model to unassigned_activities--><path d="M490.11,78.8 C403.25,87.73 247.97,115.13 148.5,199 C80.31,256.49 66.26,307.07 93.5,392 C101.55,417.1 119.52,441.15 134.37,457.98 " fill="none" id="Model&lt;-unassigned_activities" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="495.22,78.29,485.8649,75.2107,490.2451,78.7903,486.6655,83.1706,495.22,78.29" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[70de7e7f6694f04cf824d75a455a1d74]
+reverse link penalty_per_index to penalty_points--><!--MD5=[5a51f3d2283fb67a0be5d485e2e4dfb1]
+reverse link Model to penalty_points--><path d="M618.91,78.74 C813.68,92.21 1386.46,136.83 1440.5,199 C1505.18,273.41 1424.53,395.65 1380.53,451.71 " fill="none" id="Model&lt;-penalty_points" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="613.82,78.39,622.5244,82.998,618.8082,78.733,623.0732,75.0169,613.82,78.39" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[647e342d894af2b585b6527129b5bb34]
 @startuml ModelDiagram
 
-object Schedule{
-    {field} index : int = Maps a unique index to a day-timeslot-hall combination ranging from 0 to 144 
-        ((4 timeslots * 7 rooms + 1 evening slot) * 5 days).
-    activity : str = string representation of the Activity object.
+object Model{
+    courses
+    students
+    halls
+    solution
+    activity_enrollments
+    penalty_per_index
+    penalties_per_student
+    unassigned_activities
+    penalty_points
 }
 
-object Activity_participant_list{
-    activity : str = string representation of the Activity object.
-    student : str = string representation of the Student object. Based on their index number.
+object courses{
+    dict[str, Course]
+    A mapping of a course name to a Course object.
 }
 
-Schedule <- Activity_participant_list
+object students{
+    dict[str, Student]
+    A mapping of a student index (based on loading order) to a Student object.
+}
+
+object halls{
+    dict[str, Hall]
+    A mapping of a hall index (based on loading order) to a Hall object.
+}
+
+object solution{
+    dict[int, tuple[str, str]]
+    A mapping of a schedule slot index.
+    An index maps a day-timeslot-hall combination to an activity.
+    {field} An activity is represented as ('Course name', 'Activity').
+    {field} Example of an activity: ('Heuristieken 1', 'lecture 1').
+}
+
+object activity_enrollments{
+    dict[tuple[str, str], set[int]]
+    A dictionary containing activities and their set of students.
+    Students are represented by their index number.
+}
+
+object penalty_per_index{
+    dict[int, int]
+    Dictionary of penalty points per index.
+    E.G. {'(timeslot) 0': 5 (penalty points)}.
+}
+
+object penalties_per_student{
+    dict[int, dict[int, dict[str, int]]]
+    A mapping of student IDs to a dict of days which map to the conflict penalties and gap penalties.
+    Example: {(student) 0: {(day) 0: conflict penalties : 5, gap penalties : 2}.
+}
+
+object unassigned_activities{
+    list[tuple[str, str]]
+    A list of activities which have not been placed in the solution.
+}
+
+object penalty_points{
+    int | float
+    Number of penalty points added together.
+     Defaults to infinite on an empty model and is overwritten when model is filled.
+}
+
+Model <-up- courses
+Model <-up- students
+Model <-up- halls
+halls <-[hidden]- solution
+Model <-up- solution
+courses <-[hidden]- activity_enrollments
+Model <-up- activity_enrollments
+students <-[hidden]- penalty_per_index
+Model <-up- penalty_per_index
+solution <-[hidden]- penalties_per_student
+Model <-up- penalties_per_student
+activity_enrollments <-[hidden]- unassigned_activities
+Model <-up- unassigned_activities
+penalty_per_index <-[hidden]- penalty_points
+Model <-up- penalty_points
 
 @enduml
 

@@ -35,7 +35,7 @@ class SimulatedAnnealing(HillClimber):
         self.T0 = temperature
         self.T = temperature
 
-    def update_temperature(self, type: str = "linear", alpha: float = 0.99) -> None:
+    def update_temperature(self) -> None:
         """Update the temperature based on a cooling scheme.
 
         Temperature will approach zero as the
@@ -52,17 +52,15 @@ class SimulatedAnnealing(HillClimber):
             Exception: Given type not found or invalid.
             AssertionError: Given Alpha not within bounds.
         """
-        if type == "linear":
+        if self.type == "linear":
             self.T = self.T - (self.T0 / self.iterations)
-        elif type == "exponential":
-            assert 0 < alpha < 1, "Value not within bounds."
-            self.T = self.T * alpha
+        elif self.type == "exponential":
+            assert 0 < self.alpha < 1, "Value not within bounds."
+            self.T = self.T * self.alpha
         else:
             raise Exception("Type not found or invalid.")
 
-    def check_solution(
-        self, new_model: Model, type: str = "linear", alpha: float = 0.99
-    ) -> bool:
+    def check_solution(self, new_model: Model) -> bool:
         """Check and accept better solutions than the current solution.
 
         Also sometimes accepts solutions that are worse, depending on the current
@@ -86,11 +84,12 @@ class SimulatedAnnealing(HillClimber):
             return True
 
         # Update the temperature
-        self.update_temperature(type, alpha)
+        self.update_temperature()
 
         return False
 
-    def run(self,
+    def run(
+        self,
         runs: int = 20,
         iterations: int = 2000,
         temperature: int = 10,
@@ -102,6 +101,8 @@ class SimulatedAnnealing(HillClimber):
         type: str = "linear",
         alpha: float = 0.99,
     ):
+        self.type = type
+        self.alpha = alpha
         super().run(
             iterations,
             convergence,
@@ -111,7 +112,7 @@ class SimulatedAnnealing(HillClimber):
             verbose,
         )
 
-        return self.best_model
+        return self.best_model, self.scores
 
     def __repr__(self) -> str:
         return "Simulated Annealing Algorithm"
