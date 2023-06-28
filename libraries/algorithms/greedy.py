@@ -95,7 +95,7 @@ class Greedy:
         current_penalty = 0
         for activity in self.model.unassigned_activities:
             current_penalty = self.insert_greedily(activity, current_penalty)
-            print("totl penalty:", current_penalty, f'{"  " * 10}', end="\r")
+            print("total penalty:", current_penalty, f'{"  " * 10}', end="\r")
 
         return self.model
 
