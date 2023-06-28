@@ -72,6 +72,8 @@ class Random:
             # Accept new model if improved.
             self.check_solution(new_model)
 
+        self.initial_model = self.best_model
+
         return self.best_model
 
     def __repr__(self) -> str:
