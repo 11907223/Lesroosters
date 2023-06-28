@@ -1,4 +1,5 @@
 from libraries.classes.model import Model
+from libraries.helpers.random_restart_to_csv import to_csv
 from .hillclimber import HillClimber
 from .randomise import Random
 from .simulated_annealing import SimulatedAnnealing
@@ -6,23 +7,21 @@ from typing import Optional
 import random
 import sys
 import os
-import pickle
 import time
-import csv
+
 
 def random_restart(
     algorithm: HillClimber | SimulatedAnnealing,
     seed: int = 0,
     runs: int = 20,
     temperature: int = 1,
-    iterations: int = 2812,
+    iterations: int = 2821,
     convergence: int = sys.maxsize,
     mutate_slots_number: int = 1,
     heuristics: Optional[list[str]] = None,
     modifier: float = 1.5,
     verbose: int = 0,
     save: bool = False,
-    store_runs: bool = False,
 ):
     """Random Restart is a meta algorithm for a HillClimber or Simulated Annealing.
 
@@ -37,10 +36,10 @@ def random_restart(
     Args:
         algorithm (HillClimber | Simulated Annealing): Algorithm to be used.
         seed (int): Seed to be used for the random library. Defaults to 0.
-        runs (int): Amount of runs to be performed. Defaults to 10.
+        runs (int): Amount of runs to be performed. Defaults to 20.
         iterations (int): Number of iterations for the Hillclimber to 'climb'.
-            Defaults to 2000 iterations.
-        temperature (int): Startin temperature for simulated annealing. Defaults to 10.
+            Defaults to 2821 iterations.
+        temperature (int): Startin temperature for simulated annealing. Defaults to 1.
         convergence (bool): Evaluate if iterations are based on convergence.
             If no value is given, convergence is not evaluated.
         mutate_slots_number (int): Number of mutations to occur each iteration.
@@ -55,7 +54,7 @@ def random_restart(
                     high gap penalties with days containing high conflict hour penalties.
                 'steepest': Evaluate if algorithm has to only take each steepest climb.
                     Will result in deterministic algorithm behaviour.
-        modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.8.
+        modifier (float): Effect a heuristic has on the heat map. Defaults to a multiplier of 1.5.
         verbose (int): Evaluate if current run and score found is printed.
             Defaults to 0, in which none is printed. at 1, only run is printed.
             On 2, algorithm verbosity is also added.
@@ -63,7 +62,6 @@ def random_restart(
             Will store files in /libraries/results/random_restart/<class algorithm version> model and scores.
     """
     random.seed(seed)
-    scores: list[int] = []
     best_model = Model()
 
     verbosity = True if verbose >= 2 else False
@@ -74,7 +72,7 @@ def random_restart(
         # Generate a new random model.
         random_model = Random(Model()).run()
         print(
-            "\033[A", # Go back 2 lines.
+            "\033[A",  # Go back 2 lines.
             f"Run {run}/{runs}, current penalty score: {best_model.penalty_points}",
             end="\n",
         ) if verbose >= 1 else None
@@ -96,16 +94,12 @@ def random_restart(
         )
         end_time = time.time() - start_time
 
-        scores.append(new_model.penalty_points)
         if new_model < best_model:
             # Save the newly generated model if it has a lower score than the old model.
             best_model = new_model
 
         if save is True:
             # Store the generated models and their data in memory.
-            with open(f'results/random_restart/{algorithm} models.pkl', 'ab+') as file:
-                pickle.dump(new_model, file, pickle.HIGHEST_PROTOCOL)
-            with open(f"results/random_restart/{algorithm} scores.csv", 'a+', newline='') as score_file:
-                csv.writer(score_file).writerow((round(end_time, 3), new_model.penalty_points, scores))
+            to_csv(new_model, end_time, run, scores, f"{exe}")
 
     return best_model
