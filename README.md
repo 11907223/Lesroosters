@@ -81,7 +81,7 @@ python3 main.py greedy
         - [experiments:](/libraries/helpers/experiments/) Contains scripts to perform experiments.
 - [data:](/data/) Contains all data in csv files and a data analysis in jupyter notebook.
 - [results:](/results/) Contains all the resulting data from the research.
-- [images:](/images/) Contains image files of results and UML.
+- [images:](/images/) Contains image files of results and the UML.
 - [requirements.txt](/requirements.txt) Lists the required Python packages and their versions.
 
 
