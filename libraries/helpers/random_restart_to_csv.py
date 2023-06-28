@@ -18,7 +18,6 @@ def to_csv(
         "capacity penalty",
         "runtime",
         "iteration progression",
-        "scores",
     ]
 
     with open(
