@@ -71,6 +71,7 @@ def random_restart(
     verbosity = True if verbose >= 2 else False
     print(f"Starting PID Number {os.getpid()}")
     print("")  # Ensure command not overwritten.
+
     for run in range(runs):
         start_time = time.time()
         # Generate a new random model.
@@ -98,7 +99,7 @@ def random_restart(
         )
         end_time = time.time() - start_time
 
-        run_score = new_model.calc_penalty_points()
+        run_score = new_model.calc_total_penalty()
         run_scores.append(run_score)
 
         if new_model < best_model:
@@ -109,7 +110,7 @@ def random_restart(
             # Store the generated models and their data in memory.
             to_csv(new_model, end_time, run, scores, f"{exe}")
 
-        if store_runs is True:
-            return run_scores
+    if store_runs is True:
+        return run_scores
 
     return best_model

@@ -18,8 +18,11 @@ This folder contains tuner modules for HillClimber and Simulated Annealing.
 The temperature, number of iterations and the modifier of heuristical weight are tuned.
 
 Usage:
+
+Move the files to the root directory.
+
 ```bash
-python3 experiments/random_restart_tuning.py
+python3 random_restart_tuning.py
 ```
 > Warning: This takes a very long time to execute.
 

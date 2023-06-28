@@ -131,11 +131,11 @@ if __name__ == "__main__":
     temps = [2,3,4]
     results = pool_exe(temp_tester, SimulatedAnnealing, temps)
     with open(
-        "results/HillClimber/Simulated Annealing Temp Tuner.csv",
+        "results/random_restart_tuning/Simulated Annealing Temp Tuner.csv",
         "a+",
         newline="",
     ) as file:
-        for result in results.items():
+        for result in results:
             csv.writer(file).writerow(result)
 
     # # Find optimal combination of heuristics.
