@@ -1,4 +1,5 @@
 from libraries.helpers.load_data import load_halls
+from libraries.classes.model import Model
 import pandas as pd
 import tkinter as tk
 from tkinter import ttk
@@ -101,12 +102,12 @@ def tkinter_pop_up(df: pd.DataFrame) -> None:
     window.mainloop()
 
 
-def visualize_schedule(schedule: dict) -> None:
+def visualize_schedule(model: Model) -> None:
     """Visualizes a schedule in a pop up window.
 
     Args:
         schedule (dict): A schedule dictionary with indices 0-144 that map to activity tuples.
     """
 
-    df = create_df(schedule)
+    df = create_df(model.solution)
     tkinter_pop_up(df)
