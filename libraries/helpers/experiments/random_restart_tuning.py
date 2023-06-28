@@ -113,49 +113,49 @@ def pool_exe(target, algorithm, iterables) -> list[tuple[int, str]]:
 if __name__ == "__main__":
     random.seed(0)
 
-    # Find iteration at which convergence occurs.
-    list_of_convergences = iter_tuner(verbose=True)
-    with open("results/HillClimber/Iter Tuner.csv", "a+", newline="") as file:
-        csv.writer(file).writerow(list_of_convergences)
+    # # Find iteration at which convergence occurs.
+    # list_of_convergences = iter_tuner(verbose=True)
+    # with open("results/random_restart_tuning/Iter Tuner.csv", "a+", newline="") as file:
+    #     csv.writer(file).writerow(list_of_convergences)
 
-    # Find optimal modifier for heuristics.
-    modifiers = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
-    results = pool_exe(modifier_tester, HillClimber, modifiers)
-    with open(
-        "results/HillClimber/Modifier Tuner.csv", "a+", newline=""
-    ) as file:
-        for result in results:
-            csv.writer(file).writerow(result)
+    # # Find optimal modifier for heuristics.
+    # modifiers = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
+    # results = pool_exe(modifier_tester, HillClimber, modifiers)
+    # with open(
+    #     "results/random_restart_tuning/Modifier Tuner.csv", "a+", newline=""
+    # ) as file:
+    #     for result in results:
+    #         csv.writer(file).writerow(result)
 
     # Find optimal temperature for simulated annealing.
-    temps = [1, 5, 10, 20, 40, 80, 160]
+    temps = [2,3,4]
     results = pool_exe(temp_tester, SimulatedAnnealing, temps)
     with open(
-        "results/HillClimber/Simulated Annealing Temp Tuner.csv",
+        "results/random_restart_tuning/Simulated Annealing Temp Tuner.csv",
         "a+",
         newline="",
     ) as file:
         for result in results.items():
             csv.writer(file).writerow(result)
 
-    # Find optimal combination of heuristics.
-    heuristics = [["balance"], ["middle"], ["days"]]
-    results = pool_exe(heuristic_tester, HillClimber, heuristics)
-    with open(
-        "results/HillClimber/Heuristics Single Comparison.csv",
-        "a+",
-        newline="",
-    ) as file:
-        for result in results:
-            csv.writer(file).writerow(result)
+    # # Find optimal combination of heuristics.
+    # heuristics = [["balance"], ["middle"], ["days"]]
+    # results = pool_exe(heuristic_tester, HillClimber, heuristics)
+    # with open(
+    #     "results/random_restart_tuning/Heuristics Single Comparison.csv",
+    #     "a+",
+    #     newline="",
+    # ) as file:
+    #     for result in results:
+    #         csv.writer(file).writerow(result)
 
-    # Best heuristic was 'middle'. Test recombination of middle with the others.
-    heuristics_combi = [["middle", "balance"], ["middle", "days"]]
-    results = pool_exe(heuristic_tester, HillClimber, heuristics_combi)
-    with open(
-        "results/HillClimber/Heuristics Double Comparison.csv",
-        "a+",
-        newline="",
-    ) as file:
-        for result in results:
-            csv.writer(file).writerow(result)
+    # # Best heuristic was 'middle'. Test recombination of middle with the others.
+    # heuristics_combi = [["middle", "balance"], ["middle", "days"]]
+    # results = pool_exe(heuristic_tester, HillClimber, heuristics_combi)
+    # with open(
+    #     "results/random_restart_tuning/Heuristics Double Comparison.csv",
+    #     "a+",
+    #     newline="",
+    # ) as file:
+    #     for result in results:
+    #         csv.writer(file).writerow(result)

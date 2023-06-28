@@ -333,19 +333,19 @@ class HillClimber(Random):
             self.mutate_model(new_model, mutate_slots_number, heuristics, modifier)
 
             # Update the score of the model.
-            new_score = new_model.calc_total_penalty()
+            new_model.calc_total_penalty()
 
             if self.check_solution(new_model) is True:
                 # Accept the mutation if it is an improvement.
                 convergence_counter = 0
-                scores.append(new_score)
-                self.scores = scores
             elif convergence_counter > convergence:
                 # Assume convergence has occured when solution remains the same for
                 #   a given value of convergence_counter.
                 break
             convergence_counter += 1
 
+            scores.append(self.best_model.penalty_points)
+            self.scores = scores
         if store_scores is True:
             with open(f"results/{self}.csv", "a+", newline="") as file:
                 csv.writer(file).writerow(scores)

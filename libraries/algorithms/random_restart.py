@@ -14,7 +14,7 @@ def random_restart(
     algorithm: HillClimber | SimulatedAnnealing,
     seed: int = 0,
     runs: int = 20,
-    temperature: int = 1,
+    temperature: int = 2,
     iterations: int = 2821,
     convergence: int = sys.maxsize,
     mutate_slots_number: int = 1,
@@ -22,6 +22,7 @@ def random_restart(
     modifier: float = 1.5,
     verbose: int = 0,
     save: bool = False,
+    store_runs: bool = False,
 ):
     """Random Restart is a meta algorithm for a HillClimber or Simulated Annealing.
 
@@ -60,7 +61,10 @@ def random_restart(
             On 2, algorithm verbosity is also added.
         save (bool): Evaluate if generated models are to be stored. Defaults to False.
             Will store files in /libraries/results/random_restart/<class algorithm version> model and scores.
+        store_runs (bool): Evaluate if a list of scores for each run is to be returned instead of the best model.
+            Defaults to false.
     """
+    run_scores = []
     random.seed(seed)
     best_model = Model()
 
@@ -94,6 +98,9 @@ def random_restart(
         )
         end_time = time.time() - start_time
 
+        run_score = new_model.calc_penalty_points()
+        run_scores.append(run_score)
+
         if new_model < best_model:
             # Save the newly generated model if it has a lower score than the old model.
             best_model = new_model
@@ -101,5 +108,8 @@ def random_restart(
         if save is True:
             # Store the generated models and their data in memory.
             to_csv(new_model, end_time, run, scores, f"{exe}")
+
+        if store_runs is True:
+            return run_scores
 
     return best_model

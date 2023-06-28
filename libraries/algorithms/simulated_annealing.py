@@ -92,7 +92,6 @@ class SimulatedAnnealing(HillClimber):
         self,
         runs: int = 20,
         iterations: int = 2000,
-        temperature: int = 1,
         mutate_slots_number: int = 1,
         convergence: int = sys.maxsize,
         heuristics: Optional[list[str]] = None,
