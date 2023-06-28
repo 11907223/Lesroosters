@@ -2,20 +2,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as ss 
 
-def plot_histogram(data_file='../../results/baseline.txt', output_path='../../images/', output_name='score_distribution_random_schedules_5', save=True):
+def plot_histogram(data_file='../../results/baseline.txt', output_path='../../images/', output_name='score_distribution_random_schedules', save=True):
     
     random_scores = []
-    with open(data_file) as mytxt:
-        for line in mytxt:
-            random_scores.append(int(line))
+    random_scores = np.loadtxt(data_file, dtype=int)
 
     print(f'The mean is: {np.mean(random_scores)}')
     print(f'smallest score: {np.min(random_scores)}')
     print(f'highest score: {np.max(random_scores)}') 
     
     plt.figure(figsize=(15, 10))
-    
-    result = plt.hist(random_scores, bins=70, color='royalblue')[0:len(random_scores)-1000]
+
+    n_bins = int(2 * np.log(len(random_scores) / np.log(2) + 1)) # Sturges' formula
+    result = plt.hist(random_scores, bins=n_bins, color='royalblue')
 
     plt.ylabel('Number of random schedules', fontsize=16)
     plt.xlabel('Score', fontsize=16)
@@ -23,7 +22,7 @@ def plot_histogram(data_file='../../results/baseline.txt', output_path='../../im
     plt.yticks(fontsize=16)
     plt.title("Score distribution of randomly generated schedules", fontsize=18)
 
-    # gaussian    
+    # plot gaussian    
     mean     = np.mean(random_scores)
     variance = np.var(random_scores)
     sigma    = np.sqrt(variance)
@@ -34,5 +33,3 @@ def plot_histogram(data_file='../../results/baseline.txt', output_path='../../im
     
     if save:
         plt.savefig(f'{output_path}{output_name}.png', bbox_inches='tight')
-    
-plot_histogram()
